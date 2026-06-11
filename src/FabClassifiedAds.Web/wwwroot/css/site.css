@@ -338,6 +338,50 @@ code { background: var(--surface-2); padding: 2px 7px; border-radius: 6px; font-
 .photo-previews img { width: 96px; height: 72px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); }
 .photo-previews img:first-child { outline: 2px solid var(--primary); }
 
+/* ===== Trust engine ===== */
+.trust-chip {
+    display: inline-flex; align-items: center; gap: 3px;
+    padding: 2px 9px; border-radius: 999px; font-size: .74rem; font-weight: 800;
+}
+.trust-chip.trust-good { background: rgba(40, 199, 111, .14); color: #7ce6ab; border: 1px solid rgba(40, 199, 111, .35); }
+.trust-chip.trust-warn { background: rgba(255, 182, 72, .14); color: #ffcf87; border: 1px solid rgba(255, 182, 72, .35); }
+.trust-chip.trust-bad { background: rgba(234, 84, 85, .16); color: #ff9a9b; border: 1px solid rgba(234, 84, 85, .4); }
+.trust-panel { margin-bottom: 18px; border-width: 1px; }
+.trust-panel.trust-good { border-color: rgba(40, 199, 111, .45); }
+.trust-panel.trust-warn { border-color: rgba(255, 182, 72, .5); }
+.trust-panel.trust-bad { border-color: rgba(234, 84, 85, .6); box-shadow: 0 0 24px rgba(234, 84, 85, .15); }
+.trust-head { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.trust-shield { font-size: 1.9rem; }
+.trust-head h3 { margin: 0; font-size: .95rem; }
+.trust-score-line { display: flex; align-items: baseline; gap: 10px; }
+.trust-score { font-size: 1.6rem; font-weight: 800; }
+.trust-score small { font-size: .85rem; color: var(--text-muted); font-weight: 600; }
+.trust-panel.trust-good .trust-score { color: #7ce6ab; }
+.trust-panel.trust-warn .trust-score { color: #ffcf87; }
+.trust-panel.trust-bad .trust-score { color: #ff9a9b; }
+.trust-label { font-weight: 700; font-size: .88rem; }
+.trust-price { padding: 9px 12px; border-radius: var(--radius-sm); font-size: .85rem; font-weight: 600; margin-bottom: 10px; background: var(--surface-2); }
+.trust-price.trust-danger { background: rgba(234, 84, 85, .14); color: #ff9a9b; }
+.trust-price.trust-warning { background: rgba(255, 182, 72, .12); color: #ffcf87; }
+.trust-price.trust-good { background: rgba(40, 199, 111, .1); color: #7ce6ab; }
+.trust-checks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: .85rem; }
+.trust-checks li { display: flex; gap: 8px; align-items: baseline; }
+.trust-checks li span { width: 16px; text-align: center; flex-shrink: 0; }
+.trust-checks .trust-good { color: #9be8bf; }
+.trust-checks .trust-info { color: var(--text-muted); }
+.trust-checks .trust-warning { color: #ffcf87; }
+.trust-checks .trust-danger { color: #ff9a9b; font-weight: 700; }
+.trust-seller-label.trust-good-text { color: #7ce6ab; }
+.trust-seller-label.trust-warn-text { color: #ffcf87; }
+.trust-seller-label.trust-bad-text { color: #ff9a9b; font-weight: 700; }
+.trust-divider { border-top: 1px solid var(--border); margin: 14px 0 10px; }
+.chat-warning {
+    align-self: flex-start; max-width: 75%;
+    background: rgba(234, 84, 85, .12); border: 1px solid rgba(234, 84, 85, .4);
+    color: #ff9a9b; border-radius: var(--radius-sm);
+    padding: 8px 13px; font-size: .8rem; font-weight: 600;
+}
+
 /* ===== FabFeed (vertical swipe feed) ===== */
 .nav-feed { color: var(--accent); }
 .badge-video { background: rgba(0, 0, 0, .55); left: auto; right: 10px; top: 10px; font-size: .9rem; padding: 4px 9px; }

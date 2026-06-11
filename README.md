@@ -42,6 +42,13 @@ The database is created and seeded automatically on first start (full category t
 - **Video uploads** — sellers can attach a vertical MP4/WebM/MOV (max 60 MB) to any ad; video ads get a 🎬 badge on cards and play on the detail page
 - **Share cards** — every listing renders a 1080×1920 (9:16) branded card at `/l/{id}/share-card.svg` sized for TikTok / Instagram stories, with the cover photo embedded, specs summary, price and deep link; plus a native Web Share button on detail pages
 
+### Trust engine ("Verificare FabAds")
+- **Listing trust score (0–100)** computed at publish time and shown on every card and detail page: risky-language detection (advance payment, Western Union, WhatsApp-only, "plecat din țară"…), links/phones in text, ALL-CAPS titles, too-short descriptions, copy/paste duplicate detection across accounts, real-photos/video signals
+- **Automatic price verification** against the live market median — same car brand ±2 years, price/m² for the same property type and transaction, or category median ("Preț cu 67% sub media pieței — posibil risc")
+- **Seller trust score** from account age, email confirmation, ratings, risky-message rate in chat, and measured response speed — shown as a 🛡 badge with full check breakdown
+- **Real-time anti-scam chat**: every message is scanned on send; recipients see inline warnings for advance-payment requests, suspicious links/phishing, off-platform moves (WhatsApp/Telegram) and untraceable payments (crypto/gift cards)
+- Transparent rule-based + statistical heuristics — each signal can be swapped for an ML model later without UI changes. A seeded scam demo listing (5/100) shows the red flow end to end
+
 ### Languages
 - **Romanian is the primary language**, English secondary — RO|EN switcher in the header (culture cookie). ~350 translated strings including all filter labels, enum values, category names and relative dates, via a simple dictionary `Translator` with English fallback
 

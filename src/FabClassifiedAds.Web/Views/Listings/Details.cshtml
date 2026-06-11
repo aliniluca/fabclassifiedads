@@ -139,12 +139,69 @@
         </div>
 
         <aside class="detail-side">
+            @if (Model.Trust != null)
+            {
+                <div class="panel trust-panel @Model.Trust.CssClass">
+                    <div class="trust-head">
+                        <span class="trust-shield">🛡</span>
+                        <div>
+                            <h3>@T["FabAds verification"]</h3>
+                            <div class="trust-score-line">
+                                <span class="trust-score">@Model.Trust.Score<small>/100</small></span>
+                                <span class="trust-label">@T[TrustService.ListingScoreLabel(Model.Trust.Score)]</span>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.Trust.Price is { } price)
+                    {
+                        <div class="trust-price trust-@price.Level.ToString().ToLowerInvariant()">
+                            @(price.DiffPercent <= -30
+                                ? T.Format("PriceBelowMarket", Math.Abs(price.DiffPercent), price.SampleSize)
+                                : Math.Abs(price.DiffPercent) <= 25
+                                    ? T.Format("PriceFair", price.SampleSize)
+                                    : T.Format("PriceVsMarket", price.DiffPercent, price.SampleSize))
+                        </div>
+                    }
+                    <ul class="trust-checks">
+                        @foreach (var check in Model.Trust.Checks)
+                        {
+                            <li class="trust-@check.Level.ToString().ToLowerInvariant()">
+                                <span>@(check.Level switch { TrustLevel.Good => "✓", TrustLevel.Info => "ℹ", TrustLevel.Warning => "⚠", _ => "✗" })</span>
+                                @T[check.Label]@(check.Detail != null ? $" ({check.Detail})" : "")
+                            </li>
+                        }
+                    </ul>
+                    @if (Model.SellerTrust is { } st)
+                    {
+                        <div class="trust-divider"></div>
+                        <div class="trust-score-line">
+                            <span class="trust-chip @st.CssClass">🛡 @st.Score</span>
+                            <span class="trust-label">@T[TrustService.ScoreLabel(st.Score)]</span>
+                        </div>
+                        <ul class="trust-checks mt-8">
+                            @foreach (var check in st.Checks)
+                            {
+                                <li class="trust-@check.Level.ToString().ToLowerInvariant()">
+                                    <span>@(check.Level switch { TrustLevel.Good => "✓", TrustLevel.Info => "ℹ", TrustLevel.Warning => "⚠", _ => "✗" })</span>
+                                    @T[check.Label]@(check.Detail != null ? $" ({check.Detail})" : "")
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            }
+
             <div class="panel seller-panel">
                 <div class="seller-head">
                     <span class="avatar" style="background:@(l.User.AvatarColor ?? "#6d5dfc")">@(l.User.DisplayName.Length > 0 ? l.User.DisplayName[0] : '?')</span>
                     <div>
                         <strong>@l.User.DisplayName</strong>
                         @if (l.User.IsBusiness) { <span class="badge badge-business">@T["Business"]</span> }
+                        @if (Model.SellerTrust is { } sellerTrust)
+                        {
+                            <span class="trust-chip @sellerTrust.CssClass" title="@T[TrustService.ScoreLabel(sellerTrust.Score)]">🛡 @sellerTrust.Score</span>
+                            <div class="small trust-seller-label @sellerTrust.CssClass-text">@T[TrustService.ScoreLabel(sellerTrust.Score)]</div>
+                        }
                         <div class="muted small">@T["On FabAds since"] @l.User.CreatedAt.ToString("MMM yyyy")</div>
                         @if (l.User.RatingCount > 0)
                         {

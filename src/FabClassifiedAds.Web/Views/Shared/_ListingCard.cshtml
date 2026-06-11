@@ -33,6 +33,7 @@
         </div>
         <div class="card-footer">
             <span>📍 @Model.City</span>
+            <span class="trust-chip @(Model.TrustScore >= 75 ? "trust-good" : Model.TrustScore >= 40 ? "trust-warn" : "trust-bad")" title="@T["Trust score"]">🛡 @Model.TrustScore</span>
             <span>@Model.CreatedAt.TimeAgo()</span>
         </div>
     </div>

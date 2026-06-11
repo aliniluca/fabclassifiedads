@@ -51,6 +51,13 @@
                             <p>@message.Body</p>
                             <span class="chat-time">@message.SentAt.TimeAgo()</span>
                         </div>
+                        @if (!string.IsNullOrEmpty(message.RiskFlags) && message.SenderId != userId)
+                        {
+                            foreach (var flag in message.RiskFlags.Split(','))
+                            {
+                                <div class="chat-warning">⚠ @T[$"Flag.{flag}"]</div>
+                            }
+                        }
                     }
                 </div>
                 <form action="/messages/@active.Id/send" method="post" class="chat-compose">

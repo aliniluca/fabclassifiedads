@@ -39,6 +39,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Builder.RequestLocalizationOptio
 builder.Services.AddSingleton<Translator>();
 builder.Services.AddScoped<SearchService>();
 builder.Services.AddScoped<PhotoStorage>();
+builder.Services.AddScoped<TrustService>();
 builder.Services.AddSingleton<IEmailSender, OutboxEmailSender>();
 builder.Services.AddHostedService<SavedSearchAlertService>();
 builder.Services.AddControllersWithViews();

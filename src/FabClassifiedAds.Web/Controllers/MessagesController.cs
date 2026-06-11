@@ -63,7 +63,13 @@ public class MessagesController(AppDbContext db) : Controller
         }
         if (!string.IsNullOrWhiteSpace(body))
         {
-            conversation.Messages.Add(new Message { SenderId = UserId, Body = body.Trim() });
+            var flags = Services.TrustService.AnalyzeMessage(body);
+            conversation.Messages.Add(new Message
+            {
+                SenderId = UserId,
+                Body = body.Trim(),
+                RiskFlags = string.IsNullOrEmpty(flags) ? null : flags,
+            });
             conversation.LastMessageAt = DateTime.UtcNow;
         }
         await db.SaveChangesAsync();
@@ -79,7 +85,14 @@ public class MessagesController(AppDbContext db) : Controller
         if (conversation is null) return NotFound();
         if (!string.IsNullOrWhiteSpace(body))
         {
-            db.Messages.Add(new Message { ConversationId = conversationId, SenderId = UserId, Body = body.Trim() });
+            var flags = Services.TrustService.AnalyzeMessage(body);
+            db.Messages.Add(new Message
+            {
+                ConversationId = conversationId,
+                SenderId = UserId,
+                Body = body.Trim(),
+                RiskFlags = string.IsNullOrEmpty(flags) ? null : flags,
+            });
             conversation.LastMessageAt = DateTime.UtcNow;
             await db.SaveChangesAsync();
         }

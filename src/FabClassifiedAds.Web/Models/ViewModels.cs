@@ -36,6 +36,8 @@ public class ListingDetailViewModel
     public List<Listing> SimilarListings { get; set; } = [];
     public bool IsFavorite { get; set; }
     public bool IsOwner { get; set; }
+    public TrustReport? Trust { get; set; }
+    public TrustReport? SellerTrust { get; set; }
 }
 
 public class CreateListingViewModel

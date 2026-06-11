@@ -24,4 +24,7 @@ public class Message
     public string Body { get; set; } = "";
     public DateTime SentAt { get; set; } = DateTime.UtcNow;
     public bool IsRead { get; set; }
+
+    /// <summary>Comma-separated anti-scam flags set by TrustService (e.g. "AdvancePayment,SuspiciousLink").</summary>
+    public string? RiskFlags { get; set; }
 }

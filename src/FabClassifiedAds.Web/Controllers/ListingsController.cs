@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FabClassifiedAds.Web.Controllers;
 
-public class ListingsController(AppDbContext db, SearchService search, PhotoStorage photos) : Controller
+public class ListingsController(AppDbContext db, SearchService search, PhotoStorage photos, TrustService trust) : Controller
 {
     private string? UserId => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -85,6 +85,8 @@ public class ListingsController(AppDbContext db, SearchService search, PhotoStor
             Breadcrumb = await BuildBreadcrumbAsync(listing.Category),
             IsOwner = UserId == listing.UserId,
             IsFavorite = UserId != null && await db.Favorites.AnyAsync(f => f.UserId == UserId && f.ListingId == id),
+            Trust = await trust.AnalyzeListingAsync(listing),
+            SellerTrust = await trust.AnalyzeSellerAsync(listing.UserId),
         };
         return View(vm);
     }
@@ -187,6 +189,8 @@ public class ListingsController(AppDbContext db, SearchService search, PhotoStor
                 Amenities = vm.Amenities.Aggregate(PropertyAmenities.None, (acc, a) => acc | a),
             };
         }
+
+        listing.TrustScore = (await trust.AnalyzeListingAsync(listing)).Score;
 
         db.Listings.Add(listing);
         await db.SaveChangesAsync();

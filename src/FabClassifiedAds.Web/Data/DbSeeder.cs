@@ -179,6 +179,7 @@ public static class DbSeeder
 
         // ---- Electronics & others ----
         L("iPhone 15 Pro Max 256GB Natural Titanium", "Like new, 99% battery health, full box, Apple warranty until November. No scratches.", 1050, "iphone", users[0], "Bucharest", "Bucharest", featured: true, cond: ItemCondition.Used);
+        L("iPhone 14 Pro 128GB Deep Purple", "Good condition, 89% battery, small scratch on frame not visible in case, charger included.", 680, "iphone", users[4], "Iasi", "Iasi");
         L("MacBook Pro 14 M3 Pro 18GB/512GB", "Bought 6 months ago, 14 charge cycles, AppleCare+ until 2027, comes with original box and receipt.", 1850, "laptops", users[1], "Cluj-Napoca", "Cluj", featured: true);
         L("PlayStation 5 Slim + 2 controllers + 5 games", "PS5 Slim disc edition, extra DualSense, Spider-Man 2, God of War Ragnarok, FC25, Horizon, GT7.", 480, "playstation", users[4], "Iasi", "Iasi");
         L("Samsung Neo QLED 65\" QN90C", "Stunning 4K 144Hz TV, perfect for gaming and movies, wall mount included, 2 years warranty left.", 1100, "televisions", users[0], "Bucharest", "Bucharest");
@@ -221,7 +222,28 @@ public static class DbSeeder
             if (match != null) match.VideoUrl = url;
         }
 
+        // a deliberately scammy listing from a brand-new account, to demo the trust engine
+        var scammer = new ApplicationUser
+        {
+            UserName = "scam@demo.fab", Email = "scam@demo.fab", EmailConfirmed = false,
+            DisplayName = "Ion Urgent", City = "Bucharest", AvatarColor = "#ea5455",
+            CreatedAt = DateTime.UtcNow.AddDays(-2),
+        };
+        await userManager.CreateAsync(scammer, "Demo123!");
+        var scamListing = L(
+            "iPhone 15 Pro Max NOU SIGILAT — URGENT, AZI",
+            "Vand urgent iPhone 15 Pro Max nou sigilat, plecat din tara. Plata in avans prin transfer bancar si trimit gratuit prin curier. Contact doar WhatsApp.",
+            350, "iphone", scammer, "Bucharest", "Bucharest", negotiable: false, cond: ItemCondition.New, images: 1);
+        scamListing.CreatedAt = DateTime.UtcNow.AddHours(-3);
+        scamListing.BumpedAt = scamListing.CreatedAt;
+
         db.Listings.AddRange(listings);
+        await db.SaveChangesAsync();
+
+        // compute trust scores now that all comparable prices are in the database
+        var trustEngine = new Services.TrustService(db);
+        foreach (var listing in listings)
+            listing.TrustScore = (await trustEngine.AnalyzeListingAsync(listing)).Score;
         await db.SaveChangesAsync();
     }
 }

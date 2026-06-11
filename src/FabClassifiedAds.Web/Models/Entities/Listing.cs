@@ -47,6 +47,9 @@ public class Listing
     /// <summary>Optional vertical video clip shown in the swipe feed.</summary>
     public string? VideoUrl { get; set; }
 
+    /// <summary>0-100 trust score computed by TrustService when the ad is published.</summary>
+    public int TrustScore { get; set; } = 100;
+
     public List<ListingImage> Images { get; set; } = [];
     public List<ListingAttribute> Attributes { get; set; } = [];
     public CarDetails? CarDetails { get; set; }
