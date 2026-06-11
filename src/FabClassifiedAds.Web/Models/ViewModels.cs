@@ -62,6 +62,9 @@ public class CreateListingViewModel
 
     public ItemCondition Condition { get; set; } = ItemCondition.Used;
 
+    /// <summary>Uploaded photos (JPEG/PNG/WebP/GIF, max 10 × 5 MB).</summary>
+    public List<IFormFile>? Photos { get; set; }
+
     // car fields
     public int? BrandId { get; set; }
     public int? ModelId { get; set; }

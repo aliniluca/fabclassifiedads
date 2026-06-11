@@ -32,6 +32,11 @@ The database is created and seeded automatically on first start (full category t
 - Filters: property type, sale/rent, **rooms range, surface range, floor range, year-built range**, heating type, furnishing level, energy class
 - **29 amenities** as filterable flags (pool, sauna, EV charger, smart home, solar panels, sea view, pet-friendly…)
 
+### Photos, alerts & maps
+- **Real photo uploads** — up to 10 photos per ad (JPEG/PNG/WebP/GIF, 5 MB each) with live previews; stored under `wwwroot/uploads`, falling back to generated SVG covers when no photo is supplied
+- **Saved searches with email alerts** — one click on any filtered search saves it; a background service re-runs saved searches every 2 minutes and emails new matches (dev sender writes to `App_Data/outbox`, swap `IEmailSender` for SMTP in production). Manage, pause or delete alerts at `/saved-searches`
+- **Map view** — every search has a 🗺 Map view (Leaflet + OpenStreetMap, vendored locally) with filtered markers and listing popups; listings are geocoded offline from a built-in city table
+
 ### Platform features
 - Hero homepage with global search, category grid, featured band, brand strip, CTA + trust sections
 - Full-text search across titles/descriptions with price/location/condition/seller filters and 7 sort orders

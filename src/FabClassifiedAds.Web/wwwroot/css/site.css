@@ -305,6 +305,34 @@ code { background: var(--surface-2); padding: 2px 7px; border-radius: 6px; font-
 .chat-time { font-size: .7rem; opacity: .7; }
 .chat-compose { display: flex; gap: 10px; margin-top: 14px; }
 
+/* ===== Map, saved searches & photo upload ===== */
+.btn-sm { padding: 7px 14px; font-size: .85rem; }
+.btn-danger { color: #ff8a9b; border-color: rgba(255, 138, 155, .4); }
+.btn-danger:hover { border-color: #ff8a9b; color: #ff5d77; }
+.search-head-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.map-page { padding-block: 22px 50px; }
+.listing-map { height: calc(100vh - 250px); min-height: 460px; border-radius: var(--radius); border: 1px solid var(--border); z-index: 0; }
+.leaflet-popup-content-wrapper { background: var(--surface-2); color: var(--text); border-radius: var(--radius-sm); }
+.leaflet-popup-content-wrapper a { color: var(--primary); }
+.leaflet-popup-tip { background: var(--surface-2); }
+
+.saved-list { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
+.saved-item { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 16px 20px; }
+.saved-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.saved-name { font-weight: 700; }
+.saved-name:hover { color: var(--primary); }
+.saved-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.photo-drop {
+    display: block; border: 2px dashed var(--border); border-radius: var(--radius);
+    padding: 26px 16px; text-align: center; cursor: pointer; transition: border-color .15s;
+}
+.photo-drop:hover { border-color: var(--primary); }
+.photo-drop-hint { color: var(--text-muted); }
+.photo-previews { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.photo-previews img { width: 96px; height: 72px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+.photo-previews img:first-child { outline: 2px solid var(--primary); }
+
 /* ===== Footer ===== */
 .site-footer { border-top: 1px solid var(--border); margin-top: 60px; background: #0a0b12; }
 .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 30px; padding: 44px 20px 24px; }

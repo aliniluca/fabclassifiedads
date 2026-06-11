@@ -1,0 +1,48 @@
+@model SearchPageViewModel
+@{
+    ViewData["Title"] = $"Map — {Model.CurrentCategory?.Name ?? "All ads"}";
+    var listQuery = Context.Request.QueryString.Value ?? "";
+    var listUrl = Model.CurrentCategory != null ? $"/c/{Model.CurrentCategory.Slug}" : $"/search{listQuery}";
+}
+
+<div class="container map-page">
+    <div class="search-head">
+        <h1>🗺 @(Model.CurrentCategory != null ? Model.CurrentCategory.Name : "All ads") on the map</h1>
+        <span class="search-head-actions">
+            <a href="@listUrl" class="btn btn-ghost btn-sm">☰ List view</a>
+        </span>
+    </div>
+    <p class="muted">Showing every filtered ad that has a location. Click a marker for details.</p>
+    <div id="listingMap" class="listing-map" data-query="@listQuery"></div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" />
+    <script src="~/lib/leaflet/leaflet.js"></script>
+    <script>
+        const mapEl = document.getElementById('listingMap');
+        const map = L.map(mapEl).setView([45.94, 24.97], 7);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        fetch('/api/map-listings' + mapEl.dataset.query)
+            .then(r => r.json())
+            .then(items => {
+                if (!items.length) return;
+                const bounds = [];
+                for (const item of items) {
+                    bounds.push([item.lat, item.lng]);
+                    const img = item.image ? `<img src="${item.image}" alt="" style="width:100%;border-radius:8px;margin-bottom:6px;aspect-ratio:4/3;object-fit:cover">` : '';
+                    L.marker([item.lat, item.lng]).addTo(map).bindPopup(
+                        `<div style="width:190px">${img}
+                           <a href="/l/${item.id}" style="font-weight:700">${item.title}</a>
+                           <div style="opacity:.75;font-size:.82em">${item.summary} · ${item.city}</div>
+                           <div style="font-weight:800;margin-top:4px">${item.price}</div>
+                         </div>`);
+                }
+                map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
+            });
+    </script>
+}

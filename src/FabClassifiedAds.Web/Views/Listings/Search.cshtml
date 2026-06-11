@@ -19,6 +19,25 @@
     <div class="search-head">
         <h1>@(Model.CurrentCategory != null ? $"{Model.CurrentCategory.Icon} {Model.CurrentCategory.Name}" : (string.IsNullOrEmpty(f.Q) ? "All ads" : $"Results for “{f.Q}”"))</h1>
         <span class="result-count">@Model.Result.TotalCount.Number() ads</span>
+        <span class="search-head-actions">
+            @{
+                var mapQuery = Context.Request.QueryString.Value ?? "";
+                if (Model.CurrentCategory != null && !mapQuery.Contains("Category="))
+                {
+                    mapQuery = string.IsNullOrEmpty(mapQuery)
+                        ? $"?Category={Model.CurrentCategory.Slug}"
+                        : $"{mapQuery}&Category={Model.CurrentCategory.Slug}";
+                }
+            }
+            <a href="/map@(mapQuery)" class="btn btn-ghost btn-sm">🗺 Map view</a>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <form method="post" action="/saved-searches/save@(mapQuery)" class="inline-form">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-ghost btn-sm">🔔 Save search</button>
+                </form>
+            }
+        </span>
     </div>
 
     @if (Model.ChildCategories.Count > 0)

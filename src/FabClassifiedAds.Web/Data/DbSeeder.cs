@@ -74,6 +74,11 @@ public static class DbSeeder
                 ExpiresAt = DateTime.UtcNow.AddDays(30),
             };
             l.BumpedAt = l.CreatedAt;
+            if (Services.GeoData.Locate(city, title.GetHashCode()) is { } coords)
+            {
+                l.Latitude = coords.Lat;
+                l.Longitude = coords.Lng;
+            }
             imgSeed ??= CategorySeeder.Slugify(title);
             for (var i = 0; i < images; i++)
                 l.Images.Add(new ListingImage { Url = $"/media/ph/{imgSeed}-{i}.svg", SortOrder = i });

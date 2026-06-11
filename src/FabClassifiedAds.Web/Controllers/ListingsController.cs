@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using FabClassifiedAds.Web.Data;
+using FabClassifiedAds.Web.Helpers;
 using FabClassifiedAds.Web.Models;
 using FabClassifiedAds.Web.Models.Entities;
 using FabClassifiedAds.Web.Services;
@@ -9,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FabClassifiedAds.Web.Controllers;
 
-public class ListingsController(AppDbContext db, SearchService search) : Controller
+public class ListingsController(AppDbContext db, SearchService search, PhotoStorage photos) : Controller
 {
     private string? UserId => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -115,6 +116,10 @@ public class ListingsController(AppDbContext db, SearchService search) : Control
             if (vm.Transaction is null) ModelState.AddModelError(nameof(vm.Transaction), "Transaction type is required.");
         }
 
+        var uploadedPhotos = (vm.Photos ?? []).Where(p => p.Length > 0).ToList();
+        if (photos.Validate(uploadedPhotos) is { } photoError)
+            ModelState.AddModelError(nameof(vm.Photos), photoError);
+
         if (!ModelState.IsValid) return View(await PopulateAsync(vm));
 
         var listing = new Listing
@@ -132,7 +137,22 @@ public class ListingsController(AppDbContext db, SearchService search) : Control
             UserId = UserId!,
             ExpiresAt = DateTime.UtcNow.AddDays(30),
         };
-        listing.Images.Add(new ListingImage { Url = $"/media/ph/{CategorySeeder.Slugify(vm.Title)}-0.svg" });
+        if (uploadedPhotos.Count > 0)
+        {
+            var urls = await photos.SaveAsync(uploadedPhotos);
+            for (var i = 0; i < urls.Count; i++)
+                listing.Images.Add(new ListingImage { Url = urls[i], SortOrder = i });
+        }
+        else
+        {
+            listing.Images.Add(new ListingImage { Url = $"/media/ph/{CategorySeeder.Slugify(vm.Title)}-0.svg" });
+        }
+
+        if (GeoData.Locate(vm.City, Environment.TickCount) is { } coords)
+        {
+            listing.Latitude = coords.Lat;
+            listing.Longitude = coords.Lng;
+        }
 
         if (category!.Kind == CategoryKind.Cars)
         {
@@ -165,6 +185,39 @@ public class ListingsController(AppDbContext db, SearchService search) : Control
         await db.SaveChangesAsync();
         TempData["Flash"] = "Your ad is live! 🎉";
         return RedirectToAction(nameof(Details), new { id = listing.Id });
+    }
+
+    /// <summary>Full-page map view; reuses the same filters as the list view.</summary>
+    [HttpGet("/map")]
+    public async Task<IActionResult> Map(SearchFilters filters)
+    {
+        var vm = new SearchPageViewModel { Filters = filters };
+        if (!string.IsNullOrEmpty(filters.Category))
+            vm.CurrentCategory = await db.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.Slug == filters.Category);
+        return View(vm);
+    }
+
+    /// <summary>JSON endpoint feeding the Leaflet map with filtered, geocoded listings.</summary>
+    [HttpGet("/api/map-listings")]
+    public async Task<IActionResult> MapListings(SearchFilters filters)
+    {
+        filters.Page = 1;
+        filters.PageSize = 500;
+        var result = await search.SearchAsync(filters);
+        var markers = result.Items
+            .Where(l => l.Latitude.HasValue && l.Longitude.HasValue)
+            .Select(l => new
+            {
+                l.Id,
+                l.Title,
+                Price = l.Price(),
+                l.City,
+                Lat = l.Latitude!.Value,
+                Lng = l.Longitude!.Value,
+                Image = l.Images.FirstOrDefault()?.Url,
+                Summary = l.ListingSummary(),
+            });
+        return Json(markers);
     }
 
     /// <summary>JSON endpoint for the dependent brand -> model dropdown.</summary>

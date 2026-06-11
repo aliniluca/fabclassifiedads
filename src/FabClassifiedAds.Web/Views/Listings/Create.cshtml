@@ -10,7 +10,7 @@
     <h1>Post your ad</h1>
     <p class="muted">Pick the right category to unlock tailored fields — buyers filter by them.</p>
 
-    <form method="post" action="/post" class="panel form-panel" id="createForm"
+    <form method="post" action="/post" enctype="multipart/form-data" class="panel form-panel" id="createForm"
           data-car-categories="@carCategoryIds" data-re-categories="@reCategoryIds">
         @Html.AntiForgeryToken()
         <div asp-validation-summary="All" class="validation-summary"></div>
@@ -60,6 +60,15 @@
         <div class="field-row">
             <label class="check-row"><input asp-for="IsNegotiable" /> Negotiable</label>
             <label class="check-row"><input asp-for="IsFree" /> Give away for free</label>
+        </div>
+
+        <div class="field">
+            <span>Photos <span class="muted">(up to 10, max 5 MB each — JPEG, PNG, WebP, GIF)</span></span>
+            <label class="photo-drop" id="photoDrop">
+                <input type="file" name="Photos" id="photoInput" multiple accept="image/jpeg,image/png,image/webp,image/gif" hidden />
+                <span class="photo-drop-hint">📸 Click to choose photos<br/><small class="muted">The first photo becomes the cover</small></span>
+            </label>
+            <div class="photo-previews" id="photoPreviews"></div>
         </div>
 
         <div class="field-row">

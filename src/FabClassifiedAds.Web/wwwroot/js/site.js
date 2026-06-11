@@ -39,6 +39,23 @@ if (createForm) {
     sync();
 }
 
+// Photo upload previews on the create form
+const photoInput = document.getElementById('photoInput');
+if (photoInput) {
+    photoInput.addEventListener('change', () => {
+        const previews = document.getElementById('photoPreviews');
+        previews.innerHTML = '';
+        for (const file of photoInput.files) {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.onload = () => URL.revokeObjectURL(img.src);
+            previews.appendChild(img);
+        }
+        const hint = document.querySelector('.photo-drop-hint');
+        if (hint) hint.innerHTML = `📸 ${photoInput.files.length} photo(s) selected — click to change`;
+    });
+}
+
 // Favorite hearts: toggle via fetch without a page reload
 document.addEventListener('submit', async (e) => {
     const form = e.target.closest('.fav-form');

@@ -22,6 +22,7 @@
         <nav class="header-nav">
             @if (User.Identity?.IsAuthenticated == true)
             {
+                <a href="/saved-searches" class="nav-link" title="Saved searches">🔔<span class="nav-label">Alerts</span></a>
                 <a href="/favorites" class="nav-link" title="Favorites">♥<span class="nav-label">Favorites</span></a>
                 <a href="/messages" class="nav-link" title="Messages">💬<span class="nav-label">Messages</span></a>
                 <a href="/my-ads" class="nav-link" title="My ads">📋<span class="nav-label">My ads</span></a>

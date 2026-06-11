@@ -26,6 +26,9 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddScoped<SearchService>();
+builder.Services.AddScoped<PhotoStorage>();
+builder.Services.AddSingleton<IEmailSender, OutboxEmailSender>();
+builder.Services.AddHostedService<SavedSearchAlertService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

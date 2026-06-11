@@ -7,3 +7,5 @@ obj/
 .vs/
 .idea/
 node_modules/
+src/FabClassifiedAds.Web/wwwroot/uploads/
+src/FabClassifiedAds.Web/App_Data/
