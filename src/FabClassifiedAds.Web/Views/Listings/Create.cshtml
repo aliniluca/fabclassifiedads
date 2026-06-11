@@ -1,14 +1,14 @@
 @model CreateListingViewModel
 @{
-    ViewData["Title"] = "Post an ad";
+    ViewData["Title"] = T["Post your ad"];
     var currentYear = DateTime.UtcNow.Year;
     var carCategoryIds = string.Join(",", Model.CategoryTree.SelectMany(c => new[] { c }.Concat(c.Children)).Where(c => c.Kind == CategoryKind.Cars).Select(c => c.Id));
     var reCategoryIds = string.Join(",", Model.CategoryTree.SelectMany(c => new[] { c }.Concat(c.Children)).Where(c => c.Kind == CategoryKind.RealEstate).Select(c => c.Id));
 }
 
 <div class="container narrow section-pad">
-    <h1>Post your ad</h1>
-    <p class="muted">Pick the right category to unlock tailored fields — buyers filter by them.</p>
+    <h1>@T["Post your ad"]</h1>
+    <p class="muted">@T["Pick the right category to unlock tailored fields — buyers filter by them."]</p>
 
     <form method="post" action="/post" enctype="multipart/form-data" class="panel form-panel" id="createForm"
           data-car-categories="@carCategoryIds" data-re-categories="@reCategoryIds">
@@ -16,15 +16,15 @@
         <div asp-validation-summary="All" class="validation-summary"></div>
 
         <label class="field">
-            <span>Category *</span>
+            <span>@T["Category"] *</span>
             <select asp-for="CategoryId" id="categorySelect" required>
-                <option value="">Choose a category…</option>
+                <option value="">@T["Choose a category…"]</option>
                 @foreach (var root in Model.CategoryTree)
                 {
-                    <optgroup label="@root.Icon @root.Name">
+                    <optgroup label="@root.Icon @T[root.Name]">
                         @foreach (var child in root.Children)
                         {
-                            <option value="@child.Id">@child.Name</option>
+                            <option value="@child.Id">@T[child.Name]</option>
                         }
                     </optgroup>
                 }
@@ -32,63 +32,68 @@
         </label>
 
         <label class="field">
-            <span>Title *</span>
-            <input asp-for="Title" placeholder="e.g. BMW 320d xDrive M Sport, 2021, full options" required minlength="8" />
+            <span>@T["Title"] *</span>
+            <input asp-for="Title" placeholder="@T["e.g. BMW 320d xDrive M Sport, 2021, full options"]" required minlength="8" />
         </label>
 
         <label class="field">
-            <span>Description *</span>
-            <textarea asp-for="Description" rows="7" placeholder="Describe the condition, history and what makes it great…" required minlength="20"></textarea>
+            <span>@T["Description"] *</span>
+            <textarea asp-for="Description" rows="7" placeholder="@T["Describe the condition, history and what makes it great…"]" required minlength="20"></textarea>
         </label>
 
         <div class="field-row">
             <label class="field">
-                <span>Price</span>
+                <span>@T["Price"]</span>
                 <input asp-for="Price" type="number" step="0.01" min="0" placeholder="0" />
             </label>
             <label class="field">
-                <span>Currency</span>
+                <span>@T["Currency"]</span>
                 <select asp-for="Currency">
                     <option>EUR</option><option>USD</option><option>RON</option>
                 </select>
             </label>
             <label class="field">
-                <span>Condition</span>
-                <select asp-for="Condition" asp-items="Html.GetEnumSelectList<ItemCondition>()"></select>
+                <span>@T["Condition"]</span>
+                <select asp-for="Condition">
+                    @foreach (var cond in Enum.GetValues<ItemCondition>())
+                    {
+                        <option value="@cond">@cond.TranslateEnum()</option>
+                    }
+                </select>
             </label>
         </div>
         <div class="field-row">
-            <label class="check-row"><input asp-for="IsNegotiable" /> Negotiable</label>
-            <label class="check-row"><input asp-for="IsFree" /> Give away for free</label>
+            <label class="check-row"><input asp-for="IsNegotiable" /> @T["Negotiable"]</label>
+            <label class="check-row"><input asp-for="IsFree" /> @T["Give away for free"]</label>
         </div>
 
         <div class="field">
-            <span>Photos <span class="muted">(up to 10, max 5 MB each — JPEG, PNG, WebP, GIF)</span></span>
+            <span>@T["Photos"] <span class="muted">@T["PhotoLimits"]</span></span>
             <label class="photo-drop" id="photoDrop">
                 <input type="file" name="Photos" id="photoInput" multiple accept="image/jpeg,image/png,image/webp,image/gif" hidden />
-                <span class="photo-drop-hint">📸 Click to choose photos<br/><small class="muted">The first photo becomes the cover</small></span>
+                <span class="photo-drop-hint">📸 @T["Click to choose photos"]<br/><small class="muted">@T["The first photo becomes the cover"]</small></span>
             </label>
             <div class="photo-previews" id="photoPreviews"></div>
         </div>
 
         <div class="field-row">
             <label class="field">
-                <span>City *</span>
-                <input asp-for="City" placeholder="e.g. Bucharest" required />
+                <span>@T["City"] *</span>
+                <input asp-for="City" placeholder="@T["e.g. Bucharest"]" required />
             </label>
             <label class="field">
-                <span>Region</span>
-                <input asp-for="Region" placeholder="e.g. Ilfov" />
+                <span>@T["Region"]</span>
+                <input asp-for="Region" placeholder="@T["e.g. Ilfov"]" />
             </label>
         </div>
 
         <fieldset id="carFields" class="dyn-fields" hidden>
-            <legend>🚗 Vehicle details</legend>
+            <legend>🚗 @T["Vehicle details"]</legend>
             <div class="field-row">
                 <label class="field">
-                    <span>Brand</span>
+                    <span>@T["Brand"]</span>
                     <select asp-for="BrandId" id="createBrandSelect" data-models-url="/api/car-models/">
-                        <option value="">Choose brand…</option>
+                        <option value="">@T["Choose brand…"]</option>
                         @foreach (var brand in Model.Brands)
                         {
                             <option value="@brand.Id">@brand.Name</option>
@@ -96,74 +101,106 @@
                     </select>
                 </label>
                 <label class="field">
-                    <span>Model</span>
-                    <select asp-for="ModelId" id="createModelSelect"><option value="">Choose model…</option></select>
+                    <span>@T["Model"]</span>
+                    <select asp-for="ModelId" id="createModelSelect"><option value="">@T["Choose model…"]</option></select>
                 </label>
                 <label class="field">
-                    <span>Variant</span>
-                    <input asp-for="Variant" placeholder="e.g. 320d xDrive M Sport" />
+                    <span>@T["Variant"]</span>
+                    <input asp-for="Variant" placeholder="@T["e.g. 320d xDrive M Sport"]" />
                 </label>
             </div>
             <div class="field-row">
                 <label class="field">
-                    <span>Year *</span>
+                    <span>@T["Year"] *</span>
                     <select asp-for="Year">
-                        <option value="">Year…</option>
+                        <option value="">@T["Year…"]</option>
                         @for (var y = currentYear + 1; y >= 1950; y--) { <option value="@y">@y</option> }
                     </select>
                 </label>
-                <label class="field"><span>Mileage (km) *</span><input asp-for="Mileage" type="number" min="0" /></label>
-                <label class="field"><span>Color</span><input asp-for="Color" placeholder="e.g. Mineral Grey" /></label>
+                <label class="field"><span>@T["Mileage (km)"] *</span><input asp-for="Mileage" type="number" min="0" /></label>
+                <label class="field"><span>@T["Color"]</span><input asp-for="Color" placeholder="@T["e.g. Mineral Grey"]" /></label>
             </div>
             <div class="field-row">
-                <label class="field"><span>Fuel</span><select asp-for="Fuel" asp-items="Html.GetEnumSelectList<FuelType>()"><option value="">Fuel…</option></select></label>
-                <label class="field"><span>Transmission</span><select asp-for="Transmission" asp-items="Html.GetEnumSelectList<TransmissionType>()"><option value="">Transmission…</option></select></label>
-                <label class="field"><span>Body</span><select asp-for="Body" asp-items="Html.GetEnumSelectList<BodyType>()"><option value="">Body…</option></select></label>
-                <label class="field"><span>Drivetrain</span><select asp-for="Drive" asp-items="Html.GetEnumSelectList<Drivetrain>()"><option value="">Drive…</option></select></label>
+                <label class="field"><span>@T["Fuel"]</span>
+                    <select asp-for="Fuel"><option value="">@T["Fuel…"]</option>
+                        @foreach (var fuel in Enum.GetValues<FuelType>()) { <option value="@fuel">@fuel.TranslateEnum()</option> }
+                    </select>
+                </label>
+                <label class="field"><span>@T["Transmission"]</span>
+                    <select asp-for="Transmission"><option value="">@T["Transmission…"]</option>
+                        @foreach (var tr in Enum.GetValues<TransmissionType>()) { <option value="@tr">@tr.TranslateEnum()</option> }
+                    </select>
+                </label>
+                <label class="field"><span>@T["Body"]</span>
+                    <select asp-for="Body"><option value="">@T["Body…"]</option>
+                        @foreach (var body in Enum.GetValues<BodyType>()) { <option value="@body">@body.TranslateEnum()</option> }
+                    </select>
+                </label>
+                <label class="field"><span>@T["Drivetrain"]</span>
+                    <select asp-for="Drive"><option value="">@T["Drive…"]</option>
+                        @foreach (var drive in Enum.GetValues<Drivetrain>()) { <option value="@drive">@drive.TranslateEnum()</option> }
+                    </select>
+                </label>
             </div>
             <div class="field-row">
-                <label class="field"><span>Engine (cm³)</span><input asp-for="EngineCc" type="number" min="0" /></label>
-                <label class="field"><span>Power (hp)</span><input asp-for="PowerHp" type="number" min="0" /></label>
+                <label class="field"><span>@T["Engine (cm³)"]</span><input asp-for="EngineCc" type="number" min="0" /></label>
+                <label class="field"><span>@T["Power (hp)"]</span><input asp-for="PowerHp" type="number" min="0" /></label>
             </div>
             <details class="options-details">
-                <summary>Equipment & options</summary>
+                <summary>@T["Equipment & options"]</summary>
                 <div class="options-list options-grid">
                     @foreach (var option in Enum.GetValues<CarOptions>().Where(o => o != CarOptions.None))
                     {
-                        <label class="check-row"><input type="checkbox" name="Options" value="@option" /> @option.Humanize()</label>
+                        <label class="check-row"><input type="checkbox" name="Options" value="@option" /> @option.TranslateEnum()</label>
                     }
                 </div>
             </details>
         </fieldset>
 
         <fieldset id="reFields" class="dyn-fields" hidden>
-            <legend>🏠 Property details</legend>
+            <legend>🏠 @T["Property details"]</legend>
             <div class="field-row">
-                <label class="field"><span>Property type *</span><select asp-for="PropertyType" asp-items="Html.GetEnumSelectList<PropertyType>()"><option value="">Type…</option></select></label>
-                <label class="field"><span>Transaction *</span><select asp-for="Transaction" asp-items="Html.GetEnumSelectList<TransactionType>()"><option value="">Sale / rent…</option></select></label>
+                <label class="field"><span>@T["Type"] *</span>
+                    <select asp-for="PropertyType"><option value="">@T["Type…"]</option>
+                        @foreach (var pt in Enum.GetValues<PropertyType>()) { <option value="@pt">@pt.TranslateEnum()</option> }
+                    </select>
+                </label>
+                <label class="field"><span>@T["Transaction"] *</span>
+                    <select asp-for="Transaction"><option value="">@T["Sale / rent…"]</option>
+                        @foreach (var tx in Enum.GetValues<TransactionType>()) { <option value="@tx">@tx.TranslateEnum()</option> }
+                    </select>
+                </label>
             </div>
             <div class="field-row">
-                <label class="field"><span>Rooms</span><input asp-for="Rooms" type="number" min="1" max="50" /></label>
-                <label class="field"><span>Surface (m²) *</span><input asp-for="SurfaceM2" type="number" min="1" step="0.1" /></label>
-                <label class="field"><span>Floor</span><input asp-for="Floor" type="number" min="-1" /></label>
-                <label class="field"><span>Total floors</span><input asp-for="TotalFloors" type="number" min="1" /></label>
+                <label class="field"><span>@T["Rooms"]</span><input asp-for="Rooms" type="number" min="1" max="50" /></label>
+                <label class="field"><span>@T["Surface (m²)"] *</span><input asp-for="SurfaceM2" type="number" min="1" step="0.1" /></label>
+                <label class="field"><span>@T["Floor"]</span><input asp-for="Floor" type="number" min="-1" /></label>
+                <label class="field"><span>@T["Total floors"]</span><input asp-for="TotalFloors" type="number" min="1" /></label>
             </div>
             <div class="field-row">
-                <label class="field"><span>Year built</span><input asp-for="YearBuilt" type="number" min="1800" max="@(currentYear + 2)" /></label>
-                <label class="field"><span>Heating</span><select asp-for="Heating" asp-items="Html.GetEnumSelectList<HeatingType>()"><option value="">Heating…</option></select></label>
-                <label class="field"><span>Furnished</span><select asp-for="Furnished" asp-items="Html.GetEnumSelectList<FurnishedState>()"><option value="">Furnishing…</option></select></label>
+                <label class="field"><span>@T["Year built"]</span><input asp-for="YearBuilt" type="number" min="1800" max="@(currentYear + 2)" /></label>
+                <label class="field"><span>@T["Heating"]</span>
+                    <select asp-for="Heating"><option value="">@T["Heating…"]</option>
+                        @foreach (var heat in Enum.GetValues<HeatingType>().Where(h => h != HeatingType.None)) { <option value="@heat">@heat.TranslateEnum()</option> }
+                    </select>
+                </label>
+                <label class="field"><span>@T["Furnished"]</span>
+                    <select asp-for="Furnished"><option value="">@T["Furnishing…"]</option>
+                        @foreach (var furn in Enum.GetValues<FurnishedState>()) { <option value="@furn">@furn.TranslateEnum()</option> }
+                    </select>
+                </label>
             </div>
             <details class="options-details">
-                <summary>Amenities</summary>
+                <summary>@T["Amenities"]</summary>
                 <div class="options-list options-grid">
                     @foreach (var amenity in Enum.GetValues<PropertyAmenities>().Where(a => a != PropertyAmenities.None))
                     {
-                        <label class="check-row"><input type="checkbox" name="Amenities" value="@amenity" /> @amenity.Humanize()</label>
+                        <label class="check-row"><input type="checkbox" name="Amenities" value="@amenity" /> @amenity.TranslateEnum()</label>
                     }
                 </div>
             </details>
         </fieldset>
 
-        <button type="submit" class="btn btn-primary btn-block btn-lg">🚀 Publish ad</button>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">🚀 @T["Publish ad"]</button>
     </form>
 </div>

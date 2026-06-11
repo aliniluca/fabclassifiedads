@@ -8,11 +8,11 @@
 
 <div class="container detail-page">
     <nav class="breadcrumb">
-        <a href="/">Home</a>
+        <a href="/">@T["Home"]</a>
         @foreach (var crumb in Model.Breadcrumb)
         {
             <span>›</span>
-            <a href="/c/@crumb.Slug">@crumb.Name</a>
+            <a href="/c/@crumb.Slug">@T[crumb.Name]</a>
         }
     </nav>
 
@@ -34,7 +34,7 @@
                 }
                 else
                 {
-                    <div class="gallery-main card-media-empty">📷 No photos</div>
+                    <div class="gallery-main card-media-empty">📷</div>
                 }
             </div>
 
@@ -42,46 +42,46 @@
                 <div class="detail-title-row">
                     <div>
                         <h1>@l.Title</h1>
-                        <div class="muted">Posted @l.CreatedAt.TimeAgo() • 👁 @l.ViewCount.Number() views • #@l.Id</div>
+                        <div class="muted">@T["Posted"] @l.CreatedAt.TimeAgo() • 👁 @l.ViewCount.Number() @T["views"] • #@l.Id</div>
                     </div>
                     <div class="detail-price">@l.Price()
-                        @if (l.IsNegotiable) { <span class="negotiable">negotiable</span> }
+                        @if (l.IsNegotiable) { <span class="negotiable">@T["negotiable"]</span> }
                     </div>
                 </div>
 
                 @if (car != null)
                 {
-                    <h2 class="panel-subtitle">🚗 Vehicle specifications</h2>
+                    <h2 class="panel-subtitle">🚗 @T["Vehicle specifications"]</h2>
                     <dl class="spec-grid">
-                        @if (car.Brand != null) { <div><dt>Brand</dt><dd>@car.Brand.Name</dd></div> }
-                        @if (car.Model != null) { <div><dt>Model</dt><dd>@car.Model.Name</dd></div> }
-                        @if (!string.IsNullOrEmpty(car.Variant)) { <div><dt>Variant</dt><dd>@car.Variant</dd></div> }
-                        <div><dt>Year</dt><dd>@car.Year</dd></div>
-                        <div><dt>Mileage</dt><dd>@car.Mileage.Number() km</dd></div>
-                        <div><dt>Fuel</dt><dd>@car.Fuel.Humanize()</dd></div>
-                        <div><dt>Transmission</dt><dd>@car.Transmission.Humanize()</dd></div>
-                        <div><dt>Body</dt><dd>@car.Body.Humanize()</dd></div>
-                        <div><dt>Drivetrain</dt><dd>@car.Drive.Humanize()</dd></div>
-                        @if (car.EngineCc.HasValue) { <div><dt>Engine</dt><dd>@car.EngineCc cm³</dd></div> }
-                        @if (car.PowerHp.HasValue) { <div><dt>Power</dt><dd>@car.PowerHp hp</dd></div> }
-                        @if (car.BatteryKwh.HasValue) { <div><dt>Battery</dt><dd>@car.BatteryKwh kWh</dd></div> }
-                        @if (car.RangeKm.HasValue) { <div><dt>Range</dt><dd>@car.RangeKm km</dd></div> }
-                        @if (!string.IsNullOrEmpty(car.Color)) { <div><dt>Color</dt><dd>@car.Color @(car.Metallic ? "metallic" : "")</dd></div> }
-                        @if (car.Doors.HasValue) { <div><dt>Doors</dt><dd>@car.Doors</dd></div> }
-                        @if (car.EmissionStandard.HasValue) { <div><dt>Emission</dt><dd>Euro @car.EmissionStandard</dd></div> }
-                        @if (car.FuelConsumption.HasValue) { <div><dt>Consumption</dt><dd>@car.FuelConsumption @(car.Fuel == FuelType.Electric ? "kWh" : "l")/100km</dd></div> }
-                        <div><dt>Owners</dt><dd>@car.OwnersCount</dd></div>
-                        <div><dt>Accident-free</dt><dd>@(car.AccidentFree ? "✅ Yes" : "No")</dd></div>
-                        <div><dt>Service book</dt><dd>@(car.ServiceBook ? "✅ Yes" : "No")</dd></div>
+                        @if (car.Brand != null) { <div><dt>@T["Brand"]</dt><dd>@car.Brand.Name</dd></div> }
+                        @if (car.Model != null) { <div><dt>@T["Model"]</dt><dd>@car.Model.Name</dd></div> }
+                        @if (!string.IsNullOrEmpty(car.Variant)) { <div><dt>@T["Variant"]</dt><dd>@car.Variant</dd></div> }
+                        <div><dt>@T["Year"]</dt><dd>@car.Year</dd></div>
+                        <div><dt>@T["Mileage"]</dt><dd>@car.Mileage.Number() km</dd></div>
+                        <div><dt>@T["Fuel"]</dt><dd>@car.Fuel.TranslateEnum()</dd></div>
+                        <div><dt>@T["Transmission"]</dt><dd>@car.Transmission.TranslateEnum()</dd></div>
+                        <div><dt>@T["Body"]</dt><dd>@car.Body.TranslateEnum()</dd></div>
+                        <div><dt>@T["Drivetrain"]</dt><dd>@car.Drive.TranslateEnum()</dd></div>
+                        @if (car.EngineCc.HasValue) { <div><dt>@T["Engine"]</dt><dd>@car.EngineCc cm³</dd></div> }
+                        @if (car.PowerHp.HasValue) { <div><dt>@T["Power"]</dt><dd>@car.PowerHp @(FabClassifiedAds.Web.Services.Translator.IsRo ? "CP" : "hp")</dd></div> }
+                        @if (car.BatteryKwh.HasValue) { <div><dt>@T["Battery"]</dt><dd>@car.BatteryKwh kWh</dd></div> }
+                        @if (car.RangeKm.HasValue) { <div><dt>@T["Range"]</dt><dd>@car.RangeKm km</dd></div> }
+                        @if (!string.IsNullOrEmpty(car.Color)) { <div><dt>@T["Color"]</dt><dd>@car.Color @(car.Metallic ? T["metallic"] : "")</dd></div> }
+                        @if (car.Doors.HasValue) { <div><dt>@T["Doors"]</dt><dd>@car.Doors</dd></div> }
+                        @if (car.EmissionStandard.HasValue) { <div><dt>@T["Emission"]</dt><dd>Euro @car.EmissionStandard</dd></div> }
+                        @if (car.FuelConsumption.HasValue) { <div><dt>@T["Consumption"]</dt><dd>@car.FuelConsumption @(car.Fuel == FuelType.Electric ? "kWh" : "l")/100km</dd></div> }
+                        <div><dt>@T["Owners"]</dt><dd>@car.OwnersCount</dd></div>
+                        <div><dt>@T["Accident-free"]</dt><dd>@(car.AccidentFree ? $"✅ {T["Yes"]}" : T["No"])</dd></div>
+                        <div><dt>@T["Service book"]</dt><dd>@(car.ServiceBook ? $"✅ {T["Yes"]}" : T["No"])</dd></div>
                     </dl>
 
                     @if (car.Options != CarOptions.None)
                     {
-                        <h2 class="panel-subtitle">Equipment</h2>
+                        <h2 class="panel-subtitle">@T["Equipment"]</h2>
                         <div class="tag-cloud">
                             @foreach (var option in car.Options.Flags())
                             {
-                                <span class="tag">✓ @option.Humanize()</span>
+                                <span class="tag">✓ @option.TranslateEnum()</span>
                             }
                         </div>
                     }
@@ -89,35 +89,35 @@
 
                 @if (re != null)
                 {
-                    <h2 class="panel-subtitle">🏠 Property details</h2>
+                    <h2 class="panel-subtitle">🏠 @T["Property details"]</h2>
                     <dl class="spec-grid">
-                        <div><dt>Type</dt><dd>@re.PropertyType.Humanize()</dd></div>
-                        <div><dt>Transaction</dt><dd>@re.Transaction.Humanize()</dd></div>
-                        @if (re.Rooms.HasValue) { <div><dt>Rooms</dt><dd>@re.Rooms</dd></div> }
-                        @if (re.Bedrooms.HasValue) { <div><dt>Bedrooms</dt><dd>@re.Bedrooms</dd></div> }
-                        @if (re.Bathrooms.HasValue) { <div><dt>Bathrooms</dt><dd>@re.Bathrooms</dd></div> }
-                        <div><dt>Surface</dt><dd>@re.SurfaceM2.ToString("0.#") m²</dd></div>
-                        @if (re.LandSurfaceM2.HasValue) { <div><dt>Land</dt><dd>@re.LandSurfaceM2?.ToString("0.#") m²</dd></div> }
-                        @if (re.Floor.HasValue) { <div><dt>Floor</dt><dd>@(re.Floor == 0 ? "Ground" : re.Floor.ToString())@(re.TotalFloors.HasValue ? $" / {re.TotalFloors}" : "")</dd></div> }
-                        @if (re.YearBuilt.HasValue) { <div><dt>Year built</dt><dd>@re.YearBuilt</dd></div> }
-                        @if (re.Heating != HeatingType.None) { <div><dt>Heating</dt><dd>@re.Heating.Humanize()</dd></div> }
-                        @if (re.EnergyClass != EnergyClass.Unknown) { <div><dt>Energy class</dt><dd>@re.EnergyClass</dd></div> }
-                        <div><dt>Furnished</dt><dd>@re.Furnished.Humanize()</dd></div>
+                        <div><dt>@T["Type"]</dt><dd>@re.PropertyType.TranslateEnum()</dd></div>
+                        <div><dt>@T["Transaction"]</dt><dd>@re.Transaction.TranslateEnum()</dd></div>
+                        @if (re.Rooms.HasValue) { <div><dt>@T["Rooms"]</dt><dd>@re.Rooms</dd></div> }
+                        @if (re.Bedrooms.HasValue) { <div><dt>@T["Bedrooms"]</dt><dd>@re.Bedrooms</dd></div> }
+                        @if (re.Bathrooms.HasValue) { <div><dt>@T["Bathrooms"]</dt><dd>@re.Bathrooms</dd></div> }
+                        <div><dt>@T["Surface"]</dt><dd>@re.SurfaceM2.ToString("0.#") m²</dd></div>
+                        @if (re.LandSurfaceM2.HasValue) { <div><dt>@T["Land"]</dt><dd>@re.LandSurfaceM2?.ToString("0.#") m²</dd></div> }
+                        @if (re.Floor.HasValue) { <div><dt>@T["Floor"]</dt><dd>@(re.Floor == 0 ? T["Ground"] : re.Floor.ToString())@(re.TotalFloors.HasValue ? $" / {re.TotalFloors}" : "")</dd></div> }
+                        @if (re.YearBuilt.HasValue) { <div><dt>@T["Year built"]</dt><dd>@re.YearBuilt</dd></div> }
+                        @if (re.Heating != HeatingType.None) { <div><dt>@T["Heating"]</dt><dd>@re.Heating.TranslateEnum()</dd></div> }
+                        @if (re.EnergyClass != EnergyClass.Unknown) { <div><dt>@T["Energy class"]</dt><dd>@re.EnergyClass</dd></div> }
+                        <div><dt>@T["Furnished"]</dt><dd>@re.Furnished.TranslateEnum()</dd></div>
                     </dl>
 
                     @if (re.Amenities != PropertyAmenities.None)
                     {
-                        <h2 class="panel-subtitle">Amenities</h2>
+                        <h2 class="panel-subtitle">@T["Amenities"]</h2>
                         <div class="tag-cloud">
                             @foreach (var amenity in re.Amenities.Flags())
                             {
-                                <span class="tag">✓ @amenity.Humanize()</span>
+                                <span class="tag">✓ @amenity.TranslateEnum()</span>
                             }
                         </div>
                     }
                 }
 
-                <h2 class="panel-subtitle">Description</h2>
+                <h2 class="panel-subtitle">@T["Description"]</h2>
                 <p class="detail-description">@l.Description</p>
 
                 @if (l.Attributes.Count > 0)
@@ -138,11 +138,11 @@
                     <span class="avatar" style="background:@(l.User.AvatarColor ?? "#6d5dfc")">@(l.User.DisplayName.Length > 0 ? l.User.DisplayName[0] : '?')</span>
                     <div>
                         <strong>@l.User.DisplayName</strong>
-                        @if (l.User.IsBusiness) { <span class="badge badge-business">Business</span> }
-                        <div class="muted small">On FabAds since @l.User.CreatedAt.ToString("MMM yyyy")</div>
+                        @if (l.User.IsBusiness) { <span class="badge badge-business">@T["Business"]</span> }
+                        <div class="muted small">@T["On FabAds since"] @l.User.CreatedAt.ToString("MMM yyyy")</div>
                         @if (l.User.RatingCount > 0)
                         {
-                            <div class="rating">★ @l.User.RatingAverage.ToString("0.0") <span class="muted small">(@l.User.RatingCount reviews)</span></div>
+                            <div class="rating">★ @l.User.RatingAverage.ToString("0.0") <span class="muted small">(@l.User.RatingCount @T["reviews"])</span></div>
                         }
                     </div>
                 </div>
@@ -155,31 +155,31 @@
                     {
                         <form action="/messages/start/@l.Id" method="post">
                             @Html.AntiForgeryToken()
-                            <textarea name="body" rows="3" placeholder="Hi! Is this still available?" required></textarea>
-                            <button type="submit" class="btn btn-primary btn-block mt-8">💬 Send message</button>
+                            <textarea name="body" rows="3" placeholder="@T["Hi! Is this still available?"]" required></textarea>
+                            <button type="submit" class="btn btn-primary btn-block mt-8">💬 @T["Send message"]</button>
                         </form>
                         <form action="/favorites/toggle/@l.Id" method="post" class="mt-8">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-ghost btn-block">@(Model.IsFavorite ? "♥ Saved — remove" : "♡ Save to favorites")</button>
+                            <button type="submit" class="btn btn-ghost btn-block">@(Model.IsFavorite ? $"♥ {T["Saved — remove"]}" : $"♡ {T["Save to favorites"]}")</button>
                         </form>
                     }
                     else
                     {
-                        <a href="/login?returnUrl=/l/@l.Id" class="btn btn-primary btn-block">Sign in to contact seller</a>
+                        <a href="/login?returnUrl=/l/@l.Id" class="btn btn-primary btn-block">@T["Sign in to contact seller"]</a>
                     }
                 }
                 else
                 {
-                    <div class="owner-note">This is your ad.</div>
+                    <div class="owner-note">@T["This is your ad."]</div>
                 }
             </div>
 
             <div class="panel safety-panel">
-                <h3>🛡️ Stay safe</h3>
+                <h3>🛡️ @T["Stay safe"]</h3>
                 <ul>
-                    <li>Meet in a public place</li>
-                    <li>Check the item before paying</li>
-                    <li>Never pay in advance to strangers</li>
+                    <li>@T["Meet in a public place"]</li>
+                    <li>@T["Check the item before paying"]</li>
+                    <li>@T["Never pay in advance to strangers"]</li>
                 </ul>
             </div>
         </aside>
@@ -188,7 +188,7 @@
     @if (Model.SimilarListings.Count > 0)
     {
         <section class="section-pad">
-            <h2>Similar ads</h2>
+            <h2>@T["Similar ads"]</h2>
             <div class="listing-grid mt-16">
                 @foreach (var similar in Model.SimilarListings)
                 {

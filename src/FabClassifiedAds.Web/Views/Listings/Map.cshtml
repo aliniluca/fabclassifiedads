@@ -1,18 +1,18 @@
 @model SearchPageViewModel
 @{
-    ViewData["Title"] = $"Map — {Model.CurrentCategory?.Name ?? "All ads"}";
+    ViewData["Title"] = $"{T["Map view"]} — {(Model.CurrentCategory != null ? T[Model.CurrentCategory.Name] : T["All ads"])}";
     var listQuery = Context.Request.QueryString.Value ?? "";
     var listUrl = Model.CurrentCategory != null ? $"/c/{Model.CurrentCategory.Slug}" : $"/search{listQuery}";
 }
 
 <div class="container map-page">
     <div class="search-head">
-        <h1>🗺 @(Model.CurrentCategory != null ? Model.CurrentCategory.Name : "All ads") on the map</h1>
+        <h1>🗺 @(Model.CurrentCategory != null ? T[Model.CurrentCategory.Name] : T["All ads"]) @T["on the map"]</h1>
         <span class="search-head-actions">
-            <a href="@listUrl" class="btn btn-ghost btn-sm">☰ List view</a>
+            <a href="@listUrl" class="btn btn-ghost btn-sm">☰ @T["List view"]</a>
         </span>
     </div>
-    <p class="muted">Showing every filtered ad that has a location. Click a marker for details.</p>
+    <p class="muted">@T["Showing every filtered ad that has a location. Click a marker for details."]</p>
     <div id="listingMap" class="listing-map" data-query="@listQuery"></div>
 </div>
 

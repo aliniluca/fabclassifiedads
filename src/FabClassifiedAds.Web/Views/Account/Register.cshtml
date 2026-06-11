@@ -1,22 +1,22 @@
 @model RegisterViewModel
 @{
-    ViewData["Title"] = "Create account";
+    ViewData["Title"] = T["Create account"];
 }
 <div class="container auth-page">
     <div class="panel auth-panel">
-        <h1>Join FabAds 🚀</h1>
-        <p class="muted">Free forever. Post unlimited ads.</p>
+        <h1>@T["Join FabAds 🚀"]</h1>
+        <p class="muted">@T["Free forever. Post unlimited ads."]</p>
         <form method="post" action="/register">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="All" class="validation-summary"></div>
-            <label class="field"><span>Display name</span><input asp-for="DisplayName" required /></label>
-            <label class="field"><span>Email</span><input asp-for="Email" type="email" required /></label>
-            <label class="field"><span>City</span><input asp-for="City" placeholder="optional" /></label>
-            <label class="field"><span>Password</span><input asp-for="Password" type="password" required /></label>
-            <label class="field"><span>Confirm password</span><input asp-for="ConfirmPassword" type="password" required /></label>
-            <label class="check-row"><input asp-for="IsBusiness" /> I'm a business / dealer</label>
-            <button type="submit" class="btn btn-primary btn-block">Create account</button>
+            <label class="field"><span>@T["Display name"]</span><input asp-for="DisplayName" required /></label>
+            <label class="field"><span>@T["Email"]</span><input asp-for="Email" type="email" required /></label>
+            <label class="field"><span>@T["City"]</span><input asp-for="City" placeholder="@T["optional"]" /></label>
+            <label class="field"><span>@T["Password"]</span><input asp-for="Password" type="password" required /></label>
+            <label class="field"><span>@T["Confirm password"]</span><input asp-for="ConfirmPassword" type="password" required /></label>
+            <label class="check-row"><input asp-for="IsBusiness" /> @T["I'm a business / dealer"]</label>
+            <button type="submit" class="btn btn-primary btn-block">@T["Create account"]</button>
         </form>
-        <p class="auth-switch">Already have an account? <a href="/login">Sign in</a></p>
+        <p class="auth-switch">@T["Already have an account?"] <a href="/login">@T["Sign in"]</a></p>
     </div>
 </div>

@@ -25,6 +25,18 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.ExpireTimeSpan = TimeSpan.FromDays(30);
 });
 
+builder.Services.Configure<Microsoft.AspNetCore.Builder.RequestLocalizationOptions>(options =>
+{
+    // Romanian is the primary UI language, English the secondary. The formatting
+    // culture is pinned to en-US so number/date model binding never changes.
+    var ui = new[] { new System.Globalization.CultureInfo("ro"), new System.Globalization.CultureInfo("en") };
+    options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("en-US", "ro");
+    options.SupportedCultures = [new System.Globalization.CultureInfo("en-US")];
+    options.SupportedUICultures = ui;
+    options.RequestCultureProviders = [new Microsoft.AspNetCore.Localization.CookieRequestCultureProvider()];
+});
+
+builder.Services.AddSingleton<Translator>();
 builder.Services.AddScoped<SearchService>();
 builder.Services.AddScoped<PhotoStorage>();
 builder.Services.AddSingleton<IEmailSender, OutboxEmailSender>();
@@ -40,6 +52,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+app.UseRequestLocalization();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

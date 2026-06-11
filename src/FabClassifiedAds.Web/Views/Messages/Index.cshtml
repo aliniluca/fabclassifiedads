@@ -1,19 +1,19 @@
 @model List<Conversation>
 @using System.Security.Claims
 @{
-    ViewData["Title"] = "Messages";
+    ViewData["Title"] = T["Messages"];
     var active = ViewBag.Active as Conversation;
     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 <div class="container section-pad">
-    <h1>💬 Messages</h1>
+    <h1>💬 @T["Messages"]</h1>
     <div class="messages-layout mt-16">
         <aside class="conversation-list panel">
             @if (Model.Count == 0)
             {
                 <div class="empty-state small">
                     <span class="empty-icon">📨</span>
-                    <p>No conversations yet. Message a seller from any ad.</p>
+                    <p>@T["No conversations yet. Message a seller from any ad."]</p>
                 </div>
             }
             @foreach (var conversation in Model)
@@ -36,7 +36,7 @@
             {
                 <div class="empty-state">
                     <span class="empty-icon">💬</span>
-                    <h3>Select a conversation</h3>
+                    <h3>@T["Select a conversation"]</h3>
                 </div>
             }
             else
@@ -55,8 +55,8 @@
                 </div>
                 <form action="/messages/@active.Id/send" method="post" class="chat-compose">
                     @Html.AntiForgeryToken()
-                    <input type="text" name="body" placeholder="Write a message…" autocomplete="off" required autofocus />
-                    <button type="submit" class="btn btn-primary">Send</button>
+                    <input type="text" name="body" placeholder="@T["Write a message…"]" autocomplete="off" required autofocus />
+                    <button type="submit" class="btn btn-primary">@T["Send"]</button>
                 </form>
             }
         </section>

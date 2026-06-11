@@ -1,24 +1,24 @@
 @model SearchPageViewModel
 @{
     var f = Model.Filters;
-    ViewData["Title"] = Model.CurrentCategory?.Name ?? (string.IsNullOrEmpty(f.Q) ? "Browse ads" : $"\"{f.Q}\"");
+    ViewData["Title"] = Model.CurrentCategory != null ? T[Model.CurrentCategory.Name] : (string.IsNullOrEmpty(f.Q) ? T["All ads"] : $"\"{f.Q}\"");
     ViewData["FavoriteIds"] = Model.FavoriteIds;
     var currentYear = DateTime.UtcNow.Year;
 }
 
 <div class="container search-page">
     <nav class="breadcrumb">
-        <a href="/">Home</a>
+        <a href="/">@T["Home"]</a>
         @foreach (var crumb in Model.Breadcrumb)
         {
             <span>›</span>
-            <a href="/c/@crumb.Slug">@crumb.Name</a>
+            <a href="/c/@crumb.Slug">@T[crumb.Name]</a>
         }
     </nav>
 
     <div class="search-head">
-        <h1>@(Model.CurrentCategory != null ? $"{Model.CurrentCategory.Icon} {Model.CurrentCategory.Name}" : (string.IsNullOrEmpty(f.Q) ? "All ads" : $"Results for “{f.Q}”"))</h1>
-        <span class="result-count">@Model.Result.TotalCount.Number() ads</span>
+        <h1>@(Model.CurrentCategory != null ? $"{Model.CurrentCategory.Icon} {T[Model.CurrentCategory.Name]}" : (string.IsNullOrEmpty(f.Q) ? T["All ads"] : T.Format("ResultsFor", f.Q)))</h1>
+        <span class="result-count">@Model.Result.TotalCount.Number() @T["ads"]</span>
         <span class="search-head-actions">
             @{
                 var mapQuery = Context.Request.QueryString.Value ?? "";
@@ -29,12 +29,12 @@
                         : $"{mapQuery}&Category={Model.CurrentCategory.Slug}";
                 }
             }
-            <a href="/map@(mapQuery)" class="btn btn-ghost btn-sm">🗺 Map view</a>
+            <a href="/map@(mapQuery)" class="btn btn-ghost btn-sm">🗺 @T["Map view"]</a>
             @if (User.Identity?.IsAuthenticated == true)
             {
                 <form method="post" action="/saved-searches/save@(mapQuery)" class="inline-form">
                     @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn-ghost btn-sm">🔔 Save search</button>
+                    <button type="submit" class="btn btn-ghost btn-sm">🔔 @T["Save search"]</button>
                 </form>
             }
         </span>
@@ -45,7 +45,7 @@
         <div class="subcat-strip">
             @foreach (var child in Model.ChildCategories)
             {
-                <a href="/c/@child.Slug" class="subcat-chip">@child.Icon @child.Name</a>
+                <a href="/c/@child.Slug" class="subcat-chip">@child.Icon @T[child.Name]</a>
             }
         </div>
     }
@@ -63,31 +63,31 @@
                 }
 
                 <div class="filter-group">
-                    <h3>Price (€)</h3>
+                    <h3>@T["Price (€)"]</h3>
                     <div class="range-row">
-                        <input type="number" name="PriceMin" placeholder="From" value="@f.PriceMin" min="0" />
-                        <input type="number" name="PriceMax" placeholder="To" value="@f.PriceMax" min="0" />
+                        <input type="number" name="PriceMin" placeholder="@T["From"]" value="@f.PriceMin" min="0" />
+                        <input type="number" name="PriceMax" placeholder="@T["To"]" value="@f.PriceMax" min="0" />
                     </div>
                 </div>
 
                 <div class="filter-group">
-                    <h3>Location</h3>
-                    <input type="text" name="City" placeholder="City or region" value="@f.City" />
+                    <h3>@T["Location"]</h3>
+                    <input type="text" name="City" placeholder="@T["City or region"]" value="@f.City" />
                 </div>
 
                 @if (Model.ShowCarFilters)
                 {
                     <div class="filter-group">
-                        <h3>🚗 Brand & model</h3>
+                        <h3>🚗 @T["Brand & model"]</h3>
                         <select name="BrandId" id="brandSelect" data-models-url="/api/car-models/">
-                            <option value="">Any brand</option>
-                            <optgroup label="Popular brands">
+                            <option value="">@T["Any brand"]</option>
+                            <optgroup label="@T["Popular brands"]">
                                 @foreach (var brand in Model.Brands.Where(b => b.IsPopular))
                                 {
                                     <option value="@brand.Id" selected="@(f.BrandId == brand.Id)">@brand.Name</option>
                                 }
                             </optgroup>
-                            <optgroup label="All brands">
+                            <optgroup label="@T["All brands"]">
                                 @foreach (var brand in Model.Brands.Where(b => !b.IsPopular))
                                 {
                                     <option value="@brand.Id" selected="@(f.BrandId == brand.Id)">@brand.Name</option>
@@ -95,7 +95,7 @@
                             </optgroup>
                         </select>
                         <select name="ModelId" id="modelSelect" class="mt-8">
-                            <option value="">Any model</option>
+                            <option value="">@T["Any model"]</option>
                             @foreach (var carModel in Model.Models)
                             {
                                 <option value="@carModel.Id" selected="@(f.ModelId == carModel.Id)">@carModel.Name</option>
@@ -104,99 +104,99 @@
                     </div>
 
                     <div class="filter-group">
-                        <h3>Year</h3>
+                        <h3>@T["Year"]</h3>
                         <div class="range-row">
-                            <select name="YearMin"><option value="">From</option>
+                            <select name="YearMin"><option value="">@T["From"]</option>
                                 @for (var y = currentYear; y >= 1970; y--) { <option value="@y" selected="@(f.YearMin == y)">@y</option> }
                             </select>
-                            <select name="YearMax"><option value="">To</option>
+                            <select name="YearMax"><option value="">@T["To"]</option>
                                 @for (var y = currentYear; y >= 1970; y--) { <option value="@y" selected="@(f.YearMax == y)">@y</option> }
                             </select>
                         </div>
                     </div>
 
                     <div class="filter-group">
-                        <h3>Mileage (km)</h3>
+                        <h3>@T["Mileage (km)"]</h3>
                         <div class="range-row">
-                            <input type="number" name="MileageMin" placeholder="From" value="@f.MileageMin" min="0" step="1000" />
-                            <input type="number" name="MileageMax" placeholder="To" value="@f.MileageMax" min="0" step="1000" />
+                            <input type="number" name="MileageMin" placeholder="@T["From"]" value="@f.MileageMin" min="0" step="1000" />
+                            <input type="number" name="MileageMax" placeholder="@T["To"]" value="@f.MileageMax" min="0" step="1000" />
                         </div>
                     </div>
 
                     <div class="filter-group">
-                        <h3>Fuel</h3>
+                        <h3>@T["Fuel"]</h3>
                         <select name="Fuel">
-                            <option value="">Any fuel</option>
+                            <option value="">@T["Any fuel"]</option>
                             @foreach (var fuel in Enum.GetValues<FuelType>())
                             {
-                                <option value="@fuel" selected="@(f.Fuel == fuel)">@fuel.Humanize()</option>
+                                <option value="@fuel" selected="@(f.Fuel == fuel)">@fuel.TranslateEnum()</option>
                             }
                         </select>
                     </div>
 
                     <div class="filter-group">
-                        <h3>Transmission & body</h3>
+                        <h3>@T["Transmission & body"]</h3>
                         <select name="Transmission">
-                            <option value="">Any transmission</option>
+                            <option value="">@T["Any transmission"]</option>
                             @foreach (var tr in Enum.GetValues<TransmissionType>())
                             {
-                                <option value="@tr" selected="@(f.Transmission == tr)">@tr.Humanize()</option>
+                                <option value="@tr" selected="@(f.Transmission == tr)">@tr.TranslateEnum()</option>
                             }
                         </select>
                         <select name="Body" class="mt-8">
-                            <option value="">Any body type</option>
+                            <option value="">@T["Any body type"]</option>
                             @foreach (var body in Enum.GetValues<BodyType>())
                             {
-                                <option value="@body" selected="@(f.Body == body)">@body.Humanize()</option>
+                                <option value="@body" selected="@(f.Body == body)">@body.TranslateEnum()</option>
                             }
                         </select>
                         <select name="Drive" class="mt-8">
-                            <option value="">Any drivetrain</option>
+                            <option value="">@T["Any drivetrain"]</option>
                             @foreach (var drive in Enum.GetValues<Drivetrain>())
                             {
-                                <option value="@drive" selected="@(f.Drive == drive)">@drive.Humanize()</option>
+                                <option value="@drive" selected="@(f.Drive == drive)">@drive.TranslateEnum()</option>
                             }
                         </select>
                     </div>
 
                     <div class="filter-group">
-                        <h3>Engine (cm³)</h3>
+                        <h3>@T["Engine (cm³)"]</h3>
                         <div class="range-row">
-                            <input type="number" name="EngineCcMin" placeholder="From" value="@f.EngineCcMin" min="0" step="100" />
-                            <input type="number" name="EngineCcMax" placeholder="To" value="@f.EngineCcMax" min="0" step="100" />
+                            <input type="number" name="EngineCcMin" placeholder="@T["From"]" value="@f.EngineCcMin" min="0" step="100" />
+                            <input type="number" name="EngineCcMax" placeholder="@T["To"]" value="@f.EngineCcMax" min="0" step="100" />
                         </div>
                     </div>
 
                     <div class="filter-group">
-                        <h3>Power (hp)</h3>
+                        <h3>@T["Power (hp)"]</h3>
                         <div class="range-row">
-                            <input type="number" name="PowerMin" placeholder="From" value="@f.PowerMin" min="0" step="10" />
-                            <input type="number" name="PowerMax" placeholder="To" value="@f.PowerMax" min="0" step="10" />
+                            <input type="number" name="PowerMin" placeholder="@T["From"]" value="@f.PowerMin" min="0" step="10" />
+                            <input type="number" name="PowerMax" placeholder="@T["To"]" value="@f.PowerMax" min="0" step="10" />
                         </div>
                     </div>
 
                     <div class="filter-group">
-                        <h3>More</h3>
-                        <input type="text" name="Color" placeholder="Color" value="@f.Color" />
+                        <h3>@T["More"]</h3>
+                        <input type="text" name="Color" placeholder="@T["Color"]" value="@f.Color" />
                         <select name="EmissionStandard" class="mt-8">
-                            <option value="">Any emission standard</option>
+                            <option value="">@T["Any emission standard"]</option>
                             @for (var e = 7; e >= 3; e--)
                             {
-                                <option value="@e" selected="@(f.EmissionStandard == e)">Euro @e or newer</option>
+                                <option value="@e" selected="@(f.EmissionStandard == e)">@T.Format("EuroOrNewer", e)</option>
                             }
                         </select>
-                        <label class="check-row"><input type="checkbox" name="AccidentFreeOnly" value="true" checked="@f.AccidentFreeOnly" /> Accident-free only</label>
-                        <label class="check-row"><input type="checkbox" name="ServiceBookOnly" value="true" checked="@f.ServiceBookOnly" /> With service book</label>
+                        <label class="check-row"><input type="checkbox" name="AccidentFreeOnly" value="true" checked="@f.AccidentFreeOnly" /> @T["Accident-free only"]</label>
+                        <label class="check-row"><input type="checkbox" name="ServiceBookOnly" value="true" checked="@f.ServiceBookOnly" /> @T["With service book"]</label>
                     </div>
 
                     <div class="filter-group">
-                        <h3>Equipment & options</h3>
+                        <h3>@T["Equipment & options"]</h3>
                         <details class="options-details" open="@(f.Options.Count > 0)">
-                            <summary>@(f.Options.Count > 0 ? $"{f.Options.Count} selected" : "Choose options")</summary>
+                            <summary>@(f.Options.Count > 0 ? T.Format("CountSelected", f.Options.Count) : T["Choose options"])</summary>
                             <div class="options-list">
                                 @foreach (var option in Enum.GetValues<CarOptions>().Where(o => o != CarOptions.None))
                                 {
-                                    <label class="check-row"><input type="checkbox" name="Options" value="@option" checked="@f.Options.Contains(option)" /> @option.Humanize()</label>
+                                    <label class="check-row"><input type="checkbox" name="Options" value="@option" checked="@f.Options.Contains(option)" /> @option.TranslateEnum()</label>
                                 }
                             </div>
                         </details>
@@ -206,85 +206,85 @@
                 @if (Model.ShowRealEstateFilters)
                 {
                     <div class="filter-group">
-                        <h3>🏠 Property</h3>
+                        <h3>🏠 @T["Property"]</h3>
                         <select name="PropertyType">
-                            <option value="">Any property type</option>
+                            <option value="">@T["Any property type"]</option>
                             @foreach (var pt in Enum.GetValues<PropertyType>())
                             {
-                                <option value="@pt" selected="@(f.PropertyType == pt)">@pt.Humanize()</option>
+                                <option value="@pt" selected="@(f.PropertyType == pt)">@pt.TranslateEnum()</option>
                             }
                         </select>
                         <select name="Transaction" class="mt-8">
-                            <option value="">Buy or rent</option>
+                            <option value="">@T["Buy or rent"]</option>
                             @foreach (var tx in Enum.GetValues<TransactionType>())
                             {
-                                <option value="@tx" selected="@(f.Transaction == tx)">@tx.Humanize()</option>
+                                <option value="@tx" selected="@(f.Transaction == tx)">@tx.TranslateEnum()</option>
                             }
                         </select>
                     </div>
 
                     <div class="filter-group">
-                        <h3>Rooms</h3>
+                        <h3>@T["Rooms"]</h3>
                         <div class="range-row">
-                            <select name="RoomsMin"><option value="">From</option>
+                            <select name="RoomsMin"><option value="">@T["From"]</option>
                                 @for (var r = 1; r <= 10; r++) { <option value="@r" selected="@(f.RoomsMin == r)">@r</option> }
                             </select>
-                            <select name="RoomsMax"><option value="">To</option>
+                            <select name="RoomsMax"><option value="">@T["To"]</option>
                                 @for (var r = 1; r <= 10; r++) { <option value="@r" selected="@(f.RoomsMax == r)">@r</option> }
                             </select>
                         </div>
                     </div>
 
                     <div class="filter-group">
-                        <h3>Surface (m²)</h3>
+                        <h3>@T["Surface (m²)"]</h3>
                         <div class="range-row">
-                            <input type="number" name="SurfaceMin" placeholder="From" value="@f.SurfaceMin" min="0" />
-                            <input type="number" name="SurfaceMax" placeholder="To" value="@f.SurfaceMax" min="0" />
+                            <input type="number" name="SurfaceMin" placeholder="@T["From"]" value="@f.SurfaceMin" min="0" />
+                            <input type="number" name="SurfaceMax" placeholder="@T["To"]" value="@f.SurfaceMax" min="0" />
                         </div>
                     </div>
 
                     <div class="filter-group">
-                        <h3>Floor</h3>
+                        <h3>@T["Floor"]</h3>
                         <div class="range-row">
-                            <input type="number" name="FloorMin" placeholder="From" value="@f.FloorMin" min="-1" />
-                            <input type="number" name="FloorMax" placeholder="To" value="@f.FloorMax" min="-1" />
+                            <input type="number" name="FloorMin" placeholder="@T["From"]" value="@f.FloorMin" min="-1" />
+                            <input type="number" name="FloorMax" placeholder="@T["To"]" value="@f.FloorMax" min="-1" />
                         </div>
                     </div>
 
                     <div class="filter-group">
-                        <h3>Year built</h3>
+                        <h3>@T["Year built"]</h3>
                         <div class="range-row">
-                            <input type="number" name="YearBuiltMin" placeholder="From" value="@f.YearBuiltMin" min="1800" max="@currentYear" />
-                            <input type="number" name="YearBuiltMax" placeholder="To" value="@f.YearBuiltMax" min="1800" max="@currentYear" />
+                            <input type="number" name="YearBuiltMin" placeholder="@T["From"]" value="@f.YearBuiltMin" min="1800" max="@currentYear" />
+                            <input type="number" name="YearBuiltMax" placeholder="@T["To"]" value="@f.YearBuiltMax" min="1800" max="@currentYear" />
                         </div>
                     </div>
 
                     <div class="filter-group">
-                        <h3>Heating & furnishing</h3>
+                        <h3>@T["Heating & furnishing"]</h3>
                         <select name="Heating">
-                            <option value="">Any heating</option>
+                            <option value="">@T["Any heating"]</option>
                             @foreach (var heat in Enum.GetValues<HeatingType>().Where(h => h != HeatingType.None))
                             {
-                                <option value="@heat" selected="@(f.Heating == heat)">@heat.Humanize()</option>
+                                <option value="@heat" selected="@(f.Heating == heat)">@heat.TranslateEnum()</option>
                             }
                         </select>
                         <select name="Furnished" class="mt-8">
-                            <option value="">Any furnishing</option>
+                            <option value="">@T["Any furnishing"]</option>
                             @foreach (var furn in Enum.GetValues<FurnishedState>())
                             {
-                                <option value="@furn" selected="@(f.Furnished == furn)">@furn.Humanize()</option>
+                                <option value="@furn" selected="@(f.Furnished == furn)">@furn.TranslateEnum()</option>
                             }
                         </select>
                     </div>
 
                     <div class="filter-group">
-                        <h3>Amenities</h3>
+                        <h3>@T["Amenities"]</h3>
                         <details class="options-details" open="@(f.Amenities.Count > 0)">
-                            <summary>@(f.Amenities.Count > 0 ? $"{f.Amenities.Count} selected" : "Choose amenities")</summary>
+                            <summary>@(f.Amenities.Count > 0 ? T.Format("CountSelected", f.Amenities.Count) : T["Choose amenities"])</summary>
                             <div class="options-list">
                                 @foreach (var amenity in Enum.GetValues<PropertyAmenities>().Where(a => a != PropertyAmenities.None))
                                 {
-                                    <label class="check-row"><input type="checkbox" name="Amenities" value="@amenity" checked="@f.Amenities.Contains(amenity)" /> @amenity.Humanize()</label>
+                                    <label class="check-row"><input type="checkbox" name="Amenities" value="@amenity" checked="@f.Amenities.Contains(amenity)" /> @amenity.TranslateEnum()</label>
                                 }
                             </div>
                         </details>
@@ -292,24 +292,24 @@
                 }
 
                 <div class="filter-group">
-                    <h3>Seller & condition</h3>
+                    <h3>@T["Seller & condition"]</h3>
                     <select name="Seller">
-                        <option value="">Any seller</option>
-                        <option value="Private" selected="@(f.Seller == SellerType.Private)">Private</option>
-                        <option value="Business" selected="@(f.Seller == SellerType.Business)">Business</option>
+                        <option value="">@T["Any seller"]</option>
+                        <option value="Private" selected="@(f.Seller == SellerType.Private)">@T["Private"]</option>
+                        <option value="Business" selected="@(f.Seller == SellerType.Business)">@T["Business"]</option>
                     </select>
                     <select name="Condition" class="mt-8">
-                        <option value="">Any condition</option>
+                        <option value="">@T["Any condition"]</option>
                         @foreach (var cond in Enum.GetValues<ItemCondition>())
                         {
-                            <option value="@cond" selected="@(f.Condition == cond)">@cond.Humanize()</option>
+                            <option value="@cond" selected="@(f.Condition == cond)">@cond.TranslateEnum()</option>
                         }
                     </select>
-                    <label class="check-row"><input type="checkbox" name="NegotiableOnly" value="true" checked="@f.NegotiableOnly" /> Negotiable only</label>
+                    <label class="check-row"><input type="checkbox" name="NegotiableOnly" value="true" checked="@f.NegotiableOnly" /> @T["Negotiable only"]</label>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">Apply filters</button>
-                <a href="@(Model.CurrentCategory != null ? $"/c/{Model.CurrentCategory.Slug}" : "/search")" class="btn btn-ghost btn-block mt-8">Reset all</a>
+                <button type="submit" class="btn btn-primary btn-block">@T["Apply filters"]</button>
+                <a href="@(Model.CurrentCategory != null ? $"/c/{Model.CurrentCategory.Slug}" : "/search")" class="btn btn-ghost btn-block mt-8">@T["Reset all"]</a>
             </form>
         </aside>
 
@@ -320,20 +320,20 @@
                     {
                         foreach (var value in values) { <input type="hidden" name="@key" value="@value" /> }
                     }
-                    <label>Sort by
+                    <label>@T["Sort by"]
                         <select name="Sort" onchange="this.form.submit()">
-                            <option value="Newest" selected="@(f.Sort == SortOption.Newest)">Newest first</option>
-                            <option value="PriceAsc" selected="@(f.Sort == SortOption.PriceAsc)">Price: low → high</option>
-                            <option value="PriceDesc" selected="@(f.Sort == SortOption.PriceDesc)">Price: high → low</option>
-                            <option value="MostViewed" selected="@(f.Sort == SortOption.MostViewed)">Most viewed</option>
+                            <option value="Newest" selected="@(f.Sort == SortOption.Newest)">@T["Newest first"]</option>
+                            <option value="PriceAsc" selected="@(f.Sort == SortOption.PriceAsc)">@T["Price: low → high"]</option>
+                            <option value="PriceDesc" selected="@(f.Sort == SortOption.PriceDesc)">@T["Price: high → low"]</option>
+                            <option value="MostViewed" selected="@(f.Sort == SortOption.MostViewed)">@T["Most viewed"]</option>
                             @if (Model.ShowCarFilters)
                             {
-                                <option value="MileageAsc" selected="@(f.Sort == SortOption.MileageAsc)">Lowest mileage</option>
-                                <option value="YearDesc" selected="@(f.Sort == SortOption.YearDesc)">Newest cars</option>
+                                <option value="MileageAsc" selected="@(f.Sort == SortOption.MileageAsc)">@T["Lowest mileage"]</option>
+                                <option value="YearDesc" selected="@(f.Sort == SortOption.YearDesc)">@T["Newest cars"]</option>
                             }
                             @if (Model.ShowRealEstateFilters)
                             {
-                                <option value="SurfaceDesc" selected="@(f.Sort == SortOption.SurfaceDesc)">Largest surface</option>
+                                <option value="SurfaceDesc" selected="@(f.Sort == SortOption.SurfaceDesc)">@T["Largest surface"]</option>
                             }
                         </select>
                     </label>
@@ -344,8 +344,8 @@
             {
                 <div class="empty-state">
                     <span class="empty-icon">🔭</span>
-                    <h3>No ads match your filters</h3>
-                    <p>Try widening the price range or removing some filters.</p>
+                    <h3>@T["No ads match your filters"]</h3>
+                    <p>@T["Try widening the price range or removing some filters."]</p>
                 </div>
             }
             else

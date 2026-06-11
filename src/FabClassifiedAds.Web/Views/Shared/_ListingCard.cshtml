@@ -13,11 +13,11 @@
         {
             <div class="card-media-empty">📷</div>
         }
-        @if (Model.IsFeatured) { <span class="badge badge-featured">★ Featured</span> }
-        @if (Model.Condition == ItemCondition.New) { <span class="badge badge-new">New</span> }
+        @if (Model.IsFeatured) { <span class="badge badge-featured">★ @T["Featured"]</span> }
+        @if (Model.Condition == ItemCondition.New) { <span class="badge badge-new">@T["New"]</span> }
     </a>
     <div class="card-body">
-        <div class="card-meta">@Model.Category.Icon @Model.Category.Name</div>
+        <div class="card-meta">@Model.Category.Icon @T[Model.Category.Name]</div>
         <a href="/l/@Model.Id" class="card-title">@Model.Title</a>
         <div class="card-summary">@Model.ListingSummary()</div>
         <div class="card-price-row">
@@ -26,7 +26,7 @@
             {
                 <form action="/favorites/toggle/@Model.Id" method="post" class="inline-form fav-form">
                     @Html.AntiForgeryToken()
-                    <button type="submit" class="fav-btn @(isFav ? "is-fav" : "")" title="Save to favorites">@(isFav ? "♥" : "♡")</button>
+                    <button type="submit" class="fav-btn @(isFav ? "is-fav" : "")" title="@T["Save to favorites"]">@(isFav ? "♥" : "♡")</button>
                 </form>
             }
         </div>

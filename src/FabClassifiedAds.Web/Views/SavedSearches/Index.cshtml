@@ -1,17 +1,17 @@
 @model List<SavedSearch>
 @{
-    ViewData["Title"] = "Saved searches";
+    ViewData["Title"] = T["Saved searches"];
 }
 <div class="container narrow section-pad">
-    <h1>🔔 Saved searches</h1>
-    <p class="muted">We check for new matching ads every couple of minutes and email you about them.</p>
+    <h1>🔔 @T["Saved searches"]</h1>
+    <p class="muted">@T["We check for new matching ads every couple of minutes and email you about them."]</p>
 
     @if (Model.Count == 0)
     {
         <div class="empty-state">
             <span class="empty-icon">🔍</span>
-            <h3>No saved searches yet</h3>
-            <p>Run a search with your favorite filters, then hit <strong>🔔 Save search</strong>.</p>
+            <h3>@T["No saved searches yet"]</h3>
+            <p>@T["Run a search with your favorite filters, then hit"] <strong>🔔 @T["Save search"]</strong>.</p>
         </div>
     }
     else
@@ -22,17 +22,17 @@
                 <div class="panel saved-item">
                     <div class="saved-main">
                         <a href="/search@(saved.QueryString)" class="saved-name">@saved.Name</a>
-                        <span class="muted small">Saved @saved.CreatedAt.TimeAgo() · alerts @(saved.EmailAlerts ? "on ✅" : "off ⏸")</span>
+                        <span class="muted small">@T["Saved"] @saved.CreatedAt.TimeAgo() · @(saved.EmailAlerts ? $"{T["alerts on"]} ✅" : $"{T["alerts off"]} ⏸")</span>
                     </div>
                     <div class="saved-actions">
-                        <a href="/search@(saved.QueryString)" class="btn btn-ghost btn-sm">Run</a>
+                        <a href="/search@(saved.QueryString)" class="btn btn-ghost btn-sm">@T["Run"]</a>
                         <form action="/saved-searches/@saved.Id/toggle-alerts" method="post" class="inline-form">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-ghost btn-sm">@(saved.EmailAlerts ? "Pause alerts" : "Resume alerts")</button>
+                            <button type="submit" class="btn btn-ghost btn-sm">@(saved.EmailAlerts ? T["Pause alerts"] : T["Resume alerts"])</button>
                         </form>
                         <form action="/saved-searches/@saved.Id/delete" method="post" class="inline-form">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-ghost btn-sm btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-ghost btn-sm btn-danger">@T["Delete"]</button>
                         </form>
                     </div>
                 </div>
