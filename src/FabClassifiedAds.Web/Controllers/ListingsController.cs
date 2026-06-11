@@ -99,6 +99,8 @@ public class ListingsController(AppDbContext db, SearchService search, PhotoStor
     [Authorize]
     [HttpPost("/post")]
     [ValidateAntiForgeryToken]
+    [RequestSizeLimit(120_000_000)]
+    [RequestFormLimits(MultipartBodyLengthLimit = 120_000_000)]
     public async Task<IActionResult> Create(CreateListingViewModel vm)
     {
         var category = await db.Categories.FindAsync(vm.CategoryId);
@@ -119,6 +121,8 @@ public class ListingsController(AppDbContext db, SearchService search, PhotoStor
         var uploadedPhotos = (vm.Photos ?? []).Where(p => p.Length > 0).ToList();
         if (photos.Validate(uploadedPhotos) is { } photoError)
             ModelState.AddModelError(nameof(vm.Photos), photoError);
+        if (vm.Video is { Length: > 0 } && photos.ValidateVideo(vm.Video) is { } videoError)
+            ModelState.AddModelError(nameof(vm.Video), videoError);
 
         if (!ModelState.IsValid) return View(await PopulateAsync(vm));
 
@@ -147,6 +151,9 @@ public class ListingsController(AppDbContext db, SearchService search, PhotoStor
         {
             listing.Images.Add(new ListingImage { Url = $"/media/ph/{CategorySeeder.Slugify(vm.Title)}-0.svg" });
         }
+
+        if (vm.Video is { Length: > 0 })
+            listing.VideoUrl = await photos.SaveVideoAsync(vm.Video);
 
         if (GeoData.Locate(vm.City, Environment.TickCount) is { } coords)
         {
@@ -185,6 +192,30 @@ public class ListingsController(AppDbContext db, SearchService search, PhotoStor
         await db.SaveChangesAsync();
         TempData["Flash"] = "Your ad is live! 🎉";
         return RedirectToAction(nameof(Details), new { id = listing.Id });
+    }
+
+    /// <summary>Vertical swipe feed — listings with video first, then featured and fresh ones.</summary>
+    [HttpGet("/feed")]
+    public async Task<IActionResult> Feed()
+    {
+        var items = await db.Listings.AsNoTracking()
+            .Where(l => l.Status == ListingStatus.Active)
+            .Include(l => l.Images.OrderBy(i => i.SortOrder).Take(1))
+            .Include(l => l.Category)
+            .Include(l => l.User)
+            .Include(l => l.CarDetails!).ThenInclude(c => c.Brand)
+            .Include(l => l.RealEstateDetails)
+            .OrderByDescending(l => l.VideoUrl != null)
+            .ThenByDescending(l => l.IsFeatured)
+            .ThenByDescending(l => l.BumpedAt)
+            .Take(30)
+            .ToListAsync();
+
+        var favoriteIds = UserId == null
+            ? []
+            : (await db.Favorites.Where(f => f.UserId == UserId).Select(f => f.ListingId).ToListAsync()).ToHashSet();
+        ViewBag.FavoriteIds = favoriteIds;
+        return View(items);
     }
 
     /// <summary>Full-page map view; reuses the same filters as the list view.</summary>

@@ -205,6 +205,22 @@ public static class DbSeeder
         L("Vespa GTS 300 Super — 2023, like new", "GTS 300 hpe, 1900 km, still under warranty, two helmets and top case included.", 5600, "scooters-and-mopeds", users[0], "Bucharest", "Bucharest");
         L("Yamaha MT-07 2022 — A2 compatible", "MT-07 with Akrapovic exhaust, tail tidy, 9000 km, first owner, never dropped.", 6400, "naked-bikes", users[4], "Iasi", "Iasi");
 
+        // attach demo feed videos to a few flagship listings
+        var demoVideos = new (string TitleStart, string Url)[]
+        {
+            ("BMW 320d", "/demo/videos/bmw-320d.mp4"),
+            ("Tesla Model 3", "/demo/videos/tesla-m3.mp4"),
+            ("Volkswagen Golf 8", "/demo/videos/golf8.mp4"),
+            ("Porsche Macan", "/demo/videos/macan.mp4"),
+            ("Villa with pool", "/demo/videos/villa-pool.mp4"),
+            ("Penthouse with panoramic", "/demo/videos/penthouse.mp4"),
+        };
+        foreach (var (start, url) in demoVideos)
+        {
+            var match = listings.FirstOrDefault(l => l.Title.StartsWith(start));
+            if (match != null) match.VideoUrl = url;
+        }
+
         db.Listings.AddRange(listings);
         await db.SaveChangesAsync();
     }

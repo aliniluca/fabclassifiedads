@@ -26,6 +26,7 @@ public class Translator
         ["CountSubcategories"] = "{0} subcategories",
         ["PhotoLimits"] = "(up to 10, max 5 MB each — JPEG, PNG, WebP, GIF)",
         ["ResultsFor"] = "Results for “{0}”",
+        ["VideoLimits"] = "(optional — MP4/WebM/MOV, max 60 MB)",
     };
 
     private static readonly Dictionary<string, string> Ro = new()
@@ -37,6 +38,19 @@ public class Translator
         ["CountSubcategories"] = "{0} subcategorii",
         ["PhotoLimits"] = "(maxim 10, câte 5 MB fiecare — JPEG, PNG, WebP, GIF)",
         ["ResultsFor"] = "Rezultate pentru „{0}”",
+        ["VideoLimits"] = "(opțional — MP4/WebM/MOV, maxim 60 MB)",
+
+        // feed & sharing
+        ["Video"] = "Video",
+        ["Add a vertical video — video ads appear first in the FabFeed"] =
+            "Adaugă un video vertical — anunțurile cu video apar primele în FabFeed",
+        ["Swipe or scroll"] = "Glisează sau derulează",
+        ["Share"] = "Distribuie",
+        ["Share link"] = "Distribuie linkul",
+        ["Share card"] = "Card de share",
+        ["Post the 9:16 card straight to TikTok or Instagram stories."] =
+            "Postează cardul 9:16 direct pe TikTok sau Instagram stories.",
+        ["Link copied"] = "Link copiat",
 
         // header & nav
         ["Buy, sell, discover anything"] = "Cumpără, vinde, descoperă orice",

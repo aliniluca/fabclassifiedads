@@ -14,6 +14,7 @@
             <div class="card-media-empty">📷</div>
         }
         @if (Model.IsFeatured) { <span class="badge badge-featured">★ @T["Featured"]</span> }
+        @if (!string.IsNullOrEmpty(Model.VideoUrl)) { <span class="badge badge-video">🎬</span> }
         @if (Model.Condition == ItemCondition.New) { <span class="badge badge-new">@T["New"]</span> }
     </a>
     <div class="card-body">

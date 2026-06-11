@@ -44,6 +44,9 @@ public class Listing
     public string UserId { get; set; } = "";
     public ApplicationUser User { get; set; } = null!;
 
+    /// <summary>Optional vertical video clip shown in the swipe feed.</summary>
+    public string? VideoUrl { get; set; }
+
     public List<ListingImage> Images { get; set; } = [];
     public List<ListingAttribute> Attributes { get; set; } = [];
     public CarDetails? CarDetails { get; set; }

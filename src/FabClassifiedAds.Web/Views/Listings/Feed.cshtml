@@ -1,0 +1,111 @@
+@model List<Listing>
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "FabFeed";
+    Layout = "_Layout";
+    var favoriteIds = ViewBag.FavoriteIds as HashSet<int> ?? [];
+    var isAuthed = User.Identity?.IsAuthenticated == true;
+}
+
+<div class="feed-wrap">
+    <div class="feed-scroller" id="feedScroller">
+        @foreach (var l in Model)
+        {
+            var image = l.Images.FirstOrDefault();
+            var isFav = favoriteIds.Contains(l.Id);
+            <section class="feed-item" data-id="@l.Id">
+                <div class="feed-media">
+                    @if (!string.IsNullOrEmpty(l.VideoUrl))
+                    {
+                        <video src="@l.VideoUrl" muted loop playsinline preload="metadata"
+                               poster="@image?.Url" class="feed-video"></video>
+                    }
+                    else if (image != null)
+                    {
+                        <img src="@image.Url" alt="@l.Title" class="feed-kenburns" loading="lazy" />
+                    }
+                    <div class="feed-shade"></div>
+                </div>
+
+                <div class="feed-info">
+                    <div class="feed-cat">@l.Category.Icon @T[l.Category.Name]</div>
+                    <a href="/l/@l.Id" class="feed-title">@l.Title</a>
+                    <div class="feed-summary">@l.ListingSummary()</div>
+                    <div class="feed-price">@l.Price()</div>
+                    <div class="feed-seller">
+                        <span class="avatar avatar-sm" style="background:@(l.User.AvatarColor ?? "#6d5dfc")">@(l.User.DisplayName.Length > 0 ? l.User.DisplayName[0] : '?')</span>
+                        <span>@l.User.DisplayName</span>
+                        <span class="muted">· 📍 @l.City</span>
+                    </div>
+                </div>
+
+                <div class="feed-rail">
+                    @if (isAuthed)
+                    {
+                        <form action="/favorites/toggle/@l.Id" method="post" class="inline-form fav-form">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="rail-btn fav-btn @(isFav ? "is-fav" : "")" title="@T["Save to favorites"]">@(isFav ? "♥" : "♡")</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a href="/login?returnUrl=/feed" class="rail-btn" title="@T["Save to favorites"]">♡</a>
+                    }
+                    <a href="/l/@l.Id" class="rail-btn" title="@T["Messages"]">💬</a>
+                    <button type="button" class="rail-btn feed-share" data-url="/l/@l.Id" data-title="@l.Title" title="@T["Share"]">↗</button>
+                    <a href="/l/@l.Id/share-card.svg" target="_blank" class="rail-btn" title="@T["Share card"]">🖼</a>
+                    @if (!string.IsNullOrEmpty(l.VideoUrl))
+                    {
+                        <button type="button" class="rail-btn feed-mute" title="Audio">🔇</button>
+                    }
+                </div>
+            </section>
+        }
+    </div>
+    <div class="feed-hint">@T["Swipe or scroll"] ↕</div>
+</div>
+
+@section Scripts {
+    <script>
+        // play/pause videos as they enter the viewport
+        const videos = document.querySelectorAll('.feed-video');
+        const observer = new IntersectionObserver(entries => {
+            for (const entry of entries) {
+                if (entry.isIntersecting && entry.intersectionRatio > 0.6) entry.target.play().catch(() => {});
+                else entry.target.pause();
+            }
+        }, { threshold: [0, 0.6, 1] });
+        videos.forEach(v => observer.observe(v));
+
+        // mute toggle per item
+        document.querySelectorAll('.feed-mute').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const video = btn.closest('.feed-item').querySelector('.feed-video');
+                video.muted = !video.muted;
+                btn.textContent = video.muted ? '🔇' : '🔊';
+            });
+        });
+
+        // native share with clipboard fallback
+        document.querySelectorAll('.feed-share').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const url = location.origin + btn.dataset.url;
+                if (navigator.share) {
+                    try { await navigator.share({ title: btn.dataset.title, url }); } catch {}
+                } else {
+                    await navigator.clipboard.writeText(url);
+                    btn.textContent = '✓';
+                    setTimeout(() => btn.textContent = '↗', 1500);
+                }
+            });
+        });
+
+        // arrow-key navigation between items
+        const scroller = document.getElementById('feedScroller');
+        document.addEventListener('keydown', e => {
+            if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+            e.preventDefault();
+            scroller.scrollBy({ top: e.key === 'ArrowDown' ? scroller.clientHeight : -scroller.clientHeight, behavior: 'smooth' });
+        });
+    </script>
+}

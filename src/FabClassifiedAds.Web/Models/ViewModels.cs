@@ -65,6 +65,9 @@ public class CreateListingViewModel
     /// <summary>Uploaded photos (JPEG/PNG/WebP/GIF, max 10 × 5 MB).</summary>
     public List<IFormFile>? Photos { get; set; }
 
+    /// <summary>Optional vertical video for the swipe feed (MP4/WebM/MOV, max 60 MB).</summary>
+    public IFormFile? Video { get; set; }
+
     // car fields
     public int? BrandId { get; set; }
     public int? ModelId { get; set; }

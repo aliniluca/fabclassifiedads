@@ -37,6 +37,14 @@ The database is created and seeded automatically on first start (full category t
 - **Saved searches with email alerts** — one click on any filtered search saves it; a background service re-runs saved searches every 2 minutes and emails new matches (dev sender writes to `App_Data/outbox`, swap `IEmailSender` for SMTP in production). Manage, pause or delete alerts at `/saved-searches`
 - **Map view** — every search has a 🗺 Map view (Leaflet + OpenStreetMap, vendored locally) with filtered markers and listing popups; listings are geocoded offline from a built-in city table
 
+### FabFeed & sharing (the TikTok play)
+- **Vertical swipe feed** at `/feed` — full-screen scroll-snap feed of listings; video ads autoplay (muted, looped, IntersectionObserver-driven) and rank first, image-only ads get a Ken Burns motion effect. Action rail with favorite, message, share and share-card buttons; arrow-key navigation on desktop
+- **Video uploads** — sellers can attach a vertical MP4/WebM/MOV (max 60 MB) to any ad; video ads get a 🎬 badge on cards and play on the detail page
+- **Share cards** — every listing renders a 1080×1920 (9:16) branded card at `/l/{id}/share-card.svg` sized for TikTok / Instagram stories, with the cover photo embedded, specs summary, price and deep link; plus a native Web Share button on detail pages
+
+### Languages
+- **Romanian is the primary language**, English secondary — RO|EN switcher in the header (culture cookie). ~350 translated strings including all filter labels, enum values, category names and relative dates, via a simple dictionary `Translator` with English fallback
+
 ### Platform features
 - Hero homepage with global search, category grid, featured band, brand strip, CTA + trust sections
 - Full-text search across titles/descriptions with price/location/condition/seller filters and 7 sort orders

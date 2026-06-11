@@ -26,6 +26,33 @@ public class PhotoStorage(IWebHostEnvironment env)
         return null;
     }
 
+    public const long MaxVideoBytes = 60 * 1024 * 1024;
+
+    private static readonly Dictionary<string, string> AllowedVideoTypes = new()
+    {
+        ["video/mp4"] = ".mp4",
+        ["video/webm"] = ".webm",
+        ["video/quicktime"] = ".mov",
+    };
+
+    public string? ValidateVideo(IFormFile video)
+    {
+        if (video.Length == 0) return "The video file is empty.";
+        if (video.Length > MaxVideoBytes) return "The video is over 60 MB.";
+        if (!AllowedVideoTypes.ContainsKey(video.ContentType)) return "Unsupported video format (MP4, WebM or MOV).";
+        return null;
+    }
+
+    public async Task<string> SaveVideoAsync(IFormFile video, CancellationToken ct = default)
+    {
+        var dir = Path.Combine(env.WebRootPath, "uploads", "videos");
+        Directory.CreateDirectory(dir);
+        var name = $"{Guid.NewGuid():N}{AllowedVideoTypes[video.ContentType]}";
+        await using var stream = File.Create(Path.Combine(dir, name));
+        await video.CopyToAsync(stream, ct);
+        return $"/uploads/videos/{name}";
+    }
+
     public async Task<List<string>> SaveAsync(IEnumerable<IFormFile> photos, CancellationToken ct = default)
     {
         var dir = Path.Combine(env.WebRootPath, "uploads");

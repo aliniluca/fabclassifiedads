@@ -56,6 +56,15 @@ if (photoInput) {
     });
 }
 
+// Video picker hint on the create form
+const videoInput = document.getElementById('videoInput');
+if (videoInput) {
+    videoInput.addEventListener('change', () => {
+        const hint = document.getElementById('videoHint');
+        if (hint && videoInput.files.length > 0) hint.textContent = `🎬 ${videoInput.files[0].name}`;
+    });
+}
+
 // Favorite hearts: toggle via fetch without a page reload
 document.addEventListener('submit', async (e) => {
     const form = e.target.closest('.fav-form');

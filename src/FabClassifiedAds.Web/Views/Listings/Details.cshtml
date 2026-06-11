@@ -19,7 +19,13 @@
     <div class="detail-layout">
         <div class="detail-main">
             <div class="gallery">
-                @if (l.Images.Count > 0)
+                @if (!string.IsNullOrEmpty(l.VideoUrl))
+                {
+                    <div class="gallery-main gallery-video">
+                        <video src="@l.VideoUrl" controls muted loop playsinline poster="@l.Images.FirstOrDefault()?.Url"></video>
+                    </div>
+                }
+                else if (l.Images.Count > 0)
                 {
                     <div class="gallery-main"><img src="@l.Images[0].Url" alt="@l.Title" id="galleryMain" /></div>
                     @if (l.Images.Count > 1)
@@ -174,6 +180,15 @@
                 }
             </div>
 
+            <div class="panel share-panel mt-16">
+                <h3>↗ @T["Share"]</h3>
+                <div class="share-actions">
+                    <button type="button" class="btn btn-ghost btn-sm" id="shareBtn" data-title="@l.Title">↗ @T["Share link"]</button>
+                    <a href="/l/@l.Id/share-card.svg" target="_blank" class="btn btn-ghost btn-sm">🖼 @T["Share card"]</a>
+                </div>
+                <p class="muted small">@T["Post the 9:16 card straight to TikTok or Instagram stories."]</p>
+            </div>
+
             <div class="panel safety-panel">
                 <h3>🛡️ @T["Stay safe"]</h3>
                 <ul>
@@ -184,6 +199,20 @@
             </div>
         </aside>
     </div>
+
+    @section Scripts {
+        <script>
+            document.getElementById('shareBtn')?.addEventListener('click', async (e) => {
+                const btn = e.currentTarget;
+                if (navigator.share) {
+                    try { await navigator.share({ title: btn.dataset.title, url: location.href }); } catch {}
+                } else {
+                    await navigator.clipboard.writeText(location.href);
+                    btn.textContent = '✓ @T["Link copied"]';
+                }
+            });
+        </script>
+    }
 
     @if (Model.SimilarListings.Count > 0)
     {
