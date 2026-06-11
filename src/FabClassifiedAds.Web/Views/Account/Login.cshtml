@@ -1,0 +1,21 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Sign in";
+}
+<div class="container auth-page">
+    <div class="panel auth-panel">
+        <h1>Welcome back 👋</h1>
+        <p class="muted">Sign in to manage your ads, favorites and messages.</p>
+        <form method="post" action="/login">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="ReturnUrl" />
+            <div asp-validation-summary="All" class="validation-summary"></div>
+            <label class="field"><span>Email</span><input asp-for="Email" type="email" required autofocus /></label>
+            <label class="field"><span>Password</span><input asp-for="Password" type="password" required /></label>
+            <label class="check-row"><input asp-for="RememberMe" /> Keep me signed in</label>
+            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+        </form>
+        <p class="auth-switch">New here? <a href="/register">Create an account</a></p>
+        <p class="muted small">Demo account: <code>alex@demo.fab</code> / <code>Demo123!</code></p>
+    </div>
+</div>

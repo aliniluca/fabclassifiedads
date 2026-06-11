@@ -1,0 +1,38 @@
+@model Listing
+@{
+    var isFav = ViewData["FavoriteIds"] is HashSet<int> favs && favs.Contains(Model.Id);
+    var image = Model.Images.FirstOrDefault();
+}
+<article class="card listing-card">
+    <a href="/l/@Model.Id" class="card-media">
+        @if (image != null)
+        {
+            <img src="@image.Url" alt="@Model.Title" loading="lazy" />
+        }
+        else
+        {
+            <div class="card-media-empty">📷</div>
+        }
+        @if (Model.IsFeatured) { <span class="badge badge-featured">★ Featured</span> }
+        @if (Model.Condition == ItemCondition.New) { <span class="badge badge-new">New</span> }
+    </a>
+    <div class="card-body">
+        <div class="card-meta">@Model.Category.Icon @Model.Category.Name</div>
+        <a href="/l/@Model.Id" class="card-title">@Model.Title</a>
+        <div class="card-summary">@Model.ListingSummary()</div>
+        <div class="card-price-row">
+            <span class="card-price">@Model.Price()</span>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <form action="/favorites/toggle/@Model.Id" method="post" class="inline-form fav-form">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="fav-btn @(isFav ? "is-fav" : "")" title="Save to favorites">@(isFav ? "♥" : "♡")</button>
+                </form>
+            }
+        </div>
+        <div class="card-footer">
+            <span>📍 @Model.City</span>
+            <span>@Model.CreatedAt.TimeAgo()</span>
+        </div>
+    </div>
+</article>

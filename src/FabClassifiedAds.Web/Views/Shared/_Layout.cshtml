@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(ViewData["Title"] != null ? $"{ViewData["Title"]} — FabAds" : "FabAds — Buy, sell, discover anything")</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="logo" href="/"><span class="logo-mark">⚡</span>Fab<span class="logo-accent">Ads</span></a>
+
+        <form class="header-search" action="/search" method="get">
+            <input type="search" name="Q" placeholder="Search 25,000+ ads — cars, apartments, phones…"
+                   value="@(Context.Request.Query["Q"])" aria-label="Search" />
+            <button type="submit" class="btn-search" aria-label="Search">🔍</button>
+        </form>
+
+        <nav class="header-nav">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a href="/favorites" class="nav-link" title="Favorites">♥<span class="nav-label">Favorites</span></a>
+                <a href="/messages" class="nav-link" title="Messages">💬<span class="nav-label">Messages</span></a>
+                <a href="/my-ads" class="nav-link" title="My ads">📋<span class="nav-label">My ads</span></a>
+                <form action="/logout" method="post" class="inline-form">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="nav-link nav-button">Sign out</button>
+                </form>
+            }
+            else
+            {
+                <a href="/login" class="nav-link">Sign in</a>
+            }
+            <a href="/post" class="btn btn-primary btn-post">+ Post ad</a>
+        </nav>
+    </div>
+</header>
+
+@if (TempData["Flash"] is string flash)
+{
+    <div class="container"><div class="flash">@flash</div></div>
+}
+
+<main>
+    @RenderBody()
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-grid">
+        <div>
+            <a class="logo" href="/"><span class="logo-mark">⚡</span>Fab<span class="logo-accent">Ads</span></a>
+            <p class="footer-tagline">The most complete classifieds platform. Buy, sell and discover anything — from cars to castles.</p>
+        </div>
+        <div>
+            <h4>Marketplace</h4>
+            <a href="/c/cars">Cars</a>
+            <a href="/c/real-estate">Real Estate</a>
+            <a href="/c/electronics-and-appliances">Electronics</a>
+            <a href="/c/jobs">Jobs</a>
+        </div>
+        <div>
+            <h4>Account</h4>
+            <a href="/post">Post an ad</a>
+            <a href="/favorites">Favorites</a>
+            <a href="/messages">Messages</a>
+            <a href="/my-ads">My ads</a>
+        </div>
+        <div>
+            <h4>Built with</h4>
+            <p class="footer-tagline">.NET 11 • ASP.NET Core MVC • EF Core • SQLite</p>
+        </div>
+    </div>
+    <div class="container footer-bottom">© @DateTime.UtcNow.Year FabAds. All rights reserved.</div>
+</footer>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

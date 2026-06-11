@@ -1,0 +1,70 @@
+@model List<Conversation>
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Messages";
+    var active = ViewBag.Active as Conversation;
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+<div class="container section-pad">
+    <h1>💬 Messages</h1>
+    <div class="messages-layout mt-16">
+        <aside class="conversation-list panel">
+            @if (Model.Count == 0)
+            {
+                <div class="empty-state small">
+                    <span class="empty-icon">📨</span>
+                    <p>No conversations yet. Message a seller from any ad.</p>
+                </div>
+            }
+            @foreach (var conversation in Model)
+            {
+                var other = conversation.BuyerId == userId ? conversation.Seller : conversation.Buyer;
+                var last = conversation.Messages.FirstOrDefault();
+                <a href="/messages?c=@conversation.Id" class="conversation-item @(active?.Id == conversation.Id ? "active" : "")">
+                    <span class="avatar" style="background:@(other.AvatarColor ?? "#6d5dfc")">@(other.DisplayName.Length > 0 ? other.DisplayName[0] : '?')</span>
+                    <div class="conversation-meta">
+                        <strong>@other.DisplayName</strong>
+                        <span class="muted small">@conversation.Listing.Title</span>
+                        @if (last != null) { <span class="muted small ellipsis">@last.Body</span> }
+                    </div>
+                </a>
+            }
+        </aside>
+
+        <section class="chat-panel panel">
+            @if (active == null)
+            {
+                <div class="empty-state">
+                    <span class="empty-icon">💬</span>
+                    <h3>Select a conversation</h3>
+                </div>
+            }
+            else
+            {
+                <div class="chat-head">
+                    <a href="/l/@active.ListingId" class="chat-listing">@active.Listing.Title — @active.Listing.Price()</a>
+                </div>
+                <div class="chat-messages" id="chatScroll">
+                    @foreach (var message in active.Messages)
+                    {
+                        <div class="chat-bubble @(message.SenderId == userId ? "mine" : "theirs")">
+                            <p>@message.Body</p>
+                            <span class="chat-time">@message.SentAt.TimeAgo()</span>
+                        </div>
+                    }
+                </div>
+                <form action="/messages/@active.Id/send" method="post" class="chat-compose">
+                    @Html.AntiForgeryToken()
+                    <input type="text" name="body" placeholder="Write a message…" autocomplete="off" required autofocus />
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
+            }
+        </section>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        const scroll = document.getElementById('chatScroll');
+        if (scroll) scroll.scrollTop = scroll.scrollHeight;
+    </script>
+}

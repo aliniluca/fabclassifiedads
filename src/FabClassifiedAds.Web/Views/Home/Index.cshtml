@@ -1,0 +1,112 @@
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Buy, sell, discover anything";
+}
+
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-inner">
+        <h1 class="hero-title">Find <span class="gradient-text">anything</span>.<br/>Sell <span class="gradient-text">everything</span>.</h1>
+        <p class="hero-subtitle">@Model.TotalActiveListings.Number() live ads across @Model.TotalCategories.Number() categories — cars, homes, tech and more.</p>
+
+        <form class="hero-search" action="/search" method="get">
+            <span class="hero-search-icon">🔍</span>
+            <input type="search" name="Q" placeholder="What are you looking for today?" aria-label="Search" />
+            <select name="Category" aria-label="Category">
+                <option value="">All categories</option>
+                @foreach (var cat in Model.RootCategories)
+                {
+                    <option value="@cat.Slug">@cat.Icon @cat.Name</option>
+                }
+            </select>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        <div class="hero-quick">
+            <span>Trending:</span>
+            <a href="/c/cars?BrandId=">BMW</a>
+            <a href="/c/apartments-for-rent">Apartments for rent</a>
+            <a href="/c/iphone">iPhone 15</a>
+            <a href="/c/gaming-pcs">Gaming PC</a>
+            <a href="/c/e-bikes">E-bikes</a>
+        </div>
+    </div>
+</section>
+
+<section class="container section-pad">
+    <div class="section-head">
+        <h2>Browse categories</h2>
+        <p class="muted">Every category has tailored filters — engine specs for cars, floor plans for homes.</p>
+    </div>
+    <div class="category-grid">
+        @foreach (var cat in Model.RootCategories)
+        {
+            <a href="/c/@cat.Slug" class="category-tile">
+                <span class="category-icon">@cat.Icon</span>
+                <span class="category-name">@cat.Name</span>
+                <span class="category-sub">@cat.Children.Count subcategories</span>
+            </a>
+        }
+    </div>
+</section>
+
+@if (Model.FeaturedListings.Count > 0)
+{
+    <section class="featured-band">
+        <div class="container section-pad">
+            <div class="section-head">
+                <h2>★ Featured ads</h2>
+                <a href="/search" class="see-all">See all →</a>
+            </div>
+            <div class="listing-grid">
+                @foreach (var listing in Model.FeaturedListings)
+                {
+                    <partial name="_ListingCard" model="listing" />
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<section class="container section-pad">
+    <div class="section-head">
+        <h2>Shop cars by brand</h2>
+        <a href="/c/cars" class="see-all">All cars →</a>
+    </div>
+    <div class="brand-strip">
+        @foreach (var brand in Model.PopularBrands)
+        {
+            <a href="/c/cars?BrandId=@brand.Id" class="brand-chip">@brand.Name</a>
+        }
+    </div>
+</section>
+
+<section class="container section-pad">
+    <div class="section-head">
+        <h2>Fresh on FabAds</h2>
+        <a href="/search" class="see-all">See all →</a>
+    </div>
+    <div class="listing-grid">
+        @foreach (var listing in Model.LatestListings)
+        {
+            <partial name="_ListingCard" model="listing" />
+        }
+    </div>
+</section>
+
+<section class="cta-band">
+    <div class="container cta-inner">
+        <div>
+            <h2>Got something to sell?</h2>
+            <p>Post your ad in under a minute. Free, forever, with smart category-specific forms.</p>
+        </div>
+        <a href="/post" class="btn btn-light">+ Post your ad</a>
+    </div>
+</section>
+
+<section class="container section-pad trust-grid">
+    <div class="trust-item"><span>🛡️</span><h3>Verified sellers</h3><p>Ratings and reviews on every account, business badges for dealers.</p></div>
+    <div class="trust-item"><span>🎯</span><h3>Surgical filters</h3><p>Filter cars by engine, power, options. Homes by floor, heating, amenities.</p></div>
+    <div class="trust-item"><span>💬</span><h3>Built-in chat</h3><p>Message sellers instantly without sharing your phone number.</p></div>
+    <div class="trust-item"><span>⚡</span><h3>Always fast</h3><p>Built on .NET 11 — pages render in milliseconds, even on mobile.</p></div>
+</section>

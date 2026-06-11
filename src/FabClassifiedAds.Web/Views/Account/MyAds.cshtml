@@ -1,0 +1,27 @@
+@model List<Listing>
+@{
+    ViewData["Title"] = "My ads";
+}
+<div class="container section-pad">
+    <div class="section-head">
+        <h1>My ads</h1>
+        <a href="/post" class="btn btn-primary">+ Post new ad</a>
+    </div>
+    @if (Model.Count == 0)
+    {
+        <div class="empty-state">
+            <span class="empty-icon">📭</span>
+            <h3>You haven't posted anything yet</h3>
+            <p><a href="/post">Post your first ad</a> — it takes under a minute.</p>
+        </div>
+    }
+    else
+    {
+        <div class="listing-grid">
+            @foreach (var listing in Model)
+            {
+                <partial name="_ListingCard" model="listing" />
+            }
+        </div>
+    }
+</div>
