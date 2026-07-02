@@ -9,6 +9,33 @@ prin systemd. Baza de date este SQLite — nu ai nevoie de un server de DB separ
 
 ---
 
+## ⚡ Varianta rapidă (cu scripturi)
+
+Dacă vrei să sari peste pașii manuali, repo-ul conține două scripturi. Fă întâi
+**pasul 0.1** din consola OCI (deschiderea porturilor în Security List — nu poate fi
+automatizat), apoi:
+
+```bash
+# adu scripturile pe server
+git clone -b claude/keen-lovelace-pexrbj https://github.com/aliniluca/fabclassifiedads.git /tmp/ag
+cd /tmp/ag
+
+# 1) provisioning unic: .NET 11, Nginx, firewall OS, reverse proxy, TLS
+sudo DOMAIN=aicigasesti.ro EMAIL=adresa@ta.ro ./scripts/setup-server.sh
+
+# 2) build + pornire (rulează același script și la fiecare update ulterior)
+sudo ./scripts/deploy.sh
+```
+
+Atât — site-ul e live pe **https://aicigasesti.ro**. La orice actualizare viitoare,
+rulezi doar `sudo ./scripts/deploy.sh` (face pull, publish, restart; baza de date și
+pozele/video-urile utilizatorilor rămân intacte).
+
+Restul ghidului explică pas cu pas ce fac scripturile, pentru cazul în care preferi
+controlul manual sau vrei să depanezi.
+
+---
+
 ## 0. Înainte de toate: deschide porturile în Oracle Cloud (PASUL CEL MAI UITAT)
 
 Instanțele OCI blochează tot traficul din **două** locuri. Trebuie deschise amândouă,
@@ -210,6 +237,14 @@ Gata — **https://aicigasesti.ro** este live. 🎉
 ---
 
 ## 9. Actualizări viitoare (deploy nou)
+
+Cel mai simplu — scriptul face pull + publish + restart, păstrând DB și upload-urile:
+
+```bash
+cd /tmp/ag && git pull && sudo ./scripts/deploy.sh
+```
+
+Sau manual:
 
 ```bash
 cd /tmp/aicigasesti-src && git pull
