@@ -70,6 +70,9 @@ public class CreateListingViewModel
     /// <summary>Optional vertical video for the swipe feed (MP4/WebM/MOV, max 60 MB).</summary>
     public IFormFile? Video { get; set; }
 
+    /// <summary>Remote image URLs carried over from a cross-post import; downloaded on publish.</summary>
+    public List<string>? ImportedImageUrls { get; set; }
+
     // car fields
     public int? BrandId { get; set; }
     public int? ModelId { get; set; }

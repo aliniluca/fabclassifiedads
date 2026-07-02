@@ -10,7 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FabClassifiedAds.Web.Controllers;
 
-public class ListingsController(AppDbContext db, SearchService search, PhotoStorage photos, TrustService trust) : Controller
+public class ListingsController(
+    AppDbContext db,
+    SearchService search,
+    PhotoStorage photos,
+    TrustService trust,
+    ListingUrlImporter urlImporter,
+    SafeHttpFetcher fetcher) : Controller
 {
     private string? UserId => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -98,6 +104,47 @@ public class ListingsController(AppDbContext db, SearchService search, PhotoStor
         return View(await PopulateAsync(new CreateListingViewModel()));
     }
 
+    /// <summary>
+    /// Cross-post bridge: the signed-in owner pastes a link to their own ad elsewhere;
+    /// we fetch that single page and return pre-fill data for the post form. Fetching is
+    /// SSRF-guarded and reads only publisher metadata (schema.org / OpenGraph).
+    /// </summary>
+    [Authorize]
+    [HttpPost("/post/import-url")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ImportUrl([FromForm] string url)
+    {
+        if (string.IsNullOrWhiteSpace(url) || !fetcher.IsFetchableUrl(url))
+            return Json(new { ok = false, error = "Please paste a full http(s) link." });
+
+        try
+        {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(25));
+            var prefill = await urlImporter.ImportAsync(url, cts.Token);
+            if (prefill is null || string.IsNullOrWhiteSpace(prefill.Title))
+                return Json(new { ok = false, error = "Couldn't read that page. Fill the form in manually." });
+
+            return Json(new
+            {
+                ok = true,
+                data = new
+                {
+                    title = prefill.Title,
+                    description = prefill.Description,
+                    price = prefill.Price,
+                    currency = prefill.Currency,
+                    city = prefill.City,
+                    region = prefill.Region,
+                    images = prefill.Images,
+                }
+            });
+        }
+        catch
+        {
+            return Json(new { ok = false, error = "Couldn't reach that link. Fill the form in manually." });
+        }
+    }
+
     [Authorize]
     [HttpPost("/post")]
     [ValidateAntiForgeryToken]
@@ -143,16 +190,27 @@ public class ListingsController(AppDbContext db, SearchService search, PhotoStor
             UserId = UserId!,
             ExpiresAt = DateTime.UtcNow.AddDays(30),
         };
+        var imageUrls = new List<string>();
         if (uploadedPhotos.Count > 0)
+            imageUrls.AddRange(await photos.SaveAsync(uploadedPhotos));
+        // cross-posted images: download server-side (SSRF-guarded) up to the photo cap
+        foreach (var remote in (vm.ImportedImageUrls ?? []).Where(u => !string.IsNullOrWhiteSpace(u)))
         {
-            var urls = await photos.SaveAsync(uploadedPhotos);
-            for (var i = 0; i < urls.Count; i++)
-                listing.Images.Add(new ListingImage { Url = urls[i], SortOrder = i });
+            if (imageUrls.Count >= PhotoStorage.MaxPhotos) break;
+            try
+            {
+                if (await fetcher.FetchImageAsync(remote) is var img && img is { } dl &&
+                    await photos.SaveDownloadedAsync(dl.Data, dl.ContentType) is { } saved)
+                    imageUrls.Add(saved);
+            }
+            catch { /* skip an image that won't download; not fatal to publishing */ }
         }
+
+        if (imageUrls.Count > 0)
+            for (var i = 0; i < imageUrls.Count; i++)
+                listing.Images.Add(new ListingImage { Url = imageUrls[i], SortOrder = i });
         else
-        {
             listing.Images.Add(new ListingImage { Url = $"/media/ph/{CategorySeeder.Slugify(vm.Title)}-0.svg" });
-        }
 
         if (vm.Video is { Length: > 0 })
             listing.VideoUrl = await photos.SaveVideoAsync(vm.Video);

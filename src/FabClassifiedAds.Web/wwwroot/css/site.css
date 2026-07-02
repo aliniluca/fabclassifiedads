@@ -338,6 +338,20 @@ code { background: var(--surface-2); padding: 2px 7px; border-radius: 6px; font-
 .photo-previews img { width: 96px; height: 72px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); }
 .photo-previews img:first-child { outline: 2px solid var(--primary); }
 
+/* ===== Cross-post import box ===== */
+.import-box { margin-top: 18px; border: 1px solid var(--primary); background: linear-gradient(180deg, rgba(109,93,252,.10), transparent); }
+.import-box-head { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.import-box-icon { font-size: 1.6rem; }
+.import-box-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.import-box-row input {
+    flex: 1; min-width: 220px; padding: 11px 14px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--surface-2); color: var(--text); font: inherit;
+}
+.import-box-row input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(109,93,252,.2); }
+.import-box-msg { margin-top: 10px; font-size: .88rem; font-weight: 600; }
+.import-box-msg.ok { color: #7ce6ab; }
+.import-box-msg.err { color: #ff9a9b; }
+
 /* ===== Trust engine ===== */
 .trust-chip {
     display: inline-flex; align-items: center; gap: 3px;

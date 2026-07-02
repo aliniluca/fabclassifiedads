@@ -10,10 +10,26 @@
     <h1>@T["Post your ad"]</h1>
     <p class="muted">@T["Pick the right category to unlock tailored fields — buyers filter by them."]</p>
 
+    <div class="import-box panel" id="importBox">
+        <div class="import-box-head">
+            <span class="import-box-icon">📥</span>
+            <div>
+                <strong>@T["Already have this ad on another site?"]</strong>
+                <div class="muted small">@T["Paste the link to your own ad and we'll fill in the form for you."]</div>
+            </div>
+        </div>
+        <div class="import-box-row">
+            <input type="url" id="importUrl" placeholder="https://…" inputmode="url" autocomplete="off" />
+            <button type="button" class="btn btn-primary" id="importBtn">@T["Bring it in"]</button>
+        </div>
+        <div class="import-box-msg" id="importMsg" hidden></div>
+    </div>
+
     <form method="post" action="/post" enctype="multipart/form-data" class="panel form-panel" id="createForm"
           data-car-categories="@carCategoryIds" data-re-categories="@reCategoryIds">
         @Html.AntiForgeryToken()
         <div asp-validation-summary="All" class="validation-summary"></div>
+        <div id="importedImages"></div>
 
         <label class="field">
             <span>@T["Category"] *</span>

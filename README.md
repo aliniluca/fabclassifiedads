@@ -49,6 +49,12 @@ The database is created and seeded automatically on first start (full category t
 - **Real-time anti-scam chat**: every message is scanned on send; recipients see inline warnings for advance-payment requests, suspicious links/phishing, off-platform moves (WhatsApp/Telegram) and untraceable payments (crypto/gift cards)
 - Transparent rule-based + statistical heuristics — each signal can be swapped for an ML model later without UI changes. A seeded scam demo listing (5/100) shows the red flow end to end
 
+### Cross-post bridge
+- On the post form, a signed-in user pastes a link to **their own** ad elsewhere; the server fetches that single page and pre-fills title, description, price, currency, city, region and photos for review before publishing
+- Universal extraction from publisher metadata (schema.org **JSON-LD** + **OpenGraph**) — no brittle site-specific selectors
+- **SSRF-hardened** fetch: a `SocketsHttpHandler.ConnectCallback` resolves DNS itself and refuses loopback / private / link-local / **cloud-metadata (169.254.169.254)** addresses (covers redirects & DNS-rebinding), http/https on ports 80/443 only, size-capped, hard timeout
+- Imported photos are downloaded server-side on publish (same SSRF guard, type/size validated); a failed image never blocks publishing
+
 ### Import API
 - **`POST /api/import/listings`** — ingest externally-sourced listings (API-key gated via `IMPORT_API_KEY`) into a staging table; batched, deduped by `(source, externalId)` with a content hash. Review with `GET /api/import/pending`, promote with `POST /api/import/{id}/publish` (defaults to a hidden Draft; `?activate=true` to go live), or `POST /api/import/{id}/reject`
 - Staging table is created idempotently at startup (`CREATE TABLE IF NOT EXISTS`) so it lands on existing production DBs without a wipe

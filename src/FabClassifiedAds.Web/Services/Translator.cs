@@ -262,6 +262,10 @@ public class Translator
         ["Post your ad"] = "Publică anunțul tău",
         ["Pick the right category to unlock tailored fields — buyers filter by them."] =
             "Alege categoria potrivită ca să deblochezi câmpurile dedicate — cumpărătorii filtrează după ele.",
+        ["Already have this ad on another site?"] = "Ai deja anunțul pe alt site?",
+        ["Paste the link to your own ad and we'll fill in the form for you."] =
+            "Lipește linkul propriului anunț și îți completăm noi formularul.",
+        ["Bring it in"] = "Adu-l aici",
         ["Category"] = "Categorie",
         ["Choose a category…"] = "Alege o categorie…",
         ["Title"] = "Titlu",

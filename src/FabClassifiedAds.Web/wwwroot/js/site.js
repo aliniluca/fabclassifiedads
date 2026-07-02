@@ -56,6 +56,82 @@ if (photoInput) {
     });
 }
 
+// Cross-post bridge: paste a link to your own ad → pre-fill the post form
+const importBtn = document.getElementById('importBtn');
+if (importBtn) {
+    const urlInput = document.getElementById('importUrl');
+    const msg = document.getElementById('importMsg');
+    const form = document.getElementById('createForm');
+
+    const setMsg = (text, kind) => {
+        msg.hidden = false;
+        msg.textContent = text;
+        msg.className = 'import-box-msg ' + (kind || '');
+    };
+    const setField = (id, value) => {
+        const el = document.getElementById(id);
+        if (el && value != null && value !== '') el.value = value;
+    };
+
+    const runImport = async () => {
+        const url = (urlInput.value || '').trim();
+        if (!url) { setMsg('Paste a link first.', 'err'); return; }
+        importBtn.disabled = true;
+        const original = importBtn.textContent;
+        importBtn.textContent = '…';
+        setMsg('Reading the page…', '');
+        try {
+            const body = new FormData();
+            body.append('url', url);
+            body.append('__RequestVerificationToken', form.querySelector('input[name=__RequestVerificationToken]').value);
+            const res = await fetch('/post/import-url', { method: 'POST', body });
+            const json = await res.json();
+            if (!json.ok) { setMsg(json.error || 'Could not import that link.', 'err'); return; }
+
+            const d = json.data;
+            setField('Title', d.title);
+            setField('Description', d.description);
+            setField('Price', d.price);
+            setField('Currency', d.currency);
+            setField('City', d.city);
+            setField('Region', d.region);
+
+            // carry the remote images as hidden inputs; they download on publish
+            const holder = document.getElementById('importedImages');
+            holder.innerHTML = '';
+            const imgs = d.images || [];
+            for (const src of imgs) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ImportedImageUrls';
+                input.value = src;
+                holder.appendChild(input);
+            }
+            if (imgs.length) {
+                const strip = document.createElement('div');
+                strip.className = 'photo-previews';
+                imgs.slice(0, 10).forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src; img.loading = 'lazy';
+                    strip.appendChild(img);
+                });
+                holder.appendChild(strip);
+            }
+
+            setMsg(`Done — filled the form${imgs.length ? ` with ${imgs.length} photo(s)` : ''}. Pick a category and publish. ✅`, 'ok');
+            document.getElementById('categorySelect')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } catch {
+            setMsg('Could not reach that link. Fill the form in manually.', 'err');
+        } finally {
+            importBtn.disabled = false;
+            importBtn.textContent = original;
+        }
+    };
+
+    importBtn.addEventListener('click', runImport);
+    urlInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); runImport(); } });
+}
+
 // Video picker hint on the create form
 const videoInput = document.getElementById('videoInput');
 if (videoInput) {

@@ -68,4 +68,18 @@ public class PhotoStorage(IWebHostEnvironment env)
         }
         return urls;
     }
+
+    /// <summary>Persists an already-downloaded image (from a cross-post import). Returns the
+    /// public URL, or null if the content type is not a supported image.</summary>
+    public async Task<string?> SaveDownloadedAsync(byte[] data, string contentType, CancellationToken ct = default)
+    {
+        if (data.Length == 0 || data.Length > MaxBytesPerPhoto) return null;
+        if (!AllowedTypes.TryGetValue(contentType, out var ext)) return null;
+
+        var dir = Path.Combine(env.WebRootPath, "uploads");
+        Directory.CreateDirectory(dir);
+        var name = $"{Guid.NewGuid():N}{ext}";
+        await File.WriteAllBytesAsync(Path.Combine(dir, name), data, ct);
+        return $"/uploads/{name}";
+    }
 }
