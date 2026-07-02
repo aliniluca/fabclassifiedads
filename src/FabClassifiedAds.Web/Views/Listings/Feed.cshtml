@@ -1,7 +1,7 @@
 @model List<Listing>
 @using System.Security.Claims
 @{
-    ViewData["Title"] = "FabFeed";
+    ViewData["Title"] = "Feed";
     Layout = "_Layout";
     var favoriteIds = ViewBag.FavoriteIds as HashSet<int> ?? [];
     var isAuthed = User.Identity?.IsAuthenticated == true;

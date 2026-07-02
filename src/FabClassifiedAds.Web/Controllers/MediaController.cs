@@ -100,14 +100,14 @@ public class MediaController(AppDbContext db, IWebHostEnvironment env) : Control
                 <clipPath id="photo"><rect x="60" y="320" width="960" height="960" rx="48"/></clipPath>
               </defs>
               <rect width="1080" height="1920" fill="url(#bg)"/>
-              <text x="80" y="170" font-family="Arial, sans-serif" font-size="76" font-weight="bold" fill="#ffffff">⚡ Fab<tspan fill="{to}">Ads</tspan></text>
+              <text x="80" y="170" font-family="Arial, sans-serif" font-size="76" font-weight="bold" fill="#ffffff">⚡ Aici<tspan fill="{to}">Găsești</tspan></text>
               <text x="80" y="245" font-family="Arial, sans-serif" font-size="40" fill="#9aa0bd">{WebUtility.HtmlEncode(listing.Category.Icon + " " + listing.Category.Name)}</text>
               <rect x="60" y="320" width="960" height="960" rx="48" fill="url(#accent)" opacity="0.85"/>
               {photoElement}
               {titleSvg}
               <text x="80" y="{1480 + titleLines.Count * 78}" font-family="Arial, sans-serif" font-size="44" fill="#cfd3e8">{WebUtility.HtmlEncode(listing.ListingSummary())}</text>
               <text x="80" y="{1590 + titleLines.Count * 78}" font-family="Arial, sans-serif" font-size="96" font-weight="bold" fill="url(#accent)">{WebUtility.HtmlEncode(listing.Price())}</text>
-              <text x="80" y="1850" font-family="Arial, sans-serif" font-size="40" fill="#9aa0bd">📍 {WebUtility.HtmlEncode(listing.City)}   ·   fabads.ro/l/{listing.Id}</text>
+              <text x="80" y="1850" font-family="Arial, sans-serif" font-size="40" fill="#9aa0bd">📍 {WebUtility.HtmlEncode(listing.City)}   ·   aicigasesti.ro/l/{listing.Id}</text>
             </svg>
             """;
         return Content(svg, "image/svg+xml");

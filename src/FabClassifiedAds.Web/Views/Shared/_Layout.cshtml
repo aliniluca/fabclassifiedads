@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@(ViewData["Title"] != null ? $"{ViewData["Title"]} — FabAds" : "FabAds")</title>
+    <title>@(ViewData["Title"] != null ? $"{ViewData["Title"]} — AiciGăsești" : "AiciGăsești")</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -12,7 +12,7 @@
 <body>
 <header class="site-header">
     <div class="container header-inner">
-        <a class="logo" href="/"><span class="logo-mark">⚡</span>Fab<span class="logo-accent">Ads</span></a>
+        <a class="logo" href="/"><span class="logo-mark">⚡</span>Aici<span class="logo-accent">Găsești</span></a>
 
         <form class="header-search" action="/search" method="get">
             <input type="search" name="Q" placeholder="@T["Search 25,000+ ads — cars, apartments, phones…"]"
@@ -27,7 +27,7 @@
             <span class="lang-switch">
                 <a href="/set-language?culture=ro&returnUrl=@Uri.EscapeDataString(currentPath)" class="@(Translator.IsRo ? "active" : "")">RO</a><span class="lang-sep">|</span><a href="/set-language?culture=en&returnUrl=@Uri.EscapeDataString(currentPath)" class="@(Translator.IsRo ? "" : "active")">EN</a>
             </span>
-            <a href="/feed" class="nav-link nav-feed" title="FabFeed">🎬<span class="nav-label">Feed</span></a>
+            <a href="/feed" class="nav-link nav-feed" title="Feed">🎬<span class="nav-label">Feed</span></a>
             @if (User.Identity?.IsAuthenticated == true)
             {
                 <a href="/saved-searches" class="nav-link" title="@T["Alerts"]">🔔<span class="nav-label">@T["Alerts"]</span></a>
@@ -60,7 +60,7 @@
 <footer class="site-footer">
     <div class="container footer-grid">
         <div>
-            <a class="logo" href="/"><span class="logo-mark">⚡</span>Fab<span class="logo-accent">Ads</span></a>
+            <a class="logo" href="/"><span class="logo-mark">⚡</span>Aici<span class="logo-accent">Găsești</span></a>
             <p class="footer-tagline">@T["The most complete classifieds platform. Buy, sell and discover anything — from cars to castles."]</p>
         </div>
         <div>
@@ -82,7 +82,7 @@
             <p class="footer-tagline">.NET 11 • ASP.NET Core MVC • EF Core • SQLite</p>
         </div>
     </div>
-    <div class="container footer-bottom">© @DateTime.UtcNow.Year FabAds. @T["All rights reserved."]</div>
+    <div class="container footer-bottom">© @DateTime.UtcNow.Year AiciGăsești. @T["All rights reserved."]</div>
 </footer>
 
 <script src="~/js/site.js" asp-append-version="true"></script>

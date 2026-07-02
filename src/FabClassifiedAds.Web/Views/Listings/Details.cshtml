@@ -145,7 +145,7 @@
                     <div class="trust-head">
                         <span class="trust-shield">🛡</span>
                         <div>
-                            <h3>@T["FabAds verification"]</h3>
+                            <h3>@T["AiciGăsești verification"]</h3>
                             <div class="trust-score-line">
                                 <span class="trust-score">@Model.Trust.Score<small>/100</small></span>
                                 <span class="trust-label">@T[TrustService.ListingScoreLabel(Model.Trust.Score)]</span>
@@ -202,7 +202,7 @@
                             <span class="trust-chip @sellerTrust.CssClass" title="@T[TrustService.ScoreLabel(sellerTrust.Score)]">🛡 @sellerTrust.Score</span>
                             <div class="small trust-seller-label @sellerTrust.CssClass-text">@T[TrustService.ScoreLabel(sellerTrust.Score)]</div>
                         }
-                        <div class="muted small">@T["On FabAds since"] @l.User.CreatedAt.ToString("MMM yyyy")</div>
+                        <div class="muted small">@T["On AiciGăsești since"] @l.User.CreatedAt.ToString("MMM yyyy")</div>
                         @if (l.User.RatingCount > 0)
                         {
                             <div class="rating">★ @l.User.RatingAverage.ToString("0.0") <span class="muted small">(@l.User.RatingCount @T["reviews"])</span></div>

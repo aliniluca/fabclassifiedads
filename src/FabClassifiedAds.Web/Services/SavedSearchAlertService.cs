@@ -75,7 +75,7 @@ public class SavedSearchAlertService(IServiceScopeFactory scopeFactory, ILogger<
                 <h2>New ads for "{System.Net.WebUtility.HtmlEncode(saved.Name)}"</h2>
                 <p>{fresh.Count} new listing(s) match your saved search:</p>
                 <ul>{rows}</ul>
-                <p><a href="/search{saved.QueryString}">Open this search on FabAds</a></p>
+                <p><a href="/search{saved.QueryString}">Open this search on AiciGăsești</a></p>
                 """;
             await email.SendAsync(saved.User.Email!, $"🔔 {fresh.Count} new ads: {saved.Name}", body, ct);
         }

@@ -1,4 +1,4 @@
-# ⚡ FabAds — the most complete classifieds platform
+# ⚡ AiciGăsești — the most complete classifieds platform
 
 A full-featured classified ads marketplace built on **.NET 11** (ASP.NET Core MVC + EF Core + SQLite + ASP.NET Identity), designed to out-filter OLX-style platforms.
 
@@ -37,12 +37,12 @@ The database is created and seeded automatically on first start (full category t
 - **Saved searches with email alerts** — one click on any filtered search saves it; a background service re-runs saved searches every 2 minutes and emails new matches (dev sender writes to `App_Data/outbox`, swap `IEmailSender` for SMTP in production). Manage, pause or delete alerts at `/saved-searches`
 - **Map view** — every search has a 🗺 Map view (Leaflet + OpenStreetMap, vendored locally) with filtered markers and listing popups; listings are geocoded offline from a built-in city table
 
-### FabFeed & sharing (the TikTok play)
+### Feed & sharing (the TikTok play)
 - **Vertical swipe feed** at `/feed` — full-screen scroll-snap feed of listings; video ads autoplay (muted, looped, IntersectionObserver-driven) and rank first, image-only ads get a Ken Burns motion effect. Action rail with favorite, message, share and share-card buttons; arrow-key navigation on desktop
 - **Video uploads** — sellers can attach a vertical MP4/WebM/MOV (max 60 MB) to any ad; video ads get a 🎬 badge on cards and play on the detail page
 - **Share cards** — every listing renders a 1080×1920 (9:16) branded card at `/l/{id}/share-card.svg` sized for TikTok / Instagram stories, with the cover photo embedded, specs summary, price and deep link; plus a native Web Share button on detail pages
 
-### Trust engine ("Verificare FabAds")
+### Trust engine ("Verificare AiciGăsești")
 - **Listing trust score (0–100)** computed at publish time and shown on every card and detail page: risky-language detection (advance payment, Western Union, WhatsApp-only, "plecat din țară"…), links/phones in text, ALL-CAPS titles, too-short descriptions, copy/paste duplicate detection across accounts, real-photos/video signals
 - **Automatic price verification** against the live market median — same car brand ±2 years, price/m² for the same property type and transaction, or category median ("Preț cu 67% sub media pieței — posibil risc")
 - **Seller trust score** from account age, email confirmation, ratings, risky-message rate in chat, and measured response speed — shown as a 🛡 badge with full check breakdown

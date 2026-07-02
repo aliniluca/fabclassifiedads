@@ -45,8 +45,8 @@ public class Translator
 
         // feed & sharing
         ["Video"] = "Video",
-        ["Add a vertical video — video ads appear first in the FabFeed"] =
-            "Adaugă un video vertical — anunțurile cu video apar primele în FabFeed",
+        ["Add a vertical video — video ads appear first in the Feed"] =
+            "Adaugă un video vertical — anunțurile cu video apar primele în Feed",
         ["Swipe or scroll"] = "Glisează sau derulează",
         ["Share"] = "Distribuie",
         ["Share link"] = "Distribuie linkul",
@@ -59,7 +59,7 @@ public class Translator
         ["PriceBelowMarket"] = "Preț cu {0}% sub media pieței ({1} anunțuri similare) — posibil risc",
         ["PriceFair"] = "Preț corect pentru piață ({0} anunțuri similare)",
         ["PriceVsMarket"] = "Preț cu {0}% față de media pieței ({1} anunțuri similare)",
-        ["FabAds verification"] = "Verificare FabAds",
+        ["AiciGăsești verification"] = "Verificare AiciGăsești",
         ["Trust score"] = "Scor de încredere",
         ["Trusted listing"] = "Anunț de încredere",
         ["Caution advised"] = "Atenție recomandată",
@@ -93,7 +93,7 @@ public class Translator
         ["Business account"] = "Cont de firmă",
         ["Flag.AdvancePayment"] = "Acest mesaj cere avans — risc ridicat de înșelăciune. Nu plăti niciodată înainte să vezi produsul!",
         ["Flag.SuspiciousLink"] = "Link detectat — posibil phishing. Nu accesa link-uri primite de la necunoscuți.",
-        ["Flag.OffPlatform"] = "Încearcă mutarea conversației pe altă platformă — discuțiile din FabAds rămân protejate.",
+        ["Flag.OffPlatform"] = "Încearcă mutarea conversației pe altă platformă — discuțiile din AiciGăsești rămân protejate.",
         ["Flag.UntraceablePayment"] = "Cere plată netrasabilă (transfer extern / crypto / gift card) — risc foarte ridicat.",
 
         // header & nav
@@ -123,7 +123,7 @@ public class Translator
         ["See all →"] = "Vezi toate →",
         ["Shop cars by brand"] = "Mașini după marcă",
         ["All cars →"] = "Toate mașinile →",
-        ["Fresh on FabAds"] = "Noutăți pe FabAds",
+        ["Fresh on AiciGăsești"] = "Noutăți pe AiciGăsești",
         ["Got something to sell?"] = "Ai ceva de vândut?",
         ["Post your ad in under a minute. Free, forever, with smart category-specific forms."] =
             "Publică anunțul în mai puțin de un minut. Gratuit, pentru totdeauna, cu formulare inteligente pe categorii.",
@@ -243,7 +243,7 @@ public class Translator
         ["views"] = "vizualizări",
         ["negotiable"] = "negociabil",
         ["metallic"] = "metalizat",
-        ["On FabAds since"] = "Pe FabAds din",
+        ["On AiciGăsești since"] = "Pe AiciGăsești din",
         ["reviews"] = "recenzii",
         ["Stay safe"] = "Siguranța ta",
         ["Meet in a public place"] = "Întâlnește-te într-un loc public",
@@ -308,7 +308,7 @@ public class Translator
         ["New here?"] = "Ești nou aici?",
         ["Create an account"] = "Creează un cont",
         ["Demo account:"] = "Cont demo:",
-        ["Join FabAds 🚀"] = "Alătură-te FabAds 🚀",
+        ["Join AiciGăsești 🚀"] = "Alătură-te AiciGăsești 🚀",
         ["Free forever. Post unlimited ads."] = "Gratuit pentru totdeauna. Anunțuri nelimitate.",
         ["Display name"] = "Nume afișat",
         ["optional"] = "opțional",

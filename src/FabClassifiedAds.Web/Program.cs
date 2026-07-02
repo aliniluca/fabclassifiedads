@@ -1,13 +1,23 @@
 using FabClassifiedAds.Web.Data;
 using FabClassifiedAds.Web.Models.Entities;
 using FabClassifiedAds.Web.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("Default") ?? "Data Source=fabads.db"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("Default") ?? "Data Source=aicigasesti.db"));
+
+// Trust the X-Forwarded-* headers set by the Nginx reverse proxy (running on
+// loopback), so Request.Scheme/RemoteIp are correct behind TLS termination.
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     {
@@ -45,6 +55,8 @@ builder.Services.AddHostedService<SavedSearchAlertService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+app.UseForwardedHeaders();
 
 if (!app.Environment.IsDevelopment())
 {

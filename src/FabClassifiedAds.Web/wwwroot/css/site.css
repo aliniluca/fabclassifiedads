@@ -1,4 +1,4 @@
-/* ===== FabAds design system ===== */
+/* ===== AiciGăsești design system ===== */
 :root {
     --bg: #0e0f17;
     --surface: #171927;
@@ -382,7 +382,7 @@ code { background: var(--surface-2); padding: 2px 7px; border-radius: 6px; font-
     padding: 8px 13px; font-size: .8rem; font-weight: 600;
 }
 
-/* ===== FabFeed (vertical swipe feed) ===== */
+/* ===== Feed (vertical swipe feed) ===== */
 .nav-feed { color: var(--accent); }
 .badge-video { background: rgba(0, 0, 0, .55); left: auto; right: 10px; top: 10px; font-size: .9rem; padding: 4px 9px; }
 .feed-wrap { position: relative; }
