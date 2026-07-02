@@ -18,6 +18,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<Conversation> Conversations => Set<Conversation>();
     public DbSet<Message> Messages => Set<Message>();
     public DbSet<SavedSearch> SavedSearches => Set<SavedSearch>();
+    public DbSet<ImportedListing> ImportedListings => Set<ImportedListing>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -80,6 +81,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         {
             e.HasIndex(s => new { s.UserId, s.EmailAlerts });
             e.HasOne(s => s.User).WithMany().HasForeignKey(s => s.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        b.Entity<ImportedListing>(e =>
+        {
+            e.HasIndex(i => new { i.Source, i.ExternalId }).IsUnique();
+            e.HasIndex(i => i.Status);
         });
     }
 }

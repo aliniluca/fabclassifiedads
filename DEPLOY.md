@@ -280,6 +280,22 @@ tar czf ~/uploads-$(date +%F).tgz -C /var/www/aicigasesti/wwwroot uploads
 
 ---
 
+## API de import (opțional)
+
+Aplicația expune `POST /api/import/listings` pentru a alimenta anunțuri dintr-o sursă
+externă (feed partener, API oficial etc.). Endpoint-ul este **blocat implicit** — se
+deblochează doar dacă setezi o cheie secretă:
+
+```bash
+# la deploy, cheia intră automat în serviciul systemd:
+sudo IMPORT_API_KEY="o-cheie-lunga-si-secreta" ./scripts/deploy.sh
+```
+
+Anunțurile importate ajung într-un tabel de staging și **rămân invizibile** până când
+sunt promovate manual (`POST /api/import/{id}/publish`). Vezi `scraper/README.md` pentru
+clientul de colectare și **notele legale** (ToS, drepturi de autor, GDPR) înainte de a
+colecta din orice sursă.
+
 ## Notă despre email-uri (alertele de căutare salvată)
 
 În prezent expeditorul de email scrie fișiere HTML în `App_Data/outbox` (mod demo).

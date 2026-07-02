@@ -49,6 +49,11 @@ The database is created and seeded automatically on first start (full category t
 - **Real-time anti-scam chat**: every message is scanned on send; recipients see inline warnings for advance-payment requests, suspicious links/phishing, off-platform moves (WhatsApp/Telegram) and untraceable payments (crypto/gift cards)
 - Transparent rule-based + statistical heuristics — each signal can be swapped for an ML model later without UI changes. A seeded scam demo listing (5/100) shows the red flow end to end
 
+### Import API
+- **`POST /api/import/listings`** — ingest externally-sourced listings (API-key gated via `IMPORT_API_KEY`) into a staging table; batched, deduped by `(source, externalId)` with a content hash. Review with `GET /api/import/pending`, promote with `POST /api/import/{id}/publish` (defaults to a hidden Draft; `?activate=true` to go live), or `POST /api/import/{id}/reject`
+- Staging table is created idempotently at startup (`CREATE TABLE IF NOT EXISTS`) so it lands on existing production DBs without a wipe
+- A companion polite, robots-respecting collector lives in `scraper/` (Python) — see its README for the ToS/copyright/GDPR notes before pointing it anywhere
+
 ### Languages
 - **Romanian is the primary language**, English secondary — RO|EN switcher in the header (culture cookie). ~350 translated strings including all filter labels, enum values, category names and relative dates, via a simple dictionary `Translator` with English fallback
 

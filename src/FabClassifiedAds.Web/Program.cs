@@ -70,11 +70,14 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllers();   // attribute-routed API (e.g. /api/import/*)
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 
 using (var scope = app.Services.CreateScope())
 {
     await DbSeeder.SeedAsync(scope.ServiceProvider);
+    // ensure tables added after the first deploy exist on already-provisioned DBs
+    await ImportSchema.EnsureAsync(scope.ServiceProvider.GetRequiredService<AppDbContext>());
 }
 
 app.Run();

@@ -9,3 +9,8 @@ obj/
 node_modules/
 src/FabClassifiedAds.Web/wwwroot/uploads/
 src/FabClassifiedAds.Web/App_Data/
+
+# scraper (python)
+scraper/.venv/
+__pycache__/
+*.pyc

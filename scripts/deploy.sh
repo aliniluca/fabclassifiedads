@@ -81,6 +81,12 @@ User=$SERVICE_USER
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=ASPNETCORE_URLS=$ASPNETCORE_URLS
 Environment=DOTNET_CLI_TELEMETRY_OPTOUT=1
+EOF
+# Pass through the import API key if provided at deploy time (locks /api/import otherwise)
+if [ -n "${IMPORT_API_KEY:-}" ]; then
+    echo "Environment=IMPORT_API_KEY=$IMPORT_API_KEY" >> "$NEW_UNIT"
+fi
+cat >> "$NEW_UNIT" <<EOF
 
 [Install]
 WantedBy=multi-user.target
