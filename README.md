@@ -55,10 +55,12 @@ The database is created and seeded automatically on first start (full category t
 - **SSRF-hardened** fetch: a `SocketsHttpHandler.ConnectCallback` resolves DNS itself and refuses loopback / private / link-local / **cloud-metadata (169.254.169.254)** addresses (covers redirects & DNS-rebinding), http/https on ports 80/443 only, size-capped, hard timeout
 - Imported photos are downloaded server-side on publish (same SSRF guard, type/size validated); a failed image never blocks publishing
 
-### Import API
-- **`POST /api/import/listings`** — ingest externally-sourced listings (API-key gated via `IMPORT_API_KEY`) into a staging table; batched, deduped by `(source, externalId)` with a content hash. Review with `GET /api/import/pending`, promote with `POST /api/import/{id}/publish` (defaults to a hidden Draft; `?activate=true` to go live), or `POST /api/import/{id}/reject`
-- Staging table is created idempotently at startup (`CREATE TABLE IF NOT EXISTS`) so it lands on existing production DBs without a wipe
-- A companion polite, robots-respecting collector lives in `scraper/` (Python) — see its README for the ToS/copyright/GDPR notes before pointing it anywhere
+### Public API (token-protected) — see **[API.md](API.md)**
+- **`POST /api/listings`** — create a listing programmatically (API-key gated via `X-Api-Key` / `IMPORT_API_KEY`). Full car & real-estate detail objects, enum-by-name JSON, server-side SSRF-guarded image download. Returns `201` with id + URL + trust score
+- **Automatic category detection** — omit `categorySlug` and the category is inferred from the title/description (car brands + keywords, RO+EN, diacritics-insensitive); for cars it also fills brand/model. The same detector pre-selects the category on the cross-post form
+- **`GET /api/categories`** — list category slugs
+- **Staging import API** (`POST /api/import/listings` → `pending` → `publish`/`reject`) for bulk review-before-publish; deduped by `(source, externalId)`. Staging table is created idempotently at startup so it lands on existing production DBs without a wipe
+- A companion polite, robots-respecting collector lives in `scraper/` (Python) — see its README for the ToS/copyright/GDPR notes
 
 ### Languages
 - **Romanian is the primary language**, English secondary — RO|EN switcher in the header (culture cookie). ~350 translated strings including all filter labels, enum values, category names and relative dates, via a simple dictionary `Translator` with English fallback

@@ -96,6 +96,24 @@ if (importBtn) {
             setField('City', d.city);
             setField('Region', d.region);
 
+            // auto-detected category: pre-select it and reveal its tailored fields
+            let detected = false;
+            if (d.categoryId) {
+                const catSel = document.getElementById('categorySelect');
+                if (catSel && catSel.querySelector(`option[value="${d.categoryId}"]`)) {
+                    catSel.value = String(d.categoryId);
+                    catSel.dispatchEvent(new Event('change'));
+                    detected = true;
+                }
+            }
+            if (d.brandId) {
+                const brandSel = document.getElementById('createBrandSelect');
+                if (brandSel && brandSel.querySelector(`option[value="${d.brandId}"]`)) {
+                    brandSel.value = String(d.brandId);
+                    brandSel.dispatchEvent(new Event('change'));
+                }
+            }
+
             // carry the remote images as hidden inputs; they download on publish
             const holder = document.getElementById('importedImages');
             holder.innerHTML = '';
@@ -118,7 +136,8 @@ if (importBtn) {
                 holder.appendChild(strip);
             }
 
-            setMsg(`Done — filled the form${imgs.length ? ` with ${imgs.length} photo(s)` : ''}. Pick a category and publish. ✅`, 'ok');
+            const catMsg = detected ? 'category detected' : 'pick a category';
+            setMsg(`Done — filled the form${imgs.length ? ` with ${imgs.length} photo(s)` : ''} (${catMsg}). Review and publish. ✅`, 'ok');
             document.getElementById('categorySelect')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } catch {
             setMsg('Could not reach that link. Fill the form in manually.', 'err');

@@ -4,6 +4,7 @@ using System.Text.Json;
 using FabClassifiedAds.Web.Data;
 using FabClassifiedAds.Web.Models.Entities;
 using FabClassifiedAds.Web.Models.Import;
+using FabClassifiedAds.Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,28 +20,17 @@ namespace FabClassifiedAds.Web.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/import")]
+[ApiKey]
 public class ImportController(
     AppDbContext db,
-    IConfiguration config,
     UserManager<ApplicationUser> userManager,
     ILogger<ImportController> logger) : ControllerBase
 {
     private const string SystemUserEmail = "import@aicigasesti.local";
 
-    private bool KeyOk()
-    {
-        var expected = config["Import:ApiKey"] ?? Environment.GetEnvironmentVariable("IMPORT_API_KEY");
-        if (string.IsNullOrEmpty(expected)) return false;                 // not configured => locked
-        var provided = Request.Headers["X-Import-Key"].ToString();
-        if (string.IsNullOrEmpty(provided)) return false;
-        return CryptographicOperations.FixedTimeEquals(
-            Encoding.UTF8.GetBytes(provided), Encoding.UTF8.GetBytes(expected));
-    }
-
     [HttpPost("listings")]
     public async Task<IActionResult> Ingest([FromBody] ImportBatchDto batch)
     {
-        if (!KeyOk()) return Unauthorized();
         var result = new ImportResult { Received = batch.Listings.Count };
 
         foreach (var dto in batch.Listings)
@@ -112,7 +102,6 @@ public class ImportController(
     [HttpGet("pending")]
     public async Task<IActionResult> Pending([FromQuery] int take = 50, [FromQuery] string? source = null)
     {
-        if (!KeyOk()) return Unauthorized();
         var q = db.ImportedListings.AsNoTracking().Where(i => i.Status == ImportStatus.Pending);
         if (!string.IsNullOrWhiteSpace(source)) q = q.Where(i => i.Source == source.ToLowerInvariant());
         var items = await q.OrderByDescending(i => i.UpdatedAt).Take(Math.Clamp(take, 1, 500)).ToListAsync();
@@ -122,7 +111,6 @@ public class ImportController(
     [HttpGet("stats")]
     public async Task<IActionResult> Stats()
     {
-        if (!KeyOk()) return Unauthorized();
         var byStatus = await db.ImportedListings.GroupBy(i => i.Status)
             .Select(g => new { Status = g.Key.ToString(), Count = g.Count() }).ToListAsync();
         var bySource = await db.ImportedListings.GroupBy(i => i.Source)
@@ -137,7 +125,6 @@ public class ImportController(
     [HttpPost("{id:int}/publish")]
     public async Task<IActionResult> Publish(int id, [FromQuery] bool activate = false)
     {
-        if (!KeyOk()) return Unauthorized();
 
         var staged = await db.ImportedListings.FirstOrDefaultAsync(i => i.Id == id);
         if (staged is null) return NotFound();
@@ -189,7 +176,6 @@ public class ImportController(
     [HttpPost("{id:int}/reject")]
     public async Task<IActionResult> Reject(int id)
     {
-        if (!KeyOk()) return Unauthorized();
         var staged = await db.ImportedListings.FirstOrDefaultAsync(i => i.Id == id);
         if (staged is null) return NotFound();
         staged.Status = ImportStatus.Rejected;

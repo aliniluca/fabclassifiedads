@@ -52,9 +52,12 @@ builder.Services.AddScoped<PhotoStorage>();
 builder.Services.AddScoped<TrustService>();
 builder.Services.AddSingleton<SafeHttpFetcher>();
 builder.Services.AddScoped<ListingUrlImporter>();
+builder.Services.AddScoped<CategoryDetector>();
 builder.Services.AddSingleton<IEmailSender, OutboxEmailSender>();
 builder.Services.AddHostedService<SavedSearchAlertService>();
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(
+        new System.Text.Json.Serialization.JsonStringEnumConverter()));
 
 var app = builder.Build();
 

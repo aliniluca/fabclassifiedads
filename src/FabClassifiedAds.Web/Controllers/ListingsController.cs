@@ -16,7 +16,8 @@ public class ListingsController(
     PhotoStorage photos,
     TrustService trust,
     ListingUrlImporter urlImporter,
-    SafeHttpFetcher fetcher) : Controller
+    SafeHttpFetcher fetcher,
+    CategoryDetector categoryDetector) : Controller
 {
     private string? UserId => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -124,6 +125,8 @@ public class ListingsController(
             if (prefill is null || string.IsNullOrWhiteSpace(prefill.Title))
                 return Json(new { ok = false, error = "Couldn't read that page. Fill the form in manually." });
 
+            var suggestion = await categoryDetector.DetectAsync(prefill.Title, prefill.Description);
+
             return Json(new
             {
                 ok = true,
@@ -136,6 +139,8 @@ public class ListingsController(
                     city = prefill.City,
                     region = prefill.Region,
                     images = prefill.Images,
+                    categoryId = suggestion.CategoryId,
+                    brandId = suggestion.BrandId,
                 }
             });
         }
