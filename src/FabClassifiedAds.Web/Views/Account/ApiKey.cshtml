@@ -1,0 +1,60 @@
+@{
+    ViewData["Title"] = T["API key"];
+    var hasKey = (bool)(ViewBag.HasKey ?? false);
+    var newKey = ViewBag.NewKey as string;
+    var createdAt = ViewBag.CreatedAt as DateTime?;
+}
+<div class="container narrow section-pad">
+    <h1>🔑 @T["API key"]</h1>
+    <p class="muted">@T["Use this key to post ads programmatically via the API. Ads created with it appear on your account."]</p>
+
+    @if (newKey != null)
+    {
+        <div class="panel apikey-reveal">
+            <strong>@T["Your new key — copy it now, it won't be shown again:"]</strong>
+            <div class="apikey-row">
+                <code id="apiKeyValue">@newKey</code>
+                <button type="button" class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('apiKeyValue').textContent); this.textContent='✓'">@T["Copy"]</button>
+            </div>
+        </div>
+    }
+
+    <div class="panel mt-16">
+        @if (hasKey)
+        {
+            <p>@T["Status:"] <span class="trust-chip trust-good">@T["active"]</span>
+                @if (createdAt.HasValue) { <span class="muted small">· @T["created"] @createdAt.Value.ToString("d MMM yyyy")</span> }
+            </p>
+            <p class="muted small">@T["Only a hash of your key is stored, so we can't show it again. If you lost it, regenerate a new one (the old one stops working)."]</p>
+            <div class="share-actions">
+                <form method="post" action="/account/api/generate" class="inline-form">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-primary btn-sm">@T["Regenerate key"]</button>
+                </form>
+                <form method="post" action="/account/api/revoke" class="inline-form">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-ghost btn-sm btn-danger">@T["Revoke"]</button>
+                </form>
+            </div>
+        }
+        else
+        {
+            <p class="muted">@T["You don't have an API key yet."]</p>
+            <form method="post" action="/account/api/generate">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-primary">@T["Generate API key"]</button>
+            </form>
+        }
+    </div>
+
+    <div class="panel mt-16">
+        <h3>@T["Quick start"]</h3>
+        <pre class="code-block"><code>curl -X POST @(Context.Request.Scheme)://@(Context.Request.Host)/api/listings \
+  -H "X-Api-Key: YOUR_KEY" -H "Content-Type: application/json" -d '{
+    "title": "iPhone 13 Pro 256GB impecabil",
+    "description": "Full box, bateria 92%, fara zgarieturi.",
+    "price": 2500, "currency": "RON", "city": "Bucuresti"
+  }'</code></pre>
+        <p class="muted small">@T["Full reference in API.md. Category is auto-detected when you omit it."]</p>
+    </div>
+</div>

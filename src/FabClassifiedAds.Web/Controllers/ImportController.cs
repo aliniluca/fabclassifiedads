@@ -20,7 +20,7 @@ namespace FabClassifiedAds.Web.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/import")]
-[ApiKey]
+[ApiKey(RequireMaster = true)]     // staging/bulk import is admin-only (master key)
 public class ImportController(
     AppDbContext db,
     UserManager<ApplicationUser> userManager,

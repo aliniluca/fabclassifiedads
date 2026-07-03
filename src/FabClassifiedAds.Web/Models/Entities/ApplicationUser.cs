@@ -12,6 +12,10 @@ public class ApplicationUser : IdentityUser
     public double RatingAverage { get; set; }
     public int RatingCount { get; set; }
 
+    /// <summary>SHA-256 of this account's personal API key (raw key is shown once, never stored).</summary>
+    public string? ApiKeyHash { get; set; }
+    public DateTime? ApiKeyCreatedAt { get; set; }
+
     public List<Listing> Listings { get; set; } = [];
     public List<Favorite> Favorites { get; set; } = [];
 }

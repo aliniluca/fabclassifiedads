@@ -352,6 +352,13 @@ code { background: var(--surface-2); padding: 2px 7px; border-radius: 6px; font-
 .import-box-msg.ok { color: #7ce6ab; }
 .import-box-msg.err { color: #ff9a9b; }
 
+/* ===== API key page ===== */
+.apikey-reveal { border-color: var(--success); background: rgba(40, 199, 111, .08); }
+.apikey-row { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+.apikey-row code { font-size: .95rem; word-break: break-all; background: var(--surface-2); padding: 8px 12px; border-radius: var(--radius-sm); flex: 1; }
+.code-block { background: #0a0b12; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; overflow-x: auto; font-size: .82rem; }
+.code-block code { background: none; padding: 0; }
+
 /* ===== Trust engine ===== */
 .trust-chip {
     display: inline-flex; align-items: center; gap: 3px;

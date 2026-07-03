@@ -65,7 +65,13 @@ public class ApiListingsController(
         if (category.Kind == CategoryKind.RealEstate && dto.RealEstate is null)
             return Problem(statusCode: 400, title: "This category needs a 'realEstate' object (surfaceM2, propertyType, …).");
 
-        var ownerId = await GetOrCreateApiUserAsync();
+        // owner: the account whose key was used, or the system API account for the master key
+        var apiUserId = HttpContext.Items[ApiKeyAttribute.UserIdItem] as string;
+        var owner = apiUserId is null
+            ? await GetOrCreateApiUserAsync()
+            : await userManager.FindByIdAsync(apiUserId);
+        if (owner is null) return Problem(statusCode: 401, title: "API key owner not found.");
+
         var listing = new Listing
         {
             Title = dto.Title.Trim(),
@@ -78,8 +84,8 @@ public class ApiListingsController(
             City = dto.City.Trim(),
             Region = dto.Region?.Trim() ?? "",
             Condition = dto.Condition,
-            SellerType = SellerType.Business,
-            UserId = ownerId,
+            SellerType = owner.IsBusiness ? SellerType.Business : SellerType.Private,
+            UserId = owner.Id,
             Status = dto.Active ? ListingStatus.Active : ListingStatus.Draft,
             ExpiresAt = DateTime.UtcNow.AddDays(30),
         };
@@ -162,10 +168,10 @@ public class ApiListingsController(
             listing.Images.Add(new ListingImage { Url = $"/media/ph/{CategorySeeder.Slugify(listing.Title)}-0.svg" });
     }
 
-    private async Task<string> GetOrCreateApiUserAsync()
+    private async Task<ApplicationUser> GetOrCreateApiUserAsync()
     {
         var user = await userManager.FindByEmailAsync(ApiUserEmail);
-        if (user != null) return user.Id;
+        if (user != null) return user;
         user = new ApplicationUser
         {
             UserName = ApiUserEmail, Email = ApiUserEmail, EmailConfirmed = true,
@@ -175,6 +181,6 @@ public class ApiListingsController(
         if (!created.Succeeded)
             throw new InvalidOperationException("Could not create API user: " +
                 string.Join("; ", created.Errors.Select(e => e.Description)));
-        return user.Id;
+        return user;
     }
 }

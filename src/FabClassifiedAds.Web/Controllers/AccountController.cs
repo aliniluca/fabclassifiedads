@@ -68,6 +68,48 @@ public class AccountController(
     }
 
     [Authorize]
+    [HttpGet("/account/api")]
+    public async Task<IActionResult> ApiKey()
+    {
+        var user = await userManager.GetUserAsync(User);
+        ViewBag.HasKey = user?.ApiKeyHash != null;
+        ViewBag.CreatedAt = user?.ApiKeyCreatedAt;
+        ViewBag.NewKey = TempData["NewApiKey"] as string;   // shown once, right after generation
+        return View();
+    }
+
+    [Authorize]
+    [HttpPost("/account/api/generate")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> GenerateApiKey()
+    {
+        var user = await userManager.GetUserAsync(User);
+        if (user is null) return Challenge();
+
+        var raw = Services.ApiKeyService.Generate();
+        user.ApiKeyHash = Services.ApiKeyService.Hash(raw);
+        user.ApiKeyCreatedAt = DateTime.UtcNow;
+        await userManager.UpdateAsync(user);
+
+        TempData["NewApiKey"] = raw;                          // surfaced once on the next page load
+        return RedirectToAction(nameof(ApiKey));
+    }
+
+    [Authorize]
+    [HttpPost("/account/api/revoke")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RevokeApiKey()
+    {
+        var user = await userManager.GetUserAsync(User);
+        if (user is null) return Challenge();
+        user.ApiKeyHash = null;
+        user.ApiKeyCreatedAt = null;
+        await userManager.UpdateAsync(user);
+        TempData["Flash"] = "API key revoked.";
+        return RedirectToAction(nameof(ApiKey));
+    }
+
+    [Authorize]
     [HttpGet("/my-ads")]
     public async Task<IActionResult> MyAds()
     {

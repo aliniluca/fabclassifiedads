@@ -266,6 +266,26 @@ public class Translator
         ["Paste the link to your own ad and we'll fill in the form for you."] =
             "Lipește linkul propriului anunț și îți completăm noi formularul.",
         ["Bring it in"] = "Adu-l aici",
+
+        // API key page
+        ["API key"] = "Cheie API",
+        ["Use this key to post ads programmatically via the API. Ads created with it appear on your account."] =
+            "Folosește această cheie pentru a publica anunțuri prin API. Anunțurile create cu ea apar pe contul tău.",
+        ["Your new key — copy it now, it won't be shown again:"] =
+            "Cheia ta nouă — copiaz-o acum, nu va mai fi afișată:",
+        ["Copy"] = "Copiază",
+        ["Status:"] = "Stare:",
+        ["active"] = "activă",
+        ["created"] = "creată",
+        ["Only a hash of your key is stored, so we can't show it again. If you lost it, regenerate a new one (the old one stops working)."] =
+            "Stocăm doar un hash al cheii, deci nu o putem reafișa. Dacă ai pierdut-o, generează una nouă (cea veche nu mai funcționează).",
+        ["Regenerate key"] = "Regenerează cheia",
+        ["Revoke"] = "Revocă",
+        ["You don't have an API key yet."] = "Nu ai încă o cheie API.",
+        ["Generate API key"] = "Generează cheie API",
+        ["Quick start"] = "Pornire rapidă",
+        ["Full reference in API.md. Category is auto-detected when you omit it."] =
+            "Referință completă în API.md. Categoria se detectează automat dacă o omiți.",
         ["Category"] = "Categorie",
         ["Choose a category…"] = "Alege o categorie…",
         ["Title"] = "Titlu",

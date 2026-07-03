@@ -53,6 +53,7 @@ builder.Services.AddScoped<TrustService>();
 builder.Services.AddSingleton<SafeHttpFetcher>();
 builder.Services.AddScoped<ListingUrlImporter>();
 builder.Services.AddScoped<CategoryDetector>();
+builder.Services.AddScoped<ApiKeyService>();
 builder.Services.AddSingleton<IEmailSender, OutboxEmailSender>();
 builder.Services.AddHostedService<SavedSearchAlertService>();
 builder.Services.AddControllersWithViews()

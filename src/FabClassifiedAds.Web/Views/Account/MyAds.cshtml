@@ -5,7 +5,10 @@
 <div class="container section-pad">
     <div class="section-head">
         <h1>@T["My ads"]</h1>
-        <a href="/post" class="btn btn-primary">@T["+ Post new ad"]</a>
+        <div class="share-actions">
+            <a href="/account/api" class="btn btn-ghost">🔑 @T["API key"]</a>
+            <a href="/post" class="btn btn-primary">@T["+ Post new ad"]</a>
+        </div>
     </div>
     @if (Model.Count == 0)
     {

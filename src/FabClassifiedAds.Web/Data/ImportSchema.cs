@@ -4,10 +4,10 @@ namespace FabClassifiedAds.Web.Data;
 
 /// <summary>
 /// The app provisions its schema with EnsureCreated (no migrations), which does
-/// nothing on a database that already exists. So a table added after the first
-/// deploy would never appear on production. This creates the staging table
-/// explicitly with IF NOT EXISTS — a no-op on fresh DBs, a safe add on existing
-/// ones (no data loss). The DDL mirrors exactly what EF generates for the model.
+/// nothing on a database that already exists. So tables/columns added after the
+/// first deploy would never appear on production. This adds them explicitly and
+/// idempotently — a no-op on fresh DBs, a safe add on existing ones (no data loss).
+/// The DDL mirrors exactly what EF generates for the model.
 /// </summary>
 public static class ImportSchema
 {
@@ -39,5 +39,18 @@ public static class ImportSchema
             "CREATE UNIQUE INDEX IF NOT EXISTS \"IX_ImportedListings_Source_ExternalId\" ON \"ImportedListings\" (\"Source\", \"ExternalId\");");
         await db.Database.ExecuteSqlRawAsync(
             "CREATE INDEX IF NOT EXISTS \"IX_ImportedListings_Status\" ON \"ImportedListings\" (\"Status\");");
+
+        // per-account API key columns (added after the first release)
+        await AddColumnIfMissingAsync(db, "AspNetUsers", "ApiKeyHash", "TEXT");
+        await AddColumnIfMissingAsync(db, "AspNetUsers", "ApiKeyCreatedAt", "TEXT");
+    }
+
+    private static async Task AddColumnIfMissingAsync(AppDbContext db, string table, string column, string type)
+    {
+        var existing = await db.Database
+            .SqlQueryRaw<string>($"SELECT name AS \"Value\" FROM pragma_table_info('{table}')")
+            .ToListAsync();
+        if (!existing.Contains(column))
+            await db.Database.ExecuteSqlRawAsync($"ALTER TABLE \"{table}\" ADD COLUMN \"{column}\" {type} NULL");
     }
 }

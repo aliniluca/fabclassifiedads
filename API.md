@@ -10,22 +10,36 @@ Base URL: `https://aicigasesti.ro`
 
 ## Authentication
 
-Every `/api/*` endpoint requires a shared secret in a header:
+Every `/api/*` endpoint requires an API key in a header:
 
 ```
 X-Api-Key: <your-key>
 ```
 
-The key is read from the `IMPORT_API_KEY` environment variable (or `Api:Key` in
-config). If no key is configured the API stays **locked** (every call returns `401`).
-Set it at deploy time — it flows into the systemd service automatically:
+There are two kinds of key:
 
-```bash
-sudo IMPORT_API_KEY="a-long-random-secret" ./scripts/deploy.sh
-```
+- **Per-account keys** — each signed-in user generates their own from **My ads → 🔑 API key**
+  (`/account/api`). Listings created with an account key are **owned by that account**
+  (appear under their profile, business/private per the account). Only a hash is stored;
+  the raw key is shown once. Regenerating or revoking invalidates the old key immediately.
+- **Master key** — the server-wide admin key, from the `IMPORT_API_KEY` environment
+  variable (or `Api:Key` in config). It creates listings under a system "API" account and
+  is the **only** key allowed on the staging import API. Set it at deploy time:
+
+  ```bash
+  sudo IMPORT_API_KEY="a-long-random-secret" ./scripts/deploy.sh
+  ```
+
+If no master key is configured and the caller presents no valid account key, the API stays
+**locked** (every call returns `401`).
 
 Responses: `401 Unauthorized` (missing/wrong key), `400`/`422` (validation),
 `201 Created` (success).
+
+| Endpoint | Master key | Account key |
+|----------|:---------:|:-----------:|
+| `POST /api/listings`, `GET /api/categories` | ✅ (owns → system user) | ✅ (owns → that account) |
+| `POST /api/import/*` (staging) | ✅ | ❌ 401 |
 
 ---
 
