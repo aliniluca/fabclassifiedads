@@ -26,15 +26,31 @@ public class ApiListingsController(
 {
     private const string ApiUserEmail = "api@aicigasesti.local";
 
-    /// <summary>GET /api/categories — list category slugs (for choosing CategorySlug).</summary>
+    /// <summary>GET /api/categories — every category with id, slug, kind, parent and the
+    /// nested object it requires ("car", "realEstate", or null). Use it to map external
+    /// categories to ours.</summary>
     [HttpGet("categories")]
     public async Task<IActionResult> Categories()
     {
         var cats = await db.Categories.AsNoTracking()
             .OrderBy(c => c.SortOrder)
-            .Select(c => new { c.Slug, c.Name, c.Kind, Parent = c.Parent!.Slug })
+            .Select(c => new { c.Id, c.Slug, c.Name, c.Kind, Parent = c.Parent!.Slug })
             .ToListAsync();
-        return Ok(cats);
+
+        return Ok(cats.Select(c => new
+        {
+            c.Id,
+            c.Slug,
+            c.Name,
+            kind = c.Kind.ToString(),
+            parent = c.Parent,
+            requires = c.Kind switch
+            {
+                CategoryKind.Cars => "car",
+                CategoryKind.RealEstate => "realEstate",
+                _ => (string?)null,
+            },
+        }));
     }
 
     /// <summary>POST /api/listings — create a listing. Auto-detects the category when omitted.</summary>
@@ -43,22 +59,29 @@ public class ApiListingsController(
     {
         if (!ModelState.IsValid) return ValidationProblem(ModelState);
 
-        // resolve category: explicit slug, else auto-detect from the text
-        var slug = dto.CategorySlug;
+        // resolve category: explicit id, then slug, then auto-detect from the text
         int? detectedBrandId = null, detectedModelId = null;
-        if (string.IsNullOrWhiteSpace(slug))
+        Category? category = null;
+
+        if (dto.CategoryId is int cid)
+        {
+            category = await db.Categories.FindAsync(cid);
+            if (category is null) return Problem(statusCode: 400, title: $"Unknown CategoryId {cid}.");
+        }
+        if (category is null && !string.IsNullOrWhiteSpace(dto.CategorySlug))
+        {
+            category = await db.Categories.FirstOrDefaultAsync(c => c.Slug == dto.CategorySlug);
+            if (category is null) return Problem(statusCode: 400, title: $"Unknown CategorySlug '{dto.CategorySlug}'.");
+        }
+        if (category is null)
         {
             var guess = await detector.DetectAsync(dto.Title, dto.Description);
-            slug = guess.Slug;
             detectedBrandId = guess.BrandId;
             detectedModelId = guess.ModelId;
+            if (guess.CategoryId is int gid) category = await db.Categories.FindAsync(gid);
         }
-        if (string.IsNullOrWhiteSpace(slug))
-            return Problem(statusCode: 422, title: "Could not determine a category. Pass CategorySlug (see GET /api/categories).");
-
-        var category = await db.Categories.FirstOrDefaultAsync(c => c.Slug == slug);
         if (category is null)
-            return Problem(statusCode: 400, title: $"Unknown CategorySlug '{slug}'.");
+            return Problem(statusCode: 422, title: "Could not determine a category. Pass categorySlug or categoryId (see GET /api/categories).");
 
         // per-kind required fields
         if (category.Kind == CategoryKind.Cars && dto.Car is null)

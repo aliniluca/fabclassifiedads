@@ -45,8 +45,15 @@ Responses: `401 Unauthorized` (missing/wrong key), `400`/`422` (validation),
 
 ## POST /api/listings — create a listing
 
-Creates a live listing (owned by a system "API" account). Returns `201` with the
-new id and public URL.
+Creates a listing owned by the key's account (or the system account for the master
+key). Returns `201` with the new id and public URL.
+
+### Photos
+
+Photos are a **JSON array of absolute image URLs** (`"images": ["https://…/1.jpg"]`),
+**not** a multipart file upload. The server downloads each URL itself through an
+SSRF-guarded fetcher (no internal/metadata hosts), validates type/size, and attaches
+up to 10. An image that can't be fetched is skipped and never blocks creation.
 
 ### Body
 
@@ -58,18 +65,52 @@ new id and public URL.
 | `currency` | string | — | `EUR` (default), `USD`, `RON` |
 | `isNegotiable` | bool | — | default `true` |
 | `isFree` | bool | — | default `false` |
-| `categorySlug` | string | — | **omit to auto-detect** from title+description (see GET /api/categories) |
+| **`categorySlug`** | string | one of slug/id/auto | e.g. `"iphone"`. **Preferred** — stable across deploys |
+| **`categoryId`** | int | one of slug/id/auto | numeric alternative, from `GET /api/categories` |
 | `city` | string | ✅ | |
 | `region` | string | — | |
 | `condition` | enum | — | `New`, `Used` (default), `Refurbished`, `ForParts` |
 | `active` | bool | — | `true` (default) = live; `false` = hidden Draft |
 | `images` | string[] | — | absolute URLs; downloaded server-side (SSRF-guarded), max 10 |
-| `car` | object | for car categories | see below |
-| `realEstate` | object | for real-estate categories | see below |
+| `car` | object | **only** for car categories | see below |
+| `realEstate` | object | **only** for real-estate categories | see below |
 
-**Auto-detection**: if `categorySlug` is omitted, the category is guessed from the
-text (car brands + keywords). For cars it also fills brand/model when recognized.
-If nothing matches, the call returns `422` asking you to pass `categorySlug`.
+### Choosing a category (important)
+
+The field is **`categorySlug`** (a string) — **not** a numeric `categoryId` in your
+config unless you use the `categoryId` field explicitly. Resolution order:
+
+1. `categoryId` if you send it, else
+2. `categorySlug` if you send it, else
+3. **auto-detected** from the title/description (car brands + keywords). If nothing
+   matches you get `422` — pass a slug/id.
+
+**Which categories need an extra object?** Only two kinds:
+
+| Category kind | Extra object required | Examples (slug) |
+|---------------|----------------------|-----------------|
+| Cars (`kind: "Cars"`) | **`car`** (year, mileage, …) | `cars` |
+| Real estate (`kind: "RealEstate"`) | **`realEstate`** (surfaceM2, propertyType, …) | `apartments-for-sale`, `houses-for-rent`, `land-and-plots`, `offices`, … |
+| **Everything else** | **none** | `iphone`, `samsung`, `laptops`, `televisions`, `playstation`, `sofas-and-armchairs`, … |
+
+`GET /api/categories` returns a `requires` field per category (`"car"`,
+`"realEstate"`, or `null`) so your mapper knows exactly what each one needs. A full
+snapshot is committed at [`docs/categories.json`](docs/categories.json).
+
+**Phones/electronics** are plain `Generic` categories — send only the common fields,
+no nested object. This is the fix for the "needs a car object" error: that only happens
+when the resolved category is a **car** one (either you passed a car slug, or
+auto-detect matched a car brand). Pass an explicit phone slug/id and the car branch
+never runs.
+
+For your uploader config, use:
+
+```yaml
+upload:
+  extra_fields:
+    categorySlug: "iphone"     # or samsung, xiaomi, other-phones, mobile-phones, laptops, …
+    # categoryId: 149          # alternatively the numeric id from /api/categories
+```
 
 ### `car` object (required when the category is a vehicle)
 
@@ -121,6 +162,25 @@ Response `201 Created`:
   "categorySlug": "cars", "trustScore": 82 }
 ```
 
+### Example — phone / electronics (no nested object)
+
+```bash
+curl -X POST https://aicigasesti.ro/api/listings \
+  -H "X-Api-Key: $KEY" -H "Content-Type: application/json" -d '{
+    "title": "iPhone 13 Pro 256GB impecabil",
+    "description": "Full box, bateria 92%, fara zgarieturi, folosit cu grija.",
+    "price": 2500, "currency": "RON", "city": "Bucuresti",
+    "categorySlug": "iphone",
+    "images": ["https://example.com/iphone-1.jpg", "https://example.com/iphone-2.jpg"]
+  }'
+```
+
+Response `201 Created`:
+```json
+{ "id": 131, "url": "https://aicigasesti.ro/l/131", "status": "Active",
+  "categorySlug": "iphone", "trustScore": 85 }
+```
+
 ### Example — apartment (explicit category)
 
 ```bash
@@ -137,17 +197,35 @@ curl -X POST https://aicigasesti.ro/api/listings \
 
 ---
 
-## GET /api/categories — list category slugs
+## GET /api/categories — the category map
 
-Returns every category with its slug, name, kind and parent slug — use it to pick a
-valid `categorySlug`.
+Returns every category with its `id`, `slug`, `name`, `kind`, `parent` slug and the
+nested object it **`requires`** (`"car"`, `"realEstate"`, or `null`). This is what you
+map external (e.g. OLX) categories onto. A committed snapshot lives at
+[`docs/categories.json`](docs/categories.json).
 
 ```bash
 curl https://aicigasesti.ro/api/categories -H "X-Api-Key: $KEY"
 ```
 ```json
-[ { "slug": "cars", "name": "Cars", "kind": "Cars", "parent": "auto-moto-and-boats" }, … ]
+[
+  { "id": 12,  "slug": "cars",                "name": "Cars",         "kind": "Cars",        "parent": "auto-moto-and-boats",       "requires": "car" },
+  { "id": 21,  "slug": "apartments-for-sale", "name": "…",            "kind": "RealEstate",  "parent": "real-estate",               "requires": "realEstate" },
+  { "id": 149, "slug": "iphone",              "name": "iPhone",       "kind": "Generic",     "parent": "mobile-phones",             "requires": null },
+  { "id": 150, "slug": "samsung",             "name": "Samsung",      "kind": "Generic",     "parent": "mobile-phones",             "requires": null }
+]
 ```
+
+A simple mapper: for each source listing, resolve to a `slug`; if that category's
+`requires` is `"car"`/`"realEstate"`, also emit that object; otherwise send just the
+common fields.
+
+## Moderation
+
+Every created listing is screened. Clean ads go **live** (`status: "Active"`); ads with
+flagged text (profanity, or dangerous/illegal signals) are returned as
+`status: "PendingReview"` and held for admin approval — the `201` still succeeds, the
+ad just isn't public yet.
 
 ---
 

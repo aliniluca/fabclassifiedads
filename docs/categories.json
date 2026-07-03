@@ -1,0 +1,2330 @@
+[
+    {
+        "id": 1,
+        "slug": "auto-moto-and-boats",
+        "name": "Auto, Moto & Boats",
+        "kind": "Generic",
+        "parent": null,
+        "requires": null
+    },
+    {
+        "id": 12,
+        "slug": "cars",
+        "name": "Cars",
+        "kind": "Cars",
+        "parent": "auto-moto-and-boats",
+        "requires": "car"
+    },
+    {
+        "id": 13,
+        "slug": "motorcycles",
+        "name": "Motorcycles",
+        "kind": "Motorcycles",
+        "parent": "auto-moto-and-boats",
+        "requires": null
+    },
+    {
+        "id": 113,
+        "slug": "sport-bikes",
+        "name": "Sport bikes",
+        "kind": "Generic",
+        "parent": "motorcycles",
+        "requires": null
+    },
+    {
+        "id": 114,
+        "slug": "cruisers-and-choppers",
+        "name": "Cruisers & Choppers",
+        "kind": "Generic",
+        "parent": "motorcycles",
+        "requires": null
+    },
+    {
+        "id": 115,
+        "slug": "touring",
+        "name": "Touring",
+        "kind": "Generic",
+        "parent": "motorcycles",
+        "requires": null
+    },
+    {
+        "id": 116,
+        "slug": "enduro-and-cross",
+        "name": "Enduro & Cross",
+        "kind": "Generic",
+        "parent": "motorcycles",
+        "requires": null
+    },
+    {
+        "id": 117,
+        "slug": "scooters-and-mopeds",
+        "name": "Scooters & Mopeds",
+        "kind": "Generic",
+        "parent": "motorcycles",
+        "requires": null
+    },
+    {
+        "id": 118,
+        "slug": "atv-and-quad",
+        "name": "ATV & Quad",
+        "kind": "Generic",
+        "parent": "motorcycles",
+        "requires": null
+    },
+    {
+        "id": 119,
+        "slug": "naked-bikes",
+        "name": "Naked bikes",
+        "kind": "Generic",
+        "parent": "motorcycles",
+        "requires": null
+    },
+    {
+        "id": 14,
+        "slug": "trucks-and-commercial",
+        "name": "Trucks & Commercial",
+        "kind": "Generic",
+        "parent": "auto-moto-and-boats",
+        "requires": null
+    },
+    {
+        "id": 120,
+        "slug": "vans-up-to-3-5t",
+        "name": "Vans up to 3.5t",
+        "kind": "Generic",
+        "parent": "trucks-and-commercial",
+        "requires": null
+    },
+    {
+        "id": 121,
+        "slug": "trucks-over-3-5t",
+        "name": "Trucks over 3.5t",
+        "kind": "Generic",
+        "parent": "trucks-and-commercial",
+        "requires": null
+    },
+    {
+        "id": 122,
+        "slug": "tractor-units",
+        "name": "Tractor units",
+        "kind": "Generic",
+        "parent": "trucks-and-commercial",
+        "requires": null
+    },
+    {
+        "id": 123,
+        "slug": "buses-and-minibuses",
+        "name": "Buses & Minibuses",
+        "kind": "Generic",
+        "parent": "trucks-and-commercial",
+        "requires": null
+    },
+    {
+        "id": 124,
+        "slug": "trailers-and-semi-trailers",
+        "name": "Trailers & Semi-trailers",
+        "kind": "Generic",
+        "parent": "trucks-and-commercial",
+        "requires": null
+    },
+    {
+        "id": 15,
+        "slug": "boats-and-watercraft",
+        "name": "Boats & Watercraft",
+        "kind": "Generic",
+        "parent": "auto-moto-and-boats",
+        "requires": null
+    },
+    {
+        "id": 125,
+        "slug": "motor-boats",
+        "name": "Motor boats",
+        "kind": "Generic",
+        "parent": "boats-and-watercraft",
+        "requires": null
+    },
+    {
+        "id": 126,
+        "slug": "sailing-boats",
+        "name": "Sailing boats",
+        "kind": "Generic",
+        "parent": "boats-and-watercraft",
+        "requires": null
+    },
+    {
+        "id": 127,
+        "slug": "jet-skis",
+        "name": "Jet skis",
+        "kind": "Generic",
+        "parent": "boats-and-watercraft",
+        "requires": null
+    },
+    {
+        "id": 128,
+        "slug": "kayaks-and-canoes",
+        "name": "Kayaks & Canoes",
+        "kind": "Generic",
+        "parent": "boats-and-watercraft",
+        "requires": null
+    },
+    {
+        "id": 16,
+        "slug": "agricultural-vehicles",
+        "name": "Agricultural vehicles",
+        "kind": "Generic",
+        "parent": "auto-moto-and-boats",
+        "requires": null
+    },
+    {
+        "id": 129,
+        "slug": "tractors",
+        "name": "Tractors",
+        "kind": "Generic",
+        "parent": "agricultural-vehicles",
+        "requires": null
+    },
+    {
+        "id": 130,
+        "slug": "combines",
+        "name": "Combines",
+        "kind": "Generic",
+        "parent": "agricultural-vehicles",
+        "requires": null
+    },
+    {
+        "id": 131,
+        "slug": "agricultural-equipment",
+        "name": "Agricultural equipment",
+        "kind": "Generic",
+        "parent": "agricultural-vehicles",
+        "requires": null
+    },
+    {
+        "id": 17,
+        "slug": "construction-machinery",
+        "name": "Construction machinery",
+        "kind": "Generic",
+        "parent": "auto-moto-and-boats",
+        "requires": null
+    },
+    {
+        "id": 132,
+        "slug": "excavators",
+        "name": "Excavators",
+        "kind": "Generic",
+        "parent": "construction-machinery",
+        "requires": null
+    },
+    {
+        "id": 133,
+        "slug": "loaders",
+        "name": "Loaders",
+        "kind": "Generic",
+        "parent": "construction-machinery",
+        "requires": null
+    },
+    {
+        "id": 134,
+        "slug": "forklifts",
+        "name": "Forklifts",
+        "kind": "Generic",
+        "parent": "construction-machinery",
+        "requires": null
+    },
+    {
+        "id": 18,
+        "slug": "auto-parts-and-accessories",
+        "name": "Auto parts & Accessories",
+        "kind": "Generic",
+        "parent": "auto-moto-and-boats",
+        "requires": null
+    },
+    {
+        "id": 135,
+        "slug": "engine-and-drivetrain-parts",
+        "name": "Engine & Drivetrain parts",
+        "kind": "Generic",
+        "parent": "auto-parts-and-accessories",
+        "requires": null
+    },
+    {
+        "id": 136,
+        "slug": "body-parts",
+        "name": "Body parts",
+        "kind": "Generic",
+        "parent": "auto-parts-and-accessories",
+        "requires": null
+    },
+    {
+        "id": 137,
+        "slug": "brakes-and-suspension",
+        "name": "Brakes & Suspension",
+        "kind": "Generic",
+        "parent": "auto-parts-and-accessories",
+        "requires": null
+    },
+    {
+        "id": 138,
+        "slug": "electrics-and-electronics",
+        "name": "Electrics & Electronics",
+        "kind": "Generic",
+        "parent": "auto-parts-and-accessories",
+        "requires": null
+    },
+    {
+        "id": 139,
+        "slug": "interior-parts",
+        "name": "Interior parts",
+        "kind": "Generic",
+        "parent": "auto-parts-and-accessories",
+        "requires": null
+    },
+    {
+        "id": 140,
+        "slug": "car-audio-and-gps",
+        "name": "Car audio & GPS",
+        "kind": "Generic",
+        "parent": "auto-parts-and-accessories",
+        "requires": null
+    },
+    {
+        "id": 141,
+        "slug": "car-care-and-tuning",
+        "name": "Car care & Tuning",
+        "kind": "Generic",
+        "parent": "auto-parts-and-accessories",
+        "requires": null
+    },
+    {
+        "id": 142,
+        "slug": "oils-and-fluids",
+        "name": "Oils & Fluids",
+        "kind": "Generic",
+        "parent": "auto-parts-and-accessories",
+        "requires": null
+    },
+    {
+        "id": 19,
+        "slug": "tires-and-wheels",
+        "name": "Tires & Wheels",
+        "kind": "Generic",
+        "parent": "auto-moto-and-boats",
+        "requires": null
+    },
+    {
+        "id": 143,
+        "slug": "summer-tires",
+        "name": "Summer tires",
+        "kind": "Generic",
+        "parent": "tires-and-wheels",
+        "requires": null
+    },
+    {
+        "id": 144,
+        "slug": "winter-tires",
+        "name": "Winter tires",
+        "kind": "Generic",
+        "parent": "tires-and-wheels",
+        "requires": null
+    },
+    {
+        "id": 145,
+        "slug": "all-season-tires",
+        "name": "All-season tires",
+        "kind": "Generic",
+        "parent": "tires-and-wheels",
+        "requires": null
+    },
+    {
+        "id": 146,
+        "slug": "alloy-wheels",
+        "name": "Alloy wheels",
+        "kind": "Generic",
+        "parent": "tires-and-wheels",
+        "requires": null
+    },
+    {
+        "id": 147,
+        "slug": "steel-wheels",
+        "name": "Steel wheels",
+        "kind": "Generic",
+        "parent": "tires-and-wheels",
+        "requires": null
+    },
+    {
+        "id": 148,
+        "slug": "complete-wheel-sets",
+        "name": "Complete wheel sets",
+        "kind": "Generic",
+        "parent": "tires-and-wheels",
+        "requires": null
+    },
+    {
+        "id": 20,
+        "slug": "campers-and-caravans",
+        "name": "Campers & Caravans",
+        "kind": "Generic",
+        "parent": "auto-moto-and-boats",
+        "requires": null
+    },
+    {
+        "id": 2,
+        "slug": "real-estate",
+        "name": "Real Estate",
+        "kind": "Generic",
+        "parent": null,
+        "requires": null
+    },
+    {
+        "id": 21,
+        "slug": "apartments-for-sale",
+        "name": "Apartments for sale",
+        "kind": "RealEstate",
+        "parent": "real-estate",
+        "requires": "realEstate"
+    },
+    {
+        "id": 22,
+        "slug": "apartments-for-rent",
+        "name": "Apartments for rent",
+        "kind": "RealEstate",
+        "parent": "real-estate",
+        "requires": "realEstate"
+    },
+    {
+        "id": 23,
+        "slug": "houses-for-sale",
+        "name": "Houses for sale",
+        "kind": "RealEstate",
+        "parent": "real-estate",
+        "requires": "realEstate"
+    },
+    {
+        "id": 24,
+        "slug": "houses-for-rent",
+        "name": "Houses for rent",
+        "kind": "RealEstate",
+        "parent": "real-estate",
+        "requires": "realEstate"
+    },
+    {
+        "id": 25,
+        "slug": "land-and-plots",
+        "name": "Land & Plots",
+        "kind": "RealEstate",
+        "parent": "real-estate",
+        "requires": "realEstate"
+    },
+    {
+        "id": 26,
+        "slug": "commercial-spaces",
+        "name": "Commercial spaces",
+        "kind": "RealEstate",
+        "parent": "real-estate",
+        "requires": "realEstate"
+    },
+    {
+        "id": 27,
+        "slug": "offices",
+        "name": "Offices",
+        "kind": "RealEstate",
+        "parent": "real-estate",
+        "requires": "realEstate"
+    },
+    {
+        "id": 28,
+        "slug": "warehouses-and-industrial",
+        "name": "Warehouses & Industrial",
+        "kind": "RealEstate",
+        "parent": "real-estate",
+        "requires": "realEstate"
+    },
+    {
+        "id": 29,
+        "slug": "garages-and-parking",
+        "name": "Garages & Parking",
+        "kind": "RealEstate",
+        "parent": "real-estate",
+        "requires": "realEstate"
+    },
+    {
+        "id": 30,
+        "slug": "rooms-for-rent-flatmates",
+        "name": "Rooms for rent / Flatmates",
+        "kind": "RealEstate",
+        "parent": "real-estate",
+        "requires": "realEstate"
+    },
+    {
+        "id": 31,
+        "slug": "vacation-rentals",
+        "name": "Vacation rentals",
+        "kind": "RealEstate",
+        "parent": "real-estate",
+        "requires": "realEstate"
+    },
+    {
+        "id": 32,
+        "slug": "new-developments",
+        "name": "New developments",
+        "kind": "RealEstate",
+        "parent": "real-estate",
+        "requires": "realEstate"
+    },
+    {
+        "id": 3,
+        "slug": "electronics-and-appliances",
+        "name": "Electronics & Appliances",
+        "kind": "Generic",
+        "parent": null,
+        "requires": null
+    },
+    {
+        "id": 33,
+        "slug": "mobile-phones",
+        "name": "Mobile phones",
+        "kind": "Electronics",
+        "parent": "electronics-and-appliances",
+        "requires": null
+    },
+    {
+        "id": 149,
+        "slug": "iphone",
+        "name": "iPhone",
+        "kind": "Generic",
+        "parent": "mobile-phones",
+        "requires": null
+    },
+    {
+        "id": 150,
+        "slug": "samsung",
+        "name": "Samsung",
+        "kind": "Generic",
+        "parent": "mobile-phones",
+        "requires": null
+    },
+    {
+        "id": 151,
+        "slug": "xiaomi",
+        "name": "Xiaomi",
+        "kind": "Generic",
+        "parent": "mobile-phones",
+        "requires": null
+    },
+    {
+        "id": 152,
+        "slug": "google-pixel",
+        "name": "Google Pixel",
+        "kind": "Generic",
+        "parent": "mobile-phones",
+        "requires": null
+    },
+    {
+        "id": 153,
+        "slug": "huawei",
+        "name": "Huawei",
+        "kind": "Generic",
+        "parent": "mobile-phones",
+        "requires": null
+    },
+    {
+        "id": 154,
+        "slug": "oneplus",
+        "name": "OnePlus",
+        "kind": "Generic",
+        "parent": "mobile-phones",
+        "requires": null
+    },
+    {
+        "id": 155,
+        "slug": "other-phones",
+        "name": "Other phones",
+        "kind": "Generic",
+        "parent": "mobile-phones",
+        "requires": null
+    },
+    {
+        "id": 156,
+        "slug": "phone-accessories",
+        "name": "Phone accessories",
+        "kind": "Generic",
+        "parent": "mobile-phones",
+        "requires": null
+    },
+    {
+        "id": 157,
+        "slug": "smartwatches-and-wearables",
+        "name": "Smartwatches & Wearables",
+        "kind": "Generic",
+        "parent": "mobile-phones",
+        "requires": null
+    },
+    {
+        "id": 34,
+        "slug": "computers-and-laptops",
+        "name": "Computers & Laptops",
+        "kind": "Electronics",
+        "parent": "electronics-and-appliances",
+        "requires": null
+    },
+    {
+        "id": 158,
+        "slug": "laptops",
+        "name": "Laptops",
+        "kind": "Generic",
+        "parent": "computers-and-laptops",
+        "requires": null
+    },
+    {
+        "id": 159,
+        "slug": "desktop-pcs",
+        "name": "Desktop PCs",
+        "kind": "Generic",
+        "parent": "computers-and-laptops",
+        "requires": null
+    },
+    {
+        "id": 160,
+        "slug": "gaming-pcs",
+        "name": "Gaming PCs",
+        "kind": "Generic",
+        "parent": "computers-and-laptops",
+        "requires": null
+    },
+    {
+        "id": 161,
+        "slug": "monitors",
+        "name": "Monitors",
+        "kind": "Generic",
+        "parent": "computers-and-laptops",
+        "requires": null
+    },
+    {
+        "id": 162,
+        "slug": "components-cpu-gpu-ram",
+        "name": "Components (CPU, GPU, RAM)",
+        "kind": "Generic",
+        "parent": "computers-and-laptops",
+        "requires": null
+    },
+    {
+        "id": 163,
+        "slug": "peripherals",
+        "name": "Peripherals",
+        "kind": "Generic",
+        "parent": "computers-and-laptops",
+        "requires": null
+    },
+    {
+        "id": 164,
+        "slug": "printers-and-scanners",
+        "name": "Printers & Scanners",
+        "kind": "Generic",
+        "parent": "computers-and-laptops",
+        "requires": null
+    },
+    {
+        "id": 165,
+        "slug": "networking",
+        "name": "Networking",
+        "kind": "Generic",
+        "parent": "computers-and-laptops",
+        "requires": null
+    },
+    {
+        "id": 35,
+        "slug": "tablets-and-e-readers",
+        "name": "Tablets & E-readers",
+        "kind": "Generic",
+        "parent": "electronics-and-appliances",
+        "requires": null
+    },
+    {
+        "id": 36,
+        "slug": "tv-and-home-cinema",
+        "name": "TV & Home cinema",
+        "kind": "Generic",
+        "parent": "electronics-and-appliances",
+        "requires": null
+    },
+    {
+        "id": 166,
+        "slug": "televisions",
+        "name": "Televisions",
+        "kind": "Generic",
+        "parent": "tv-and-home-cinema",
+        "requires": null
+    },
+    {
+        "id": 167,
+        "slug": "projectors",
+        "name": "Projectors",
+        "kind": "Generic",
+        "parent": "tv-and-home-cinema",
+        "requires": null
+    },
+    {
+        "id": 168,
+        "slug": "soundbars-and-speakers",
+        "name": "Soundbars & Speakers",
+        "kind": "Generic",
+        "parent": "tv-and-home-cinema",
+        "requires": null
+    },
+    {
+        "id": 169,
+        "slug": "streaming-devices",
+        "name": "Streaming devices",
+        "kind": "Generic",
+        "parent": "tv-and-home-cinema",
+        "requires": null
+    },
+    {
+        "id": 37,
+        "slug": "audio-and-hi-fi",
+        "name": "Audio & Hi-Fi",
+        "kind": "Generic",
+        "parent": "electronics-and-appliances",
+        "requires": null
+    },
+    {
+        "id": 170,
+        "slug": "headphones",
+        "name": "Headphones",
+        "kind": "Generic",
+        "parent": "audio-and-hi-fi",
+        "requires": null
+    },
+    {
+        "id": 171,
+        "slug": "speakers",
+        "name": "Speakers",
+        "kind": "Generic",
+        "parent": "audio-and-hi-fi",
+        "requires": null
+    },
+    {
+        "id": 172,
+        "slug": "amplifiers-and-receivers",
+        "name": "Amplifiers & Receivers",
+        "kind": "Generic",
+        "parent": "audio-and-hi-fi",
+        "requires": null
+    },
+    {
+        "id": 173,
+        "slug": "turntables-and-vinyl",
+        "name": "Turntables & Vinyl",
+        "kind": "Generic",
+        "parent": "audio-and-hi-fi",
+        "requires": null
+    },
+    {
+        "id": 38,
+        "slug": "photo-and-video",
+        "name": "Photo & Video",
+        "kind": "Generic",
+        "parent": "electronics-and-appliances",
+        "requires": null
+    },
+    {
+        "id": 174,
+        "slug": "dslr-and-mirrorless-cameras",
+        "name": "DSLR & Mirrorless cameras",
+        "kind": "Generic",
+        "parent": "photo-and-video",
+        "requires": null
+    },
+    {
+        "id": 175,
+        "slug": "lenses",
+        "name": "Lenses",
+        "kind": "Generic",
+        "parent": "photo-and-video",
+        "requires": null
+    },
+    {
+        "id": 176,
+        "slug": "drones",
+        "name": "Drones",
+        "kind": "Generic",
+        "parent": "photo-and-video",
+        "requires": null
+    },
+    {
+        "id": 177,
+        "slug": "action-cameras",
+        "name": "Action cameras",
+        "kind": "Generic",
+        "parent": "photo-and-video",
+        "requires": null
+    },
+    {
+        "id": 178,
+        "slug": "studio-and-lighting",
+        "name": "Studio & Lighting",
+        "kind": "Generic",
+        "parent": "photo-and-video",
+        "requires": null
+    },
+    {
+        "id": 39,
+        "slug": "gaming-and-consoles",
+        "name": "Gaming & Consoles",
+        "kind": "Generic",
+        "parent": "electronics-and-appliances",
+        "requires": null
+    },
+    {
+        "id": 179,
+        "slug": "playstation",
+        "name": "PlayStation",
+        "kind": "Generic",
+        "parent": "gaming-and-consoles",
+        "requires": null
+    },
+    {
+        "id": 180,
+        "slug": "xbox",
+        "name": "Xbox",
+        "kind": "Generic",
+        "parent": "gaming-and-consoles",
+        "requires": null
+    },
+    {
+        "id": 181,
+        "slug": "nintendo",
+        "name": "Nintendo",
+        "kind": "Generic",
+        "parent": "gaming-and-consoles",
+        "requires": null
+    },
+    {
+        "id": 182,
+        "slug": "games",
+        "name": "Games",
+        "kind": "Generic",
+        "parent": "gaming-and-consoles",
+        "requires": null
+    },
+    {
+        "id": 183,
+        "slug": "vr-headsets",
+        "name": "VR headsets",
+        "kind": "Generic",
+        "parent": "gaming-and-consoles",
+        "requires": null
+    },
+    {
+        "id": 184,
+        "slug": "gaming-accessories",
+        "name": "Gaming accessories",
+        "kind": "Generic",
+        "parent": "gaming-and-consoles",
+        "requires": null
+    },
+    {
+        "id": 40,
+        "slug": "large-appliances",
+        "name": "Large appliances",
+        "kind": "Generic",
+        "parent": "electronics-and-appliances",
+        "requires": null
+    },
+    {
+        "id": 185,
+        "slug": "refrigerators",
+        "name": "Refrigerators",
+        "kind": "Generic",
+        "parent": "large-appliances",
+        "requires": null
+    },
+    {
+        "id": 186,
+        "slug": "washing-machines",
+        "name": "Washing machines",
+        "kind": "Generic",
+        "parent": "large-appliances",
+        "requires": null
+    },
+    {
+        "id": 187,
+        "slug": "dishwashers",
+        "name": "Dishwashers",
+        "kind": "Generic",
+        "parent": "large-appliances",
+        "requires": null
+    },
+    {
+        "id": 188,
+        "slug": "ovens-and-stoves",
+        "name": "Ovens & Stoves",
+        "kind": "Generic",
+        "parent": "large-appliances",
+        "requires": null
+    },
+    {
+        "id": 189,
+        "slug": "dryers",
+        "name": "Dryers",
+        "kind": "Generic",
+        "parent": "large-appliances",
+        "requires": null
+    },
+    {
+        "id": 41,
+        "slug": "small-appliances",
+        "name": "Small appliances",
+        "kind": "Generic",
+        "parent": "electronics-and-appliances",
+        "requires": null
+    },
+    {
+        "id": 190,
+        "slug": "coffee-machines",
+        "name": "Coffee machines",
+        "kind": "Generic",
+        "parent": "small-appliances",
+        "requires": null
+    },
+    {
+        "id": 191,
+        "slug": "vacuum-cleaners",
+        "name": "Vacuum cleaners",
+        "kind": "Generic",
+        "parent": "small-appliances",
+        "requires": null
+    },
+    {
+        "id": 192,
+        "slug": "kitchen-appliances",
+        "name": "Kitchen appliances",
+        "kind": "Generic",
+        "parent": "small-appliances",
+        "requires": null
+    },
+    {
+        "id": 193,
+        "slug": "air-purifiers-and-fans",
+        "name": "Air purifiers & Fans",
+        "kind": "Generic",
+        "parent": "small-appliances",
+        "requires": null
+    },
+    {
+        "id": 194,
+        "slug": "personal-care",
+        "name": "Personal care",
+        "kind": "Generic",
+        "parent": "small-appliances",
+        "requires": null
+    },
+    {
+        "id": 4,
+        "slug": "home-and-garden",
+        "name": "Home & Garden",
+        "kind": "Generic",
+        "parent": null,
+        "requires": null
+    },
+    {
+        "id": 42,
+        "slug": "furniture",
+        "name": "Furniture",
+        "kind": "Generic",
+        "parent": "home-and-garden",
+        "requires": null
+    },
+    {
+        "id": 195,
+        "slug": "sofas-and-armchairs",
+        "name": "Sofas & Armchairs",
+        "kind": "Generic",
+        "parent": "furniture",
+        "requires": null
+    },
+    {
+        "id": 196,
+        "slug": "beds-and-mattresses",
+        "name": "Beds & Mattresses",
+        "kind": "Generic",
+        "parent": "furniture",
+        "requires": null
+    },
+    {
+        "id": 197,
+        "slug": "tables-and-chairs",
+        "name": "Tables & Chairs",
+        "kind": "Generic",
+        "parent": "furniture",
+        "requires": null
+    },
+    {
+        "id": 198,
+        "slug": "wardrobes-and-storage",
+        "name": "Wardrobes & Storage",
+        "kind": "Generic",
+        "parent": "furniture",
+        "requires": null
+    },
+    {
+        "id": 199,
+        "slug": "office-furniture",
+        "name": "Office furniture",
+        "kind": "Generic",
+        "parent": "furniture",
+        "requires": null
+    },
+    {
+        "id": 43,
+        "slug": "home-decor",
+        "name": "Home decor",
+        "kind": "Generic",
+        "parent": "home-and-garden",
+        "requires": null
+    },
+    {
+        "id": 200,
+        "slug": "lighting",
+        "name": "Lighting",
+        "kind": "Generic",
+        "parent": "home-decor",
+        "requires": null
+    },
+    {
+        "id": 201,
+        "slug": "rugs-and-carpets",
+        "name": "Rugs & Carpets",
+        "kind": "Generic",
+        "parent": "home-decor",
+        "requires": null
+    },
+    {
+        "id": 202,
+        "slug": "curtains-and-textiles",
+        "name": "Curtains & Textiles",
+        "kind": "Generic",
+        "parent": "home-decor",
+        "requires": null
+    },
+    {
+        "id": 203,
+        "slug": "mirrors-and-wall-art",
+        "name": "Mirrors & Wall art",
+        "kind": "Generic",
+        "parent": "home-decor",
+        "requires": null
+    },
+    {
+        "id": 204,
+        "slug": "candles-and-scents",
+        "name": "Candles & Scents",
+        "kind": "Generic",
+        "parent": "home-decor",
+        "requires": null
+    },
+    {
+        "id": 44,
+        "slug": "kitchen-and-dining",
+        "name": "Kitchen & Dining",
+        "kind": "Generic",
+        "parent": "home-and-garden",
+        "requires": null
+    },
+    {
+        "id": 45,
+        "slug": "garden-and-terrace",
+        "name": "Garden & Terrace",
+        "kind": "Generic",
+        "parent": "home-and-garden",
+        "requires": null
+    },
+    {
+        "id": 205,
+        "slug": "garden-furniture",
+        "name": "Garden furniture",
+        "kind": "Generic",
+        "parent": "garden-and-terrace",
+        "requires": null
+    },
+    {
+        "id": 206,
+        "slug": "bbq-and-grills",
+        "name": "BBQ & Grills",
+        "kind": "Generic",
+        "parent": "garden-and-terrace",
+        "requires": null
+    },
+    {
+        "id": 207,
+        "slug": "plants-and-seeds",
+        "name": "Plants & Seeds",
+        "kind": "Generic",
+        "parent": "garden-and-terrace",
+        "requires": null
+    },
+    {
+        "id": 208,
+        "slug": "lawn-mowers-and-garden-tools",
+        "name": "Lawn mowers & Garden tools",
+        "kind": "Generic",
+        "parent": "garden-and-terrace",
+        "requires": null
+    },
+    {
+        "id": 209,
+        "slug": "pools-and-accessories",
+        "name": "Pools & Accessories",
+        "kind": "Generic",
+        "parent": "garden-and-terrace",
+        "requires": null
+    },
+    {
+        "id": 46,
+        "slug": "tools-and-diy",
+        "name": "Tools & DIY",
+        "kind": "Generic",
+        "parent": "home-and-garden",
+        "requires": null
+    },
+    {
+        "id": 210,
+        "slug": "power-tools",
+        "name": "Power tools",
+        "kind": "Generic",
+        "parent": "tools-and-diy",
+        "requires": null
+    },
+    {
+        "id": 211,
+        "slug": "hand-tools",
+        "name": "Hand tools",
+        "kind": "Generic",
+        "parent": "tools-and-diy",
+        "requires": null
+    },
+    {
+        "id": 212,
+        "slug": "welding-equipment",
+        "name": "Welding equipment",
+        "kind": "Generic",
+        "parent": "tools-and-diy",
+        "requires": null
+    },
+    {
+        "id": 213,
+        "slug": "ladders-and-scaffolding",
+        "name": "Ladders & Scaffolding",
+        "kind": "Generic",
+        "parent": "tools-and-diy",
+        "requires": null
+    },
+    {
+        "id": 47,
+        "slug": "construction-materials",
+        "name": "Construction materials",
+        "kind": "Generic",
+        "parent": "home-and-garden",
+        "requires": null
+    },
+    {
+        "id": 214,
+        "slug": "bricks-cement-and-aggregates",
+        "name": "Bricks, Cement & Aggregates",
+        "kind": "Generic",
+        "parent": "construction-materials",
+        "requires": null
+    },
+    {
+        "id": 215,
+        "slug": "doors-and-windows",
+        "name": "Doors & Windows",
+        "kind": "Generic",
+        "parent": "construction-materials",
+        "requires": null
+    },
+    {
+        "id": 216,
+        "slug": "flooring-and-tiles",
+        "name": "Flooring & Tiles",
+        "kind": "Generic",
+        "parent": "construction-materials",
+        "requires": null
+    },
+    {
+        "id": 217,
+        "slug": "plumbing-and-heating",
+        "name": "Plumbing & Heating",
+        "kind": "Generic",
+        "parent": "construction-materials",
+        "requires": null
+    },
+    {
+        "id": 218,
+        "slug": "electrical-supplies",
+        "name": "Electrical supplies",
+        "kind": "Generic",
+        "parent": "construction-materials",
+        "requires": null
+    },
+    {
+        "id": 5,
+        "slug": "fashion-and-beauty",
+        "name": "Fashion & Beauty",
+        "kind": "Generic",
+        "parent": null,
+        "requires": null
+    },
+    {
+        "id": 48,
+        "slug": "women-s-clothing",
+        "name": "Women's clothing",
+        "kind": "Fashion",
+        "parent": "fashion-and-beauty",
+        "requires": null
+    },
+    {
+        "id": 219,
+        "slug": "dresses",
+        "name": "Dresses",
+        "kind": "Generic",
+        "parent": "women-s-clothing",
+        "requires": null
+    },
+    {
+        "id": 220,
+        "slug": "tops-and-shirts",
+        "name": "Tops & Shirts",
+        "kind": "Generic",
+        "parent": "women-s-clothing",
+        "requires": null
+    },
+    {
+        "id": 221,
+        "slug": "jeans-and-trousers",
+        "name": "Jeans & Trousers",
+        "kind": "Generic",
+        "parent": "women-s-clothing",
+        "requires": null
+    },
+    {
+        "id": 222,
+        "slug": "jackets-and-coats",
+        "name": "Jackets & Coats",
+        "kind": "Generic",
+        "parent": "women-s-clothing",
+        "requires": null
+    },
+    {
+        "id": 223,
+        "slug": "activewear",
+        "name": "Activewear",
+        "kind": "Generic",
+        "parent": "women-s-clothing",
+        "requires": null
+    },
+    {
+        "id": 49,
+        "slug": "men-s-clothing",
+        "name": "Men's clothing",
+        "kind": "Fashion",
+        "parent": "fashion-and-beauty",
+        "requires": null
+    },
+    {
+        "id": 224,
+        "slug": "shirts-and-t-shirts",
+        "name": "Shirts & T-shirts",
+        "kind": "Generic",
+        "parent": "men-s-clothing",
+        "requires": null
+    },
+    {
+        "id": 225,
+        "slug": "jeans-and-trousers-2",
+        "name": "Jeans & Trousers",
+        "kind": "Generic",
+        "parent": "men-s-clothing",
+        "requires": null
+    },
+    {
+        "id": 226,
+        "slug": "jackets-and-coats-2",
+        "name": "Jackets & Coats",
+        "kind": "Generic",
+        "parent": "men-s-clothing",
+        "requires": null
+    },
+    {
+        "id": 227,
+        "slug": "suits",
+        "name": "Suits",
+        "kind": "Generic",
+        "parent": "men-s-clothing",
+        "requires": null
+    },
+    {
+        "id": 50,
+        "slug": "shoes",
+        "name": "Shoes",
+        "kind": "Generic",
+        "parent": "fashion-and-beauty",
+        "requires": null
+    },
+    {
+        "id": 228,
+        "slug": "women-s-shoes",
+        "name": "Women's shoes",
+        "kind": "Generic",
+        "parent": "shoes",
+        "requires": null
+    },
+    {
+        "id": 229,
+        "slug": "men-s-shoes",
+        "name": "Men's shoes",
+        "kind": "Generic",
+        "parent": "shoes",
+        "requires": null
+    },
+    {
+        "id": 230,
+        "slug": "sneakers",
+        "name": "Sneakers",
+        "kind": "Generic",
+        "parent": "shoes",
+        "requires": null
+    },
+    {
+        "id": 231,
+        "slug": "boots",
+        "name": "Boots",
+        "kind": "Generic",
+        "parent": "shoes",
+        "requires": null
+    },
+    {
+        "id": 51,
+        "slug": "bags-and-accessories",
+        "name": "Bags & Accessories",
+        "kind": "Generic",
+        "parent": "fashion-and-beauty",
+        "requires": null
+    },
+    {
+        "id": 232,
+        "slug": "handbags",
+        "name": "Handbags",
+        "kind": "Generic",
+        "parent": "bags-and-accessories",
+        "requires": null
+    },
+    {
+        "id": 233,
+        "slug": "backpacks",
+        "name": "Backpacks",
+        "kind": "Generic",
+        "parent": "bags-and-accessories",
+        "requires": null
+    },
+    {
+        "id": 234,
+        "slug": "wallets-and-belts",
+        "name": "Wallets & Belts",
+        "kind": "Generic",
+        "parent": "bags-and-accessories",
+        "requires": null
+    },
+    {
+        "id": 235,
+        "slug": "sunglasses",
+        "name": "Sunglasses",
+        "kind": "Generic",
+        "parent": "bags-and-accessories",
+        "requires": null
+    },
+    {
+        "id": 52,
+        "slug": "watches-and-jewelry",
+        "name": "Watches & Jewelry",
+        "kind": "Generic",
+        "parent": "fashion-and-beauty",
+        "requires": null
+    },
+    {
+        "id": 236,
+        "slug": "luxury-watches",
+        "name": "Luxury watches",
+        "kind": "Generic",
+        "parent": "watches-and-jewelry",
+        "requires": null
+    },
+    {
+        "id": 237,
+        "slug": "fashion-watches",
+        "name": "Fashion watches",
+        "kind": "Generic",
+        "parent": "watches-and-jewelry",
+        "requires": null
+    },
+    {
+        "id": 238,
+        "slug": "rings-and-necklaces",
+        "name": "Rings & Necklaces",
+        "kind": "Generic",
+        "parent": "watches-and-jewelry",
+        "requires": null
+    },
+    {
+        "id": 239,
+        "slug": "gold-and-silver",
+        "name": "Gold & Silver",
+        "kind": "Generic",
+        "parent": "watches-and-jewelry",
+        "requires": null
+    },
+    {
+        "id": 53,
+        "slug": "beauty-and-health",
+        "name": "Beauty & Health",
+        "kind": "Generic",
+        "parent": "fashion-and-beauty",
+        "requires": null
+    },
+    {
+        "id": 240,
+        "slug": "perfumes",
+        "name": "Perfumes",
+        "kind": "Generic",
+        "parent": "beauty-and-health",
+        "requires": null
+    },
+    {
+        "id": 241,
+        "slug": "makeup",
+        "name": "Makeup",
+        "kind": "Generic",
+        "parent": "beauty-and-health",
+        "requires": null
+    },
+    {
+        "id": 242,
+        "slug": "skincare",
+        "name": "Skincare",
+        "kind": "Generic",
+        "parent": "beauty-and-health",
+        "requires": null
+    },
+    {
+        "id": 243,
+        "slug": "hair-styling",
+        "name": "Hair styling",
+        "kind": "Generic",
+        "parent": "beauty-and-health",
+        "requires": null
+    },
+    {
+        "id": 6,
+        "slug": "mom-and-kids",
+        "name": "Mom & Kids",
+        "kind": "Generic",
+        "parent": null,
+        "requires": null
+    },
+    {
+        "id": 54,
+        "slug": "strollers-and-car-seats",
+        "name": "Strollers & Car seats",
+        "kind": "Generic",
+        "parent": "mom-and-kids",
+        "requires": null
+    },
+    {
+        "id": 244,
+        "slug": "strollers",
+        "name": "Strollers",
+        "kind": "Generic",
+        "parent": "strollers-and-car-seats",
+        "requires": null
+    },
+    {
+        "id": 245,
+        "slug": "car-seats",
+        "name": "Car seats",
+        "kind": "Generic",
+        "parent": "strollers-and-car-seats",
+        "requires": null
+    },
+    {
+        "id": 246,
+        "slug": "carriers-and-slings",
+        "name": "Carriers & Slings",
+        "kind": "Generic",
+        "parent": "strollers-and-car-seats",
+        "requires": null
+    },
+    {
+        "id": 55,
+        "slug": "kids-clothing-and-shoes",
+        "name": "Kids' clothing & Shoes",
+        "kind": "Generic",
+        "parent": "mom-and-kids",
+        "requires": null
+    },
+    {
+        "id": 56,
+        "slug": "toys-and-games",
+        "name": "Toys & Games",
+        "kind": "Generic",
+        "parent": "mom-and-kids",
+        "requires": null
+    },
+    {
+        "id": 247,
+        "slug": "lego-and-building-sets",
+        "name": "LEGO & Building sets",
+        "kind": "Generic",
+        "parent": "toys-and-games",
+        "requires": null
+    },
+    {
+        "id": 248,
+        "slug": "dolls-and-plush",
+        "name": "Dolls & Plush",
+        "kind": "Generic",
+        "parent": "toys-and-games",
+        "requires": null
+    },
+    {
+        "id": 249,
+        "slug": "outdoor-toys",
+        "name": "Outdoor toys",
+        "kind": "Generic",
+        "parent": "toys-and-games",
+        "requires": null
+    },
+    {
+        "id": 250,
+        "slug": "educational-toys",
+        "name": "Educational toys",
+        "kind": "Generic",
+        "parent": "toys-and-games",
+        "requires": null
+    },
+    {
+        "id": 57,
+        "slug": "kids-furniture",
+        "name": "Kids' furniture",
+        "kind": "Generic",
+        "parent": "mom-and-kids",
+        "requires": null
+    },
+    {
+        "id": 58,
+        "slug": "baby-essentials",
+        "name": "Baby essentials",
+        "kind": "Generic",
+        "parent": "mom-and-kids",
+        "requires": null
+    },
+    {
+        "id": 59,
+        "slug": "school-supplies",
+        "name": "School supplies",
+        "kind": "Generic",
+        "parent": "mom-and-kids",
+        "requires": null
+    },
+    {
+        "id": 7,
+        "slug": "sports-hobby-and-leisure",
+        "name": "Sports, Hobby & Leisure",
+        "kind": "Generic",
+        "parent": null,
+        "requires": null
+    },
+    {
+        "id": 60,
+        "slug": "bicycles",
+        "name": "Bicycles",
+        "kind": "Generic",
+        "parent": "sports-hobby-and-leisure",
+        "requires": null
+    },
+    {
+        "id": 251,
+        "slug": "road-bikes",
+        "name": "Road bikes",
+        "kind": "Generic",
+        "parent": "bicycles",
+        "requires": null
+    },
+    {
+        "id": 252,
+        "slug": "mountain-bikes",
+        "name": "Mountain bikes",
+        "kind": "Generic",
+        "parent": "bicycles",
+        "requires": null
+    },
+    {
+        "id": 253,
+        "slug": "e-bikes",
+        "name": "E-bikes",
+        "kind": "Generic",
+        "parent": "bicycles",
+        "requires": null
+    },
+    {
+        "id": 254,
+        "slug": "city-and-trekking-bikes",
+        "name": "City & Trekking bikes",
+        "kind": "Generic",
+        "parent": "bicycles",
+        "requires": null
+    },
+    {
+        "id": 255,
+        "slug": "kids-bikes",
+        "name": "Kids' bikes",
+        "kind": "Generic",
+        "parent": "bicycles",
+        "requires": null
+    },
+    {
+        "id": 256,
+        "slug": "bike-parts-and-accessories",
+        "name": "Bike parts & accessories",
+        "kind": "Generic",
+        "parent": "bicycles",
+        "requires": null
+    },
+    {
+        "id": 61,
+        "slug": "e-scooters-and-mobility",
+        "name": "E-scooters & Mobility",
+        "kind": "Generic",
+        "parent": "sports-hobby-and-leisure",
+        "requires": null
+    },
+    {
+        "id": 62,
+        "slug": "fitness-and-gym",
+        "name": "Fitness & Gym",
+        "kind": "Generic",
+        "parent": "sports-hobby-and-leisure",
+        "requires": null
+    },
+    {
+        "id": 257,
+        "slug": "treadmills-and-cardio",
+        "name": "Treadmills & Cardio",
+        "kind": "Generic",
+        "parent": "fitness-and-gym",
+        "requires": null
+    },
+    {
+        "id": 258,
+        "slug": "weights-and-dumbbells",
+        "name": "Weights & Dumbbells",
+        "kind": "Generic",
+        "parent": "fitness-and-gym",
+        "requires": null
+    },
+    {
+        "id": 259,
+        "slug": "home-gyms",
+        "name": "Home gyms",
+        "kind": "Generic",
+        "parent": "fitness-and-gym",
+        "requires": null
+    },
+    {
+        "id": 260,
+        "slug": "yoga-and-pilates",
+        "name": "Yoga & Pilates",
+        "kind": "Generic",
+        "parent": "fitness-and-gym",
+        "requires": null
+    },
+    {
+        "id": 63,
+        "slug": "winter-sports",
+        "name": "Winter sports",
+        "kind": "Generic",
+        "parent": "sports-hobby-and-leisure",
+        "requires": null
+    },
+    {
+        "id": 261,
+        "slug": "skis",
+        "name": "Skis",
+        "kind": "Generic",
+        "parent": "winter-sports",
+        "requires": null
+    },
+    {
+        "id": 262,
+        "slug": "snowboards",
+        "name": "Snowboards",
+        "kind": "Generic",
+        "parent": "winter-sports",
+        "requires": null
+    },
+    {
+        "id": 263,
+        "slug": "boots-and-bindings",
+        "name": "Boots & Bindings",
+        "kind": "Generic",
+        "parent": "winter-sports",
+        "requires": null
+    },
+    {
+        "id": 264,
+        "slug": "ski-apparel",
+        "name": "Ski apparel",
+        "kind": "Generic",
+        "parent": "winter-sports",
+        "requires": null
+    },
+    {
+        "id": 64,
+        "slug": "water-sports",
+        "name": "Water sports",
+        "kind": "Generic",
+        "parent": "sports-hobby-and-leisure",
+        "requires": null
+    },
+    {
+        "id": 265,
+        "slug": "surf-and-sup",
+        "name": "Surf & SUP",
+        "kind": "Generic",
+        "parent": "water-sports",
+        "requires": null
+    },
+    {
+        "id": 266,
+        "slug": "diving-gear",
+        "name": "Diving gear",
+        "kind": "Generic",
+        "parent": "water-sports",
+        "requires": null
+    },
+    {
+        "id": 267,
+        "slug": "swimming",
+        "name": "Swimming",
+        "kind": "Generic",
+        "parent": "water-sports",
+        "requires": null
+    },
+    {
+        "id": 65,
+        "slug": "fishing-and-hunting",
+        "name": "Fishing & Hunting",
+        "kind": "Generic",
+        "parent": "sports-hobby-and-leisure",
+        "requires": null
+    },
+    {
+        "id": 268,
+        "slug": "rods-and-reels",
+        "name": "Rods & Reels",
+        "kind": "Generic",
+        "parent": "fishing-and-hunting",
+        "requires": null
+    },
+    {
+        "id": 269,
+        "slug": "lures-and-bait",
+        "name": "Lures & Bait",
+        "kind": "Generic",
+        "parent": "fishing-and-hunting",
+        "requires": null
+    },
+    {
+        "id": 270,
+        "slug": "hunting-gear",
+        "name": "Hunting gear",
+        "kind": "Generic",
+        "parent": "fishing-and-hunting",
+        "requires": null
+    },
+    {
+        "id": 66,
+        "slug": "camping-and-outdoor",
+        "name": "Camping & Outdoor",
+        "kind": "Generic",
+        "parent": "sports-hobby-and-leisure",
+        "requires": null
+    },
+    {
+        "id": 271,
+        "slug": "tents",
+        "name": "Tents",
+        "kind": "Generic",
+        "parent": "camping-and-outdoor",
+        "requires": null
+    },
+    {
+        "id": 272,
+        "slug": "sleeping-bags-and-mats",
+        "name": "Sleeping bags & Mats",
+        "kind": "Generic",
+        "parent": "camping-and-outdoor",
+        "requires": null
+    },
+    {
+        "id": 273,
+        "slug": "hiking-gear",
+        "name": "Hiking gear",
+        "kind": "Generic",
+        "parent": "camping-and-outdoor",
+        "requires": null
+    },
+    {
+        "id": 67,
+        "slug": "team-sports",
+        "name": "Team sports",
+        "kind": "Generic",
+        "parent": "sports-hobby-and-leisure",
+        "requires": null
+    },
+    {
+        "id": 274,
+        "slug": "football",
+        "name": "Football",
+        "kind": "Generic",
+        "parent": "team-sports",
+        "requires": null
+    },
+    {
+        "id": 275,
+        "slug": "basketball",
+        "name": "Basketball",
+        "kind": "Generic",
+        "parent": "team-sports",
+        "requires": null
+    },
+    {
+        "id": 276,
+        "slug": "tennis-and-padel",
+        "name": "Tennis & Padel",
+        "kind": "Generic",
+        "parent": "team-sports",
+        "requires": null
+    },
+    {
+        "id": 277,
+        "slug": "hockey",
+        "name": "Hockey",
+        "kind": "Generic",
+        "parent": "team-sports",
+        "requires": null
+    },
+    {
+        "id": 68,
+        "slug": "musical-instruments",
+        "name": "Musical instruments",
+        "kind": "Generic",
+        "parent": "sports-hobby-and-leisure",
+        "requires": null
+    },
+    {
+        "id": 278,
+        "slug": "guitars-and-basses",
+        "name": "Guitars & Basses",
+        "kind": "Generic",
+        "parent": "musical-instruments",
+        "requires": null
+    },
+    {
+        "id": 279,
+        "slug": "keyboards-and-pianos",
+        "name": "Keyboards & Pianos",
+        "kind": "Generic",
+        "parent": "musical-instruments",
+        "requires": null
+    },
+    {
+        "id": 280,
+        "slug": "drums-and-percussion",
+        "name": "Drums & Percussion",
+        "kind": "Generic",
+        "parent": "musical-instruments",
+        "requires": null
+    },
+    {
+        "id": 281,
+        "slug": "dj-and-studio-equipment",
+        "name": "DJ & Studio equipment",
+        "kind": "Generic",
+        "parent": "musical-instruments",
+        "requires": null
+    },
+    {
+        "id": 282,
+        "slug": "wind-and-string-instruments",
+        "name": "Wind & String instruments",
+        "kind": "Generic",
+        "parent": "musical-instruments",
+        "requires": null
+    },
+    {
+        "id": 69,
+        "slug": "books-movies-and-music",
+        "name": "Books, Movies & Music",
+        "kind": "Generic",
+        "parent": "sports-hobby-and-leisure",
+        "requires": null
+    },
+    {
+        "id": 283,
+        "slug": "books",
+        "name": "Books",
+        "kind": "Generic",
+        "parent": "books-movies-and-music",
+        "requires": null
+    },
+    {
+        "id": 284,
+        "slug": "comics-and-manga",
+        "name": "Comics & Manga",
+        "kind": "Generic",
+        "parent": "books-movies-and-music",
+        "requires": null
+    },
+    {
+        "id": 285,
+        "slug": "vinyl-and-cds",
+        "name": "Vinyl & CDs",
+        "kind": "Generic",
+        "parent": "books-movies-and-music",
+        "requires": null
+    },
+    {
+        "id": 286,
+        "slug": "movies-and-series",
+        "name": "Movies & Series",
+        "kind": "Generic",
+        "parent": "books-movies-and-music",
+        "requires": null
+    },
+    {
+        "id": 70,
+        "slug": "collectibles-and-art",
+        "name": "Collectibles & Art",
+        "kind": "Generic",
+        "parent": "sports-hobby-and-leisure",
+        "requires": null
+    },
+    {
+        "id": 287,
+        "slug": "coins-and-banknotes",
+        "name": "Coins & Banknotes",
+        "kind": "Generic",
+        "parent": "collectibles-and-art",
+        "requires": null
+    },
+    {
+        "id": 288,
+        "slug": "stamps",
+        "name": "Stamps",
+        "kind": "Generic",
+        "parent": "collectibles-and-art",
+        "requires": null
+    },
+    {
+        "id": 289,
+        "slug": "antiques",
+        "name": "Antiques",
+        "kind": "Generic",
+        "parent": "collectibles-and-art",
+        "requires": null
+    },
+    {
+        "id": 290,
+        "slug": "trading-cards",
+        "name": "Trading cards",
+        "kind": "Generic",
+        "parent": "collectibles-and-art",
+        "requires": null
+    },
+    {
+        "id": 291,
+        "slug": "paintings-and-art",
+        "name": "Paintings & Art",
+        "kind": "Generic",
+        "parent": "collectibles-and-art",
+        "requires": null
+    },
+    {
+        "id": 71,
+        "slug": "board-games-and-puzzles",
+        "name": "Board games & Puzzles",
+        "kind": "Generic",
+        "parent": "sports-hobby-and-leisure",
+        "requires": null
+    },
+    {
+        "id": 72,
+        "slug": "tickets-and-events",
+        "name": "Tickets & Events",
+        "kind": "Generic",
+        "parent": "sports-hobby-and-leisure",
+        "requires": null
+    },
+    {
+        "id": 8,
+        "slug": "animals",
+        "name": "Animals",
+        "kind": "Generic",
+        "parent": null,
+        "requires": null
+    },
+    {
+        "id": 73,
+        "slug": "dogs",
+        "name": "Dogs",
+        "kind": "Generic",
+        "parent": "animals",
+        "requires": null
+    },
+    {
+        "id": 74,
+        "slug": "cats",
+        "name": "Cats",
+        "kind": "Generic",
+        "parent": "animals",
+        "requires": null
+    },
+    {
+        "id": 75,
+        "slug": "birds",
+        "name": "Birds",
+        "kind": "Generic",
+        "parent": "animals",
+        "requires": null
+    },
+    {
+        "id": 76,
+        "slug": "fish-and-aquariums",
+        "name": "Fish & Aquariums",
+        "kind": "Generic",
+        "parent": "animals",
+        "requires": null
+    },
+    {
+        "id": 77,
+        "slug": "small-animals",
+        "name": "Small animals",
+        "kind": "Generic",
+        "parent": "animals",
+        "requires": null
+    },
+    {
+        "id": 78,
+        "slug": "farm-animals",
+        "name": "Farm animals",
+        "kind": "Generic",
+        "parent": "animals",
+        "requires": null
+    },
+    {
+        "id": 79,
+        "slug": "pet-food-and-accessories",
+        "name": "Pet food & Accessories",
+        "kind": "Generic",
+        "parent": "animals",
+        "requires": null
+    },
+    {
+        "id": 80,
+        "slug": "pet-services",
+        "name": "Pet services",
+        "kind": "Generic",
+        "parent": "animals",
+        "requires": null
+    },
+    {
+        "id": 9,
+        "slug": "agriculture-and-industry",
+        "name": "Agriculture & Industry",
+        "kind": "Generic",
+        "parent": null,
+        "requires": null
+    },
+    {
+        "id": 81,
+        "slug": "cereals-and-crops",
+        "name": "Cereals & Crops",
+        "kind": "Generic",
+        "parent": "agriculture-and-industry",
+        "requires": null
+    },
+    {
+        "id": 82,
+        "slug": "industrial-equipment",
+        "name": "Industrial equipment",
+        "kind": "Generic",
+        "parent": "agriculture-and-industry",
+        "requires": null
+    },
+    {
+        "id": 83,
+        "slug": "beekeeping",
+        "name": "Beekeeping",
+        "kind": "Generic",
+        "parent": "agriculture-and-industry",
+        "requires": null
+    },
+    {
+        "id": 84,
+        "slug": "firewood-and-fuel",
+        "name": "Firewood & Fuel",
+        "kind": "Generic",
+        "parent": "agriculture-and-industry",
+        "requires": null
+    },
+    {
+        "id": 85,
+        "slug": "business-for-sale",
+        "name": "Business for sale",
+        "kind": "Generic",
+        "parent": "agriculture-and-industry",
+        "requires": null
+    },
+    {
+        "id": 10,
+        "slug": "jobs",
+        "name": "Jobs",
+        "kind": "Generic",
+        "parent": null,
+        "requires": null
+    },
+    {
+        "id": 86,
+        "slug": "it-and-software",
+        "name": "IT & Software",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 87,
+        "slug": "engineering",
+        "name": "Engineering",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 88,
+        "slug": "construction-and-trades",
+        "name": "Construction & Trades",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 89,
+        "slug": "transport-and-logistics",
+        "name": "Transport & Logistics",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 90,
+        "slug": "retail-and-sales",
+        "name": "Retail & Sales",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 91,
+        "slug": "hospitality-and-tourism",
+        "name": "Hospitality & Tourism",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 92,
+        "slug": "healthcare",
+        "name": "Healthcare",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 93,
+        "slug": "education",
+        "name": "Education",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 94,
+        "slug": "finance-and-accounting",
+        "name": "Finance & Accounting",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 95,
+        "slug": "marketing-and-pr",
+        "name": "Marketing & PR",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 96,
+        "slug": "customer-support",
+        "name": "Customer support",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 97,
+        "slug": "cleaning-and-housekeeping",
+        "name": "Cleaning & Housekeeping",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 98,
+        "slug": "beauty-and-wellness-jobs",
+        "name": "Beauty & Wellness jobs",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 99,
+        "slug": "agriculture-jobs",
+        "name": "Agriculture jobs",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 100,
+        "slug": "work-abroad",
+        "name": "Work abroad",
+        "kind": "Jobs",
+        "parent": "jobs",
+        "requires": null
+    },
+    {
+        "id": 11,
+        "slug": "services",
+        "name": "Services",
+        "kind": "Generic",
+        "parent": null,
+        "requires": null
+    },
+    {
+        "id": 101,
+        "slug": "construction-and-renovation",
+        "name": "Construction & Renovation",
+        "kind": "Generic",
+        "parent": "services",
+        "requires": null
+    },
+    {
+        "id": 102,
+        "slug": "electrician-and-plumber",
+        "name": "Electrician & Plumber",
+        "kind": "Generic",
+        "parent": "services",
+        "requires": null
+    },
+    {
+        "id": 103,
+        "slug": "moving-and-transport",
+        "name": "Moving & Transport",
+        "kind": "Generic",
+        "parent": "services",
+        "requires": null
+    },
+    {
+        "id": 104,
+        "slug": "auto-services",
+        "name": "Auto services",
+        "kind": "Generic",
+        "parent": "services",
+        "requires": null
+    },
+    {
+        "id": 105,
+        "slug": "cleaning-services",
+        "name": "Cleaning services",
+        "kind": "Generic",
+        "parent": "services",
+        "requires": null
+    },
+    {
+        "id": 106,
+        "slug": "it-and-web-services",
+        "name": "IT & Web services",
+        "kind": "Generic",
+        "parent": "services",
+        "requires": null
+    },
+    {
+        "id": 107,
+        "slug": "photo-and-video-services",
+        "name": "Photo & Video services",
+        "kind": "Generic",
+        "parent": "services",
+        "requires": null
+    },
+    {
+        "id": 108,
+        "slug": "events-and-catering",
+        "name": "Events & Catering",
+        "kind": "Generic",
+        "parent": "services",
+        "requires": null
+    },
+    {
+        "id": 109,
+        "slug": "tutoring-and-courses",
+        "name": "Tutoring & Courses",
+        "kind": "Generic",
+        "parent": "services",
+        "requires": null
+    },
+    {
+        "id": 110,
+        "slug": "beauty-services",
+        "name": "Beauty services",
+        "kind": "Generic",
+        "parent": "services",
+        "requires": null
+    },
+    {
+        "id": 111,
+        "slug": "legal-and-accounting",
+        "name": "Legal & Accounting",
+        "kind": "Generic",
+        "parent": "services",
+        "requires": null
+    },
+    {
+        "id": 112,
+        "slug": "repair-services",
+        "name": "Repair services",
+        "kind": "Generic",
+        "parent": "services",
+        "requires": null
+    }
+]

@@ -14,8 +14,11 @@ public class CreateListingApiDto
     public bool IsNegotiable { get; set; } = true;
     public bool IsFree { get; set; }
 
-    /// <summary>Category slug (see GET /api/categories). If omitted, it is auto-detected from the text.</summary>
+    /// <summary>Category slug, e.g. "iphone" (see GET /api/categories). Preferred — stable across deploys.</summary>
     public string? CategorySlug { get; set; }
+
+    /// <summary>Numeric category id — alternative to CategorySlug (ids come from GET /api/categories).</summary>
+    public int? CategoryId { get; set; }
 
     [Required] public string City { get; set; } = "";
     public string? Region { get; set; }
