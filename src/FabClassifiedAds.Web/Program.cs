@@ -54,6 +54,11 @@ builder.Services.AddSingleton<SafeHttpFetcher>();
 builder.Services.AddScoped<ListingUrlImporter>();
 builder.Services.AddScoped<CategoryDetector>();
 builder.Services.AddScoped<ApiKeyService>();
+builder.Services.AddSingleton<ContentModerationService>();
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy(AdminAccess.PolicyName, policy =>
+        policy.RequireAssertion(ctx => AdminAccess.IsAdmin(ctx.User, builder.Configuration)));
 builder.Services.AddSingleton<IEmailSender, OutboxEmailSender>();
 builder.Services.AddHostedService<SavedSearchAlertService>();
 builder.Services.AddControllersWithViews()

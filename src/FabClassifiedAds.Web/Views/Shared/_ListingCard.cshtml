@@ -4,7 +4,7 @@
     var image = Model.Images.FirstOrDefault();
 }
 <article class="card listing-card">
-    <a href="/l/@Model.Id" class="card-media">
+    <a href="@Model.SeoUrl()" class="card-media">
         @if (image != null)
         {
             <img src="@image.Url" alt="@Model.Title" loading="lazy" />
@@ -15,11 +15,13 @@
         }
         @if (Model.IsFeatured) { <span class="badge badge-featured">★ @T["Featured"]</span> }
         @if (!string.IsNullOrEmpty(Model.VideoUrl)) { <span class="badge badge-video">🎬</span> }
+        @if (Model.Status == ListingStatus.PendingReview) { <span class="badge badge-review">⏳ @T["In review"]</span> }
+        else if (Model.Status == ListingStatus.Rejected) { <span class="badge badge-rejected">🚫 @T["Rejected"]</span> }
         @if (Model.Condition == ItemCondition.New) { <span class="badge badge-new">@T["New"]</span> }
     </a>
     <div class="card-body">
         <div class="card-meta">@Model.Category.Icon @T[Model.Category.Name]</div>
-        <a href="/l/@Model.Id" class="card-title">@Model.Title</a>
+        <a href="@Model.SeoUrl()" class="card-title">@Model.Title</a>
         <div class="card-summary">@Model.ListingSummary()</div>
         <div class="card-price-row">
             <span class="card-price">@Model.Price()</span>

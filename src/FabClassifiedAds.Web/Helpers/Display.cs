@@ -85,4 +85,63 @@ public static partial class Display
 
     /// <summary>Humanizes an enum value and runs it through the translator.</summary>
     public static string TranslateEnum(this Enum value) => T[value.Humanize()];
+
+    // ===== SEO =====
+
+    /// <summary>Descriptive, keyword-rich page title (brand/specs/price/city).</summary>
+    public static string SeoTitle(this Listing l)
+    {
+        var parts = new List<string>();
+        if (l.CarDetails is { } c)
+        {
+            var head = string.Join(" ", new[] { c.Brand?.Name, c.Model?.Name, c.Variant, c.Year.ToString() }
+                .Where(s => !string.IsNullOrWhiteSpace(s)));
+            parts.Add(string.IsNullOrWhiteSpace(head) ? l.Title : head);
+            parts.Add($"{c.Mileage.Number()} km");
+            parts.Add(c.Fuel.TranslateEnum());
+        }
+        else if (l.RealEstateDetails is { } r)
+        {
+            var head = r.PropertyType.TranslateEnum();
+            if (r.Rooms.HasValue) head += Translator.IsRo ? $" {r.Rooms} camere" : $" {r.Rooms} rooms";
+            parts.Add(head);
+            parts.Add($"{r.SurfaceM2:0.#} m²");
+            parts.Add(r.Transaction.TranslateEnum());
+        }
+        else
+        {
+            parts.Add(l.Title);
+        }
+
+        var title = string.Join(", ", parts);
+        if (l.Price is not null) title += $" — {l.Price()}";
+        if (!string.IsNullOrWhiteSpace(l.City)) title += $" · {l.City}";
+        return title.Length > 65 ? title[..65].TrimEnd(' ', ',', '·', '—') : title;
+    }
+
+    /// <summary>~155-char meta description from the listing text.</summary>
+    public static string SeoDescription(this Listing l)
+    {
+        var basis = string.IsNullOrWhiteSpace(l.Description) ? l.ListingSummary() : l.Description;
+        var flat = MultiWhitespace().Replace(basis, " ").Trim();
+        var lead = $"{l.SeoTitle()}. ";
+        var text = flat.StartsWith(l.Title, StringComparison.OrdinalIgnoreCase) ? flat : lead + flat;
+        return text.Length > 157 ? text[..157].TrimEnd() + "…" : text;
+    }
+
+    /// <summary>URL slug for the SEO path /l/{id}/{slug}.</summary>
+    public static string SeoSlug(this Listing l)
+    {
+        string basis = l.CarDetails is { } c && c.Brand is not null
+            ? $"{c.Brand.Name} {c.Model?.Name} {c.Year} {l.City}"
+            : $"{l.Title} {l.City}";
+        var slug = Data.CategorySeeder.Slugify(basis);
+        return slug.Length > 70 ? slug[..70].TrimEnd('-') : slug;
+    }
+
+    /// <summary>Canonical listing URL with the SEO slug.</summary>
+    public static string SeoUrl(this Listing l) => $"/l/{l.Id}/{l.SeoSlug()}";
+
+    [GeneratedRegex(@"\s+")]
+    private static partial Regex MultiWhitespace();
 }

@@ -1,0 +1,67 @@
+@model List<Listing>
+@{
+    ViewData["Title"] = T["Admin"];
+    var tab = (string)(ViewBag.Tab ?? "pending");
+    var c = ViewBag.Counts;
+}
+<div class="container section-pad">
+    <h1>🛡️ @T["Admin — moderation"]</h1>
+
+    <div class="admin-stats">
+        <div class="admin-stat"><span class="admin-stat-n">@c.Pending</span>@T["Pending"]</div>
+        <div class="admin-stat"><span class="admin-stat-n">@c.Active</span>@T["Active"]</div>
+        <div class="admin-stat"><span class="admin-stat-n">@c.Rejected</span>@T["Rejected"]</div>
+        <div class="admin-stat"><span class="admin-stat-n">@c.Total</span>@T["Total ads"]</div>
+        <div class="admin-stat"><span class="admin-stat-n">@c.Users</span>@T["Users"]</div>
+    </div>
+
+    <div class="admin-tabs">
+        <a href="/admin?tab=pending" class="admin-tab @(tab == "pending" ? "active" : "")">⏳ @T["Pending"] (@c.Pending)</a>
+        <a href="/admin?tab=active" class="admin-tab @(tab == "active" ? "active" : "")">✅ @T["Active"]</a>
+        <a href="/admin?tab=rejected" class="admin-tab @(tab == "rejected" ? "active" : "")">🚫 @T["Rejected"]</a>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="empty-state"><span class="empty-icon">✨</span><h3>@T["Nothing here"]</h3></div>
+    }
+    else
+    {
+        <div class="admin-list">
+            @foreach (var l in Model)
+            {
+                var img = l.Images.FirstOrDefault();
+                <div class="admin-row panel">
+                    <a href="/l/@l.Id" target="_blank" class="admin-thumb">
+                        @if (img != null) { <img src="@img.Url" alt="" loading="lazy" /> } else { <span>📷</span> }
+                    </a>
+                    <div class="admin-row-main">
+                        <a href="/l/@l.Id" target="_blank" class="admin-row-title">@l.Title</a>
+                        <div class="muted small">@l.Category.Icon @T[l.Category.Name] · @l.Price() · 📍 @l.City · @l.User.DisplayName · @l.CreatedAt.TimeAgo()</div>
+                        @if (!string.IsNullOrEmpty(l.ModerationNote))
+                        {
+                            <div class="admin-flag">⚠ @l.ModerationNote</div>
+                        }
+                        <div class="admin-desc muted small">@(l.Description.Length > 220 ? l.Description[..220] + "…" : l.Description)</div>
+                    </div>
+                    <div class="admin-actions">
+                        @if (l.Status != ListingStatus.Active)
+                        {
+                            <form method="post" action="/admin/listings/@l.Id/approve" class="inline-form">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-primary btn-sm">✓ @T["Approve"]</button>
+                            </form>
+                        }
+                        @if (l.Status != ListingStatus.Rejected)
+                        {
+                            <form method="post" action="/admin/listings/@l.Id/reject" class="inline-form">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-ghost btn-sm btn-danger">✕ @T["Reject"]</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

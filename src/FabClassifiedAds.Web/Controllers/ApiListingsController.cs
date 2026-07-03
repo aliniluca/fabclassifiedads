@@ -21,6 +21,7 @@ public class ApiListingsController(
     SafeHttpFetcher fetcher,
     CategoryDetector detector,
     TrustService trust,
+    ContentModerationService moderation,
     UserManager<ApplicationUser> userManager) : ControllerBase
 {
     private const string ApiUserEmail = "api@aicigasesti.local";
@@ -72,6 +73,12 @@ public class ApiListingsController(
             : await userManager.FindByIdAsync(apiUserId);
         if (owner is null) return Problem(statusCode: 401, title: "API key owner not found.");
 
+        // moderation overrides the requested status: flagged content is always held
+        var verdict = moderation.Analyze(dto.Title, dto.Description);
+        var status = verdict.NeedsReview
+            ? ListingStatus.PendingReview
+            : dto.Active ? ListingStatus.Active : ListingStatus.Draft;
+
         var listing = new Listing
         {
             Title = dto.Title.Trim(),
@@ -86,7 +93,8 @@ public class ApiListingsController(
             Condition = dto.Condition,
             SellerType = owner.IsBusiness ? SellerType.Business : SellerType.Private,
             UserId = owner.Id,
-            Status = dto.Active ? ListingStatus.Active : ListingStatus.Draft,
+            Status = status,
+            ModerationNote = verdict.Note,
             ExpiresAt = DateTime.UtcNow.AddDays(30),
         };
 
@@ -175,7 +183,7 @@ public class ApiListingsController(
         user = new ApplicationUser
         {
             UserName = ApiUserEmail, Email = ApiUserEmail, EmailConfirmed = true,
-            DisplayName = "AiciGăsești API", IsBusiness = true, AvatarColor = "#6d5dfc",
+            DisplayName = "AiciGăsești", IsBusiness = false, AvatarColor = "#6d5dfc",
         };
         var created = await userManager.CreateAsync(user);
         if (!created.Succeeded)

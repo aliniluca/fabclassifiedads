@@ -17,7 +17,9 @@ public class ListingsController(
     TrustService trust,
     ListingUrlImporter urlImporter,
     SafeHttpFetcher fetcher,
-    CategoryDetector categoryDetector) : Controller
+    CategoryDetector categoryDetector,
+    ContentModerationService moderation,
+    IConfiguration config) : Controller
 {
     private string? UserId => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -59,7 +61,7 @@ public class ListingsController(
         return View(vm);
     }
 
-    [HttpGet("/l/{id:int}")]
+    [HttpGet("/l/{id:int}/{slug?}")]
     public async Task<IActionResult> Details(int id)
     {
         var listing = await db.Listings
@@ -73,6 +75,14 @@ public class ListingsController(
             .FirstOrDefaultAsync(l => l.Id == id);
 
         if (listing is null) return NotFound();
+
+        // non-public listings (pending/draft/rejected/suspended) are visible only to
+        // their owner and to admins — everyone else gets a 404
+        if (listing.Status != ListingStatus.Active && listing.Status != ListingStatus.Sold)
+        {
+            var isOwnerOrAdmin = UserId == listing.UserId || AdminAccess.IsAdmin(User, config);
+            if (!isOwnerOrAdmin) return NotFound();
+        }
 
         listing.ViewCount++;
         await db.SaveChangesAsync();
@@ -180,6 +190,12 @@ public class ListingsController(
 
         if (!ModelState.IsValid) return View(await PopulateAsync(vm));
 
+        // content moderation: dangerous/profane text is held for admin review;
+        // clean ads publish immediately unless the operator holds everything
+        var verdict = moderation.Analyze(vm.Title, vm.Description);
+        var holdAll = config.GetValue("Moderation:HoldAllNewListings", false);
+        var status = verdict.NeedsReview || holdAll ? ListingStatus.PendingReview : ListingStatus.Active;
+
         var listing = new Listing
         {
             Title = vm.Title.Trim(),
@@ -193,6 +209,8 @@ public class ListingsController(
             Region = vm.Region.Trim(),
             Condition = vm.Condition,
             UserId = UserId!,
+            Status = status,
+            ModerationNote = verdict.Note,
             ExpiresAt = DateTime.UtcNow.AddDays(30),
         };
         var imageUrls = new List<string>();
@@ -257,7 +275,9 @@ public class ListingsController(
 
         db.Listings.Add(listing);
         await db.SaveChangesAsync();
-        TempData["Flash"] = "Your ad is live! 🎉";
+        TempData["Flash"] = status == ListingStatus.Active
+            ? "Your ad is live! 🎉"
+            : "Your ad was submitted and is awaiting review. ⏳";
         return RedirectToAction(nameof(Details), new { id = listing.Id });
     }
 

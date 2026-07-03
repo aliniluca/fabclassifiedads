@@ -38,6 +38,9 @@ public class Listing
     public DateTime? ExpiresAt { get; set; }
     public DateTime BumpedAt { get; set; } = DateTime.UtcNow;
 
+    /// <summary>Why moderation held/flagged this listing (shown in the admin queue).</summary>
+    public string? ModerationNote { get; set; }
+
     public int CategoryId { get; set; }
     public Category Category { get; set; } = null!;
 
@@ -59,7 +62,7 @@ public class Listing
 
 public enum ItemCondition { New = 0, Used = 1, Refurbished = 2, ForParts = 3 }
 public enum SellerType { Private = 0, Business = 1 }
-public enum ListingStatus { Draft = 0, Active = 1, Sold = 2, Expired = 3, Suspended = 4 }
+public enum ListingStatus { Draft = 0, Active = 1, Sold = 2, Expired = 3, Suspended = 4, PendingReview = 5, Rejected = 6 }
 
 public class ListingImage
 {

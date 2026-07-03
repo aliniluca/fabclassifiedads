@@ -55,6 +55,11 @@ The database is created and seeded automatically on first start (full category t
 - **SSRF-hardened** fetch: a `SocketsHttpHandler.ConnectCallback` resolves DNS itself and refuses loopback / private / link-local / **cloud-metadata (169.254.169.254)** addresses (covers redirects & DNS-rebinding), http/https on ports 80/443 only, size-capped, hard timeout
 - Imported photos are downloaded server-side on publish (same SSRF guard, type/size validated); a failed image never blocks publishing
 
+### Moderation & admin panel
+- **Content filter** on every new listing (web form + API): rule-based, diacritics- and leetspeak-insensitive (RO+EN). Two tiers — **Block** (weapons, drugs, fake documents, stolen cards/fraud, counterfeit, human/organ) and **Review** (profanity). Flagged ads go to a hidden `PendingReview` state with the reason stored; clean ads publish instantly (or set `Moderation:HoldAllNewListings=true` to hold everything). The word lists are the extension point for an ML/LLM classifier
+- **Admin panel** at `/admin` (email allow-list via `ADMIN_EMAILS` / `Admin:Emails`): stats, pending/active/rejected tabs, each ad with its flag reason and one-click **Approve / Reject**. Pending/rejected listings return 404 to the public and are excluded from search/feed; owners and admins can still preview them
+- **SEO**: listing pages get a keyword-rich `<title>` (brand/specs/price/city), meta description, canonical slug URL `/l/{id}/{slug}`, OpenGraph/Twitter cards and schema.org Product JSON-LD
+
 ### Public API (token-protected) — see **[API.md](API.md)**
 - **`POST /api/listings`** — create a listing programmatically (API-key gated via `X-Api-Key` / `IMPORT_API_KEY`). Full car & real-estate detail objects, enum-by-name JSON, server-side SSRF-guarded image download. Returns `201` with id + URL + trust score
 - **Automatic category detection** — omit `categorySlug` and the category is inferred from the title/description (car brands + keywords, RO+EN, diacritics-insensitive); for cars it also fills brand/model. The same detector pre-selects the category on the cross-post form

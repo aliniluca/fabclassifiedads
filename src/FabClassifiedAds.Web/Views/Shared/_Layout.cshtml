@@ -5,9 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@(ViewData["Title"] != null ? $"{ViewData["Title"]} — AiciGăsești" : "AiciGăsești")</title>
+    @if (ViewData["MetaDescription"] is string metaDesc)
+    {
+        <meta name="description" content="@metaDesc" />
+    }
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("head", required: false)
 </head>
 <body>
 <header class="site-header">
@@ -34,6 +39,10 @@
                 <a href="/favorites" class="nav-link" title="@T["Favorites"]">♥<span class="nav-label">@T["Favorites"]</span></a>
                 <a href="/messages" class="nav-link" title="@T["Messages"]">💬<span class="nav-label">@T["Messages"]</span></a>
                 <a href="/my-ads" class="nav-link" title="@T["My ads"]">📋<span class="nav-label">@T["My ads"]</span></a>
+                @if (FabClassifiedAds.Web.Services.AdminAccess.IsAdmin(User, Configuration))
+                {
+                    <a href="/admin" class="nav-link nav-admin" title="Admin">🛡️<span class="nav-label">Admin</span></a>
+                }
                 <form action="/logout" method="post" class="inline-form">
                     @Html.AntiForgeryToken()
                     <button type="submit" class="nav-link nav-button">@T["Sign out"]</button>
@@ -50,7 +59,7 @@
 
 @if (TempData["Flash"] is string flash)
 {
-    <div class="container"><div class="flash">@flash</div></div>
+    <div class="container"><div class="flash">@T[flash]</div></div>
 }
 
 <main>

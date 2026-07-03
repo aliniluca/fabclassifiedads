@@ -352,6 +352,28 @@ code { background: var(--surface-2); padding: 2px 7px; border-radius: 6px; font-
 .import-box-msg.ok { color: #7ce6ab; }
 .import-box-msg.err { color: #ff9a9b; }
 
+/* ===== Admin panel ===== */
+.nav-admin { color: var(--warning); }
+.badge-review { background: var(--warning); color: #3a2c05; left: 10px; top: 40px; }
+.badge-rejected { background: var(--accent); color: #fff; left: 10px; top: 40px; }
+.admin-stats { display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0 22px; }
+.admin-stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 20px; display: flex; flex-direction: column; min-width: 90px; color: var(--text-muted); font-size: .82rem; }
+.admin-stat-n { font-size: 1.6rem; font-weight: 800; color: var(--text); }
+.admin-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+.admin-tab { padding: 9px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); font-weight: 600; font-size: .9rem; }
+.admin-tab.active { background: var(--grad); border-color: transparent; color: #fff; }
+.admin-list { display: flex; flex-direction: column; gap: 12px; }
+.admin-row { display: flex; gap: 16px; align-items: flex-start; padding: 16px; }
+.admin-thumb { width: 120px; height: 90px; flex-shrink: 0; border-radius: var(--radius-sm); overflow: hidden; background: var(--surface-2); display: grid; place-items: center; }
+.admin-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.admin-row-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.admin-row-title { font-weight: 700; }
+.admin-row-title:hover { color: var(--primary); }
+.admin-flag { color: #ff9a9b; font-weight: 700; font-size: .84rem; background: rgba(234,84,85,.1); border: 1px solid rgba(234,84,85,.3); border-radius: var(--radius-sm); padding: 5px 10px; }
+.admin-desc { max-height: 3.2em; overflow: hidden; }
+.admin-actions { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+@media (max-width: 640px) { .admin-row { flex-wrap: wrap; } .admin-actions { flex-direction: row; } }
+
 /* ===== API key page ===== */
 .apikey-reveal { border-color: var(--success); background: rgba(40, 199, 111, .08); }
 .apikey-row { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }

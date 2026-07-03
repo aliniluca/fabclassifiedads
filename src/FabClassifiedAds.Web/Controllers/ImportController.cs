@@ -147,7 +147,7 @@ public class ImportController(
             City = staged.City ?? "",
             Region = staged.Region ?? "",
             UserId = systemUserId,
-            SellerType = SellerType.Business,
+            SellerType = SellerType.Private,
             Status = activate ? ListingStatus.Active : ListingStatus.Draft,
             ExpiresAt = DateTime.UtcNow.AddDays(30),
         };

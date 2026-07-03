@@ -267,6 +267,22 @@ public class Translator
             "Lipește linkul propriului anunț și îți completăm noi formularul.",
         ["Bring it in"] = "Adu-l aici",
 
+        // admin / moderation
+        ["Admin"] = "Admin",
+        ["Admin — moderation"] = "Admin — moderare",
+        ["Pending"] = "În așteptare",
+        ["Active"] = "Active",
+        ["Rejected"] = "Respinse",
+        ["Total ads"] = "Total anunțuri",
+        ["Users"] = "Utilizatori",
+        ["Nothing here"] = "Nimic aici",
+        ["Approve"] = "Aprobă",
+        ["Reject"] = "Respinge",
+        ["In review"] = "În verificare",
+        ["Your ad was submitted and is awaiting review. ⏳"] =
+            "Anunțul a fost trimis și așteaptă verificarea. ⏳",
+        ["Your ad is live! 🎉"] = "Anunțul tău este publicat! 🎉",
+
         // API key page
         ["API key"] = "Cheie API",
         ["Use this key to post ads programmatically via the API. Ads created with it appear on your account."] =

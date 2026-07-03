@@ -1,9 +1,45 @@
 @model ListingDetailViewModel
 @{
     var l = Model.Listing;
-    ViewData["Title"] = l.Title;
+    ViewData["Title"] = l.SeoTitle();
+    ViewData["MetaDescription"] = l.SeoDescription();
     var car = l.CarDetails;
     var re = l.RealEstateDetails;
+    var canonical = $"{Context.Request.Scheme}://{Context.Request.Host}{l.SeoUrl()}";
+    var ogImage = l.Images.FirstOrDefault()?.Url is { } img
+        ? (img.StartsWith("http") ? img : $"{Context.Request.Scheme}://{Context.Request.Host}{img}")
+        : $"{Context.Request.Scheme}://{Context.Request.Host}/l/{l.Id}/share-card.svg";
+}
+
+@section head {
+    <link rel="canonical" href="@canonical" />
+    <meta property="og:type" content="product" />
+    <meta property="og:title" content="@l.SeoTitle()" />
+    <meta property="og:description" content="@l.SeoDescription()" />
+    <meta property="og:url" content="@canonical" />
+    <meta property="og:image" content="@ogImage" />
+    <meta property="og:site_name" content="AiciGăsești" />
+    <meta name="twitter:card" content="summary_large_image" />
+    @if (l.Price is not null)
+    {
+        <meta property="product:price:amount" content="@l.Price?.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
+        <meta property="product:price:currency" content="@l.Currency" />
+    }
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Product",
+        "name": @Html.Raw(System.Text.Json.JsonSerializer.Serialize(l.Title)),
+        "description": @Html.Raw(System.Text.Json.JsonSerializer.Serialize(l.SeoDescription())),
+        "image": @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ogImage)),
+        "offers": {
+            "@@type": "Offer",
+            "price": "@(l.Price?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "0")",
+            "priceCurrency": "@l.Currency",
+            "availability": "https://schema.org/InStock"
+        }
+    }
+    </script>
 }
 
 <div class="container detail-page">

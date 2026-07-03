@@ -43,6 +43,16 @@ public static class ImportSchema
         // per-account API key columns (added after the first release)
         await AddColumnIfMissingAsync(db, "AspNetUsers", "ApiKeyHash", "TEXT");
         await AddColumnIfMissingAsync(db, "AspNetUsers", "ApiKeyCreatedAt", "TEXT");
+
+        // moderation note (added with the admin approval queue)
+        await AddColumnIfMissingAsync(db, "Listings", "ModerationNote", "TEXT");
+
+        // one-time correction: the API/import system accounts and their listings are not
+        // businesses (an earlier version marked them as such)
+        await db.Database.ExecuteSqlRawAsync(
+            "UPDATE \"AspNetUsers\" SET \"IsBusiness\" = 0 WHERE \"Email\" IN ('api@aicigasesti.local','import@aicigasesti.local');");
+        await db.Database.ExecuteSqlRawAsync(
+            "UPDATE \"Listings\" SET \"SellerType\" = 0 WHERE \"UserId\" IN (SELECT \"Id\" FROM \"AspNetUsers\" WHERE \"Email\" IN ('api@aicigasesti.local','import@aicigasesti.local'));");
     }
 
     private static async Task AddColumnIfMissingAsync(AppDbContext db, string table, string column, string type)
