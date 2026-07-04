@@ -1,0 +1,151 @@
+@model FabClassifiedAds.Web.Models.Admin.AdminEditViewModel
+@{
+    ViewData["Title"] = T["Edit listing"];
+    var currentYear = DateTime.UtcNow.Year;
+}
+<div class="container narrow section-pad">
+    <partial name="_AdminNav" />
+    <div class="section-head">
+        <h1>✏️ @T["Edit listing"] #@Model.Id</h1>
+        <a href="/l/@Model.Id" target="_blank" class="btn btn-ghost btn-sm">@T["Preview"] ↗</a>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ModerationNote))
+    {
+        <div class="admin-flag">⚠ @Model.ModerationNote</div>
+    }
+
+    <form method="post" action="/admin/listings/@Model.Id/edit" class="panel form-panel mt-16">
+        @Html.AntiForgeryToken()
+
+        <div class="field-row">
+            <label class="field"><span>@T["Status"]</span>
+                <select asp-for="Status" asp-items="Html.GetEnumSelectList<ListingStatus>()"></select>
+            </label>
+            <label class="field"><span>@T["Category"]</span>
+                <select asp-for="CategoryId">
+                    @foreach (var root in Model.CategoryTree)
+                    {
+                        <optgroup label="@root.Icon @T[root.Name]">
+                            @foreach (var child in root.Children)
+                            {
+                                <option value="@child.Id">@T[child.Name]</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+            </label>
+        </div>
+        <div class="field-row">
+            <label class="check-row"><input asp-for="IsFeatured" /> ★ @T["Featured"]</label>
+            <label class="check-row"><input asp-for="IsUrgent" /> 🔥 @T["Urgent"]</label>
+        </div>
+
+        <label class="field"><span>@T["Title"]</span><input asp-for="Title" required /></label>
+        <label class="field"><span>@T["Description"]</span><textarea asp-for="Description" rows="6"></textarea></label>
+
+        <div class="field-row">
+            <label class="field"><span>@T["Price"]</span><input asp-for="Price" type="number" step="0.01" min="0" /></label>
+            <label class="field"><span>@T["Currency"]</span>
+                <select asp-for="Currency"><option>EUR</option><option>USD</option><option>RON</option></select>
+            </label>
+            <label class="field"><span>@T["Condition"]</span>
+                <select asp-for="Condition">
+                    @foreach (var cond in Enum.GetValues<ItemCondition>()) { <option value="@cond">@cond.TranslateEnum()</option> }
+                </select>
+            </label>
+        </div>
+        <div class="field-row">
+            <label class="check-row"><input asp-for="IsNegotiable" /> @T["Negotiable"]</label>
+            <label class="check-row"><input asp-for="IsFree" /> @T["Give away for free"]</label>
+        </div>
+        <div class="field-row">
+            <label class="field"><span>@T["City"]</span><input asp-for="City" required /></label>
+            <label class="field"><span>@T["Region"]</span><input asp-for="Region" /></label>
+        </div>
+
+        @if (Model.HasCar)
+        {
+            <fieldset class="dyn-fields"><legend>🚗 @T["Vehicle details"]</legend>
+                <div class="field-row">
+                    <label class="field"><span>@T["Brand"]</span>
+                        <select asp-for="BrandId"><option value="">—</option>
+                            @foreach (var b in Model.Brands) { <option value="@b.Id">@b.Name</option> }
+                        </select>
+                    </label>
+                    <label class="field"><span>@T["Variant"]</span><input asp-for="Variant" /></label>
+                    <label class="field"><span>@T["Color"]</span><input asp-for="Color" /></label>
+                </div>
+                <div class="field-row">
+                    <label class="field"><span>@T["Year"]</span><input asp-for="Year" type="number" min="1900" max="@(currentYear+1)" /></label>
+                    <label class="field"><span>@T["Mileage (km)"]</span><input asp-for="Mileage" type="number" min="0" /></label>
+                    <label class="field"><span>@T["Engine (cm³)"]</span><input asp-for="EngineCc" type="number" min="0" /></label>
+                    <label class="field"><span>@T["Power (hp)"]</span><input asp-for="PowerHp" type="number" min="0" /></label>
+                </div>
+                <div class="field-row">
+                    <label class="field"><span>@T["Fuel"]</span><select asp-for="Fuel">@foreach (var f in Enum.GetValues<FuelType>()) { <option value="@f">@f.TranslateEnum()</option> }</select></label>
+                    <label class="field"><span>@T["Transmission"]</span><select asp-for="Transmission">@foreach (var f in Enum.GetValues<TransmissionType>()) { <option value="@f">@f.TranslateEnum()</option> }</select></label>
+                    <label class="field"><span>@T["Body"]</span><select asp-for="Body">@foreach (var f in Enum.GetValues<BodyType>()) { <option value="@f">@f.TranslateEnum()</option> }</select></label>
+                    <label class="field"><span>@T["Drivetrain"]</span><select asp-for="Drive">@foreach (var f in Enum.GetValues<Drivetrain>()) { <option value="@f">@f.TranslateEnum()</option> }</select></label>
+                </div>
+                <details class="options-details"><summary>@T["Equipment & options"]</summary>
+                    <div class="options-list options-grid">
+                        @foreach (var o in Enum.GetValues<CarOptions>().Where(o => o != CarOptions.None))
+                        {
+                            <label class="check-row"><input type="checkbox" name="Options" value="@o" checked="@Model.Options.Contains(o)" /> @o.TranslateEnum()</label>
+                        }
+                    </div>
+                </details>
+            </fieldset>
+        }
+
+        @if (Model.HasRealEstate)
+        {
+            <fieldset class="dyn-fields"><legend>🏠 @T["Property details"]</legend>
+                <div class="field-row">
+                    <label class="field"><span>@T["Type"]</span><select asp-for="PropertyType">@foreach (var f in Enum.GetValues<PropertyType>()) { <option value="@f">@f.TranslateEnum()</option> }</select></label>
+                    <label class="field"><span>@T["Transaction"]</span><select asp-for="Transaction">@foreach (var f in Enum.GetValues<TransactionType>()) { <option value="@f">@f.TranslateEnum()</option> }</select></label>
+                </div>
+                <div class="field-row">
+                    <label class="field"><span>@T["Rooms"]</span><input asp-for="Rooms" type="number" min="1" /></label>
+                    <label class="field"><span>@T["Surface (m²)"]</span><input asp-for="SurfaceM2" type="number" step="0.1" min="0" /></label>
+                    <label class="field"><span>@T["Floor"]</span><input asp-for="Floor" type="number" /></label>
+                    <label class="field"><span>@T["Total floors"]</span><input asp-for="TotalFloors" type="number" /></label>
+                </div>
+                <div class="field-row">
+                    <label class="field"><span>@T["Year built"]</span><input asp-for="YearBuilt" type="number" /></label>
+                    <label class="field"><span>@T["Heating"]</span><select asp-for="Heating">@foreach (var f in Enum.GetValues<HeatingType>()) { <option value="@f">@f.TranslateEnum()</option> }</select></label>
+                    <label class="field"><span>@T["Furnished"]</span><select asp-for="Furnished">@foreach (var f in Enum.GetValues<FurnishedState>()) { <option value="@f">@f.TranslateEnum()</option> }</select></label>
+                </div>
+                <details class="options-details"><summary>@T["Amenities"]</summary>
+                    <div class="options-list options-grid">
+                        @foreach (var a in Enum.GetValues<PropertyAmenities>().Where(a => a != PropertyAmenities.None))
+                        {
+                            <label class="check-row"><input type="checkbox" name="Amenities" value="@a" checked="@Model.Amenities.Contains(a)" /> @a.TranslateEnum()</label>
+                        }
+                    </div>
+                </details>
+            </fieldset>
+        }
+
+        <fieldset class="dyn-fields"><legend>🖼 @T["Photos"]</legend>
+            @if (Model.ExistingImages.Count > 0)
+            {
+                <div class="admin-img-grid">
+                    @foreach (var img in Model.ExistingImages)
+                    {
+                        <label class="admin-img">
+                            <img src="@img.Url" alt="" loading="lazy" />
+                            <span class="check-row"><input type="checkbox" name="RemoveImageIds" value="@img.Id" /> @T["Remove"]</span>
+                        </label>
+                    }
+                </div>
+            }
+            <label class="field mt-8"><span>@T["Add photos by URL (one per line)"]</span>
+                <textarea asp-for="AddImageUrls" rows="3" placeholder="https://…"></textarea>
+            </label>
+        </fieldset>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg">💾 @T["Save changes"]</button>
+    </form>
+</div>

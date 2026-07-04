@@ -57,7 +57,11 @@ The database is created and seeded automatically on first start (full category t
 
 ### Moderation & admin panel
 - **Content filter** on every new listing (web form + API): rule-based, diacritics- and leetspeak-insensitive (RO+EN). Two tiers — **Block** (weapons, drugs, fake documents, stolen cards/fraud, counterfeit, human/organ) and **Review** (profanity). Flagged ads go to a hidden `PendingReview` state with the reason stored; clean ads publish instantly (or set `Moderation:HoldAllNewListings=true` to hold everything). The word lists are the extension point for an ML/LLM classifier
-- **Admin panel** at `/admin` (email allow-list via `ADMIN_EMAILS` / `Admin:Emails`): stats, pending/active/rejected tabs, each ad with its flag reason and one-click **Approve / Reject**. Pending/rejected listings return 404 to the public and are excluded from search/feed; owners and admins can still preview them
+- **Admin panel** at `/admin` (email allow-list via `ADMIN_EMAILS` / `Admin:Emails`, plus in-app granted admins):
+  - **Moderation** — stats, pending/active/rejected tabs, one-click Approve/Reject with the flag reason shown; **Edit** any listing (all fields, status, featured, add/remove photos) and **Delete**
+  - **Users** — search, **ban/unban** (banning hides their active ads and blocks login), **grant/revoke admin**
+  - **Settings** — toggle "hold every new listing for approval" and add custom banned/dangerous words, all applied live (DB-backed, no redeploy)
+  - Admin access is surfaced as an `Admin` role via a claims transformation, so bootstrap-email and in-app admins work identically. Pending/rejected listings return 404 to the public and stay out of search/feed; owners and admins can still preview them
 - **SEO**: listing pages get a keyword-rich `<title>` (brand/specs/price/city), meta description, canonical slug URL `/l/{id}/{slug}`, OpenGraph/Twitter cards and schema.org Product JSON-LD
 
 ### Public API (token-protected) — see **[API.md](API.md)**

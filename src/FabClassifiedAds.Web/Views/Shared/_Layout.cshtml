@@ -39,7 +39,7 @@
                 <a href="/favorites" class="nav-link" title="@T["Favorites"]">♥<span class="nav-label">@T["Favorites"]</span></a>
                 <a href="/messages" class="nav-link" title="@T["Messages"]">💬<span class="nav-label">@T["Messages"]</span></a>
                 <a href="/my-ads" class="nav-link" title="@T["My ads"]">📋<span class="nav-label">@T["My ads"]</span></a>
-                @if (FabClassifiedAds.Web.Services.AdminAccess.IsAdmin(User, Configuration))
+                @if (User.IsInRole("Admin"))
                 {
                     <a href="/admin" class="nav-link nav-admin" title="Admin">🛡️<span class="nav-label">Admin</span></a>
                 }

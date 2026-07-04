@@ -47,6 +47,16 @@ public static class ImportSchema
         // moderation note (added with the admin approval queue)
         await AddColumnIfMissingAsync(db, "Listings", "ModerationNote", "TEXT");
 
+        // admin/ban flags + runtime settings table (added with the full admin panel)
+        await AddColumnIfMissingAsync(db, "AspNetUsers", "IsAdmin", "INTEGER NOT NULL DEFAULT 0");
+        await AddColumnIfMissingAsync(db, "AspNetUsers", "IsBanned", "INTEGER NOT NULL DEFAULT 0");
+        await db.Database.ExecuteSqlRawAsync("""
+            CREATE TABLE IF NOT EXISTS "SiteSettings" (
+                "Key" TEXT NOT NULL CONSTRAINT "PK_SiteSettings" PRIMARY KEY,
+                "Value" TEXT NULL
+            );
+            """);
+
         // one-time correction: the API/import system accounts and their listings are not
         // businesses (an earlier version marked them as such)
         await db.Database.ExecuteSqlRawAsync(
@@ -55,12 +65,14 @@ public static class ImportSchema
             "UPDATE \"Listings\" SET \"SellerType\" = 0 WHERE \"UserId\" IN (SELECT \"Id\" FROM \"AspNetUsers\" WHERE \"Email\" IN ('api@aicigasesti.local','import@aicigasesti.local'));");
     }
 
-    private static async Task AddColumnIfMissingAsync(AppDbContext db, string table, string column, string type)
+    /// <summary><paramref name="definition"/> is the full column type + constraints, e.g.
+    /// "TEXT" (nullable) or "INTEGER NOT NULL DEFAULT 0".</summary>
+    private static async Task AddColumnIfMissingAsync(AppDbContext db, string table, string column, string definition)
     {
         var existing = await db.Database
             .SqlQueryRaw<string>($"SELECT name AS \"Value\" FROM pragma_table_info('{table}')")
             .ToListAsync();
         if (!existing.Contains(column))
-            await db.Database.ExecuteSqlRawAsync($"ALTER TABLE \"{table}\" ADD COLUMN \"{column}\" {type} NULL");
+            await db.Database.ExecuteSqlRawAsync($"ALTER TABLE \"{table}\" ADD COLUMN \"{column}\" {definition}");
     }
 }

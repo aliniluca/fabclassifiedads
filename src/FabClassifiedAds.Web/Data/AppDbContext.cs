@@ -19,6 +19,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<Message> Messages => Set<Message>();
     public DbSet<SavedSearch> SavedSearches => Set<SavedSearch>();
     public DbSet<ImportedListing> ImportedListings => Set<ImportedListing>();
+    public DbSet<SiteSetting> SiteSettings => Set<SiteSetting>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -88,5 +89,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             e.HasIndex(i => new { i.Source, i.ExternalId }).IsUnique();
             e.HasIndex(i => i.Status);
         });
+
+        b.Entity<SiteSetting>().HasKey(s => s.Key);
     }
 }

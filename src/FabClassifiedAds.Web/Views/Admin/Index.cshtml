@@ -6,6 +6,7 @@
 }
 <div class="container section-pad">
     <h1>🛡️ @T["Admin — moderation"]</h1>
+    <partial name="_AdminNav" />
 
     <div class="admin-stats">
         <div class="admin-stat"><span class="admin-stat-n">@c.Pending</span>@T["Pending"]</div>
@@ -59,6 +60,12 @@
                                 <button type="submit" class="btn btn-ghost btn-sm btn-danger">✕ @T["Reject"]</button>
                             </form>
                         }
+                        <a href="/admin/listings/@l.Id/edit" class="btn btn-ghost btn-sm">✏️ @T["Edit"]</a>
+                        <form method="post" action="/admin/listings/@l.Id/delete" class="inline-form"
+                              onsubmit="return confirm('@T["Delete this listing permanently?"]')">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-ghost btn-sm btn-danger">🗑 @T["Delete"]</button>
+                        </form>
                     </div>
                 </div>
             }

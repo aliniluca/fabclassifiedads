@@ -22,7 +22,7 @@ public record ModerationResult(ModerationSeverity Severity, IReadOnlyList<string
 /// evasions (0 for o, @ for a, spacing) still hit. The word lists are the extension
 /// point — swap in / augment with an AI/LLM classifier without changing callers.
 /// </summary>
-public partial class ContentModerationService
+public partial class ContentModerationService(SettingsStore settings)
 {
     // Illegal / dangerous — any hit holds the listing (Block).
     private static readonly string[] DangerTerms =
@@ -60,11 +60,13 @@ public partial class ContentModerationService
     {
         var text = Normalize($" {title} {description} ");
 
-        var dangerHits = DangerTerms.Where(t => text.Contains(Normalize($" {t} ").Trim())).Distinct().ToList();
+        var danger = DangerTerms.Concat(settings.GetWordList(SettingsStore.DangerWordsKey));
+        var dangerHits = danger.Where(t => text.Contains(Normalize($" {t} ").Trim())).Distinct().ToList();
         if (dangerHits.Count > 0)
             return new ModerationResult(ModerationSeverity.Block, dangerHits);
 
-        var profanityHits = ProfanityTerms.Where(t => text.Contains(Normalize($" {t} ").Trim())).Distinct().ToList();
+        var profanity = ProfanityTerms.Concat(settings.GetWordList(SettingsStore.BannedWordsKey));
+        var profanityHits = profanity.Where(t => text.Contains(Normalize($" {t} ").Trim())).Distinct().ToList();
         if (profanityHits.Count > 0)
             return new ModerationResult(ModerationSeverity.Review, profanityHits);
 

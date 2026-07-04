@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = T["Settings"];
+    var holdAll = (bool)(ViewBag.HoldAll ?? false);
+}
+<div class="container narrow section-pad">
+    <h1>⚙️ @T["Site settings"]</h1>
+    <partial name="_AdminNav" />
+
+    <form method="post" action="/admin/settings" class="panel form-panel mt-16">
+        @Html.AntiForgeryToken()
+
+        <h3>@T["Moderation"]</h3>
+        <label class="check-row"><input type="checkbox" name="holdAll" value="true" checked="@holdAll" />
+            @T["Hold every new listing for approval"]</label>
+        <p class="muted small">@T["When off, only listings flagged by the content filter are held; clean ones publish instantly."]</p>
+
+        <label class="field mt-16"><span>@T["Extra banned words (profanity → held for review)"]</span>
+            <textarea name="bannedWords" rows="4" placeholder="one term per line">@(ViewBag.BannedWords)</textarea>
+        </label>
+        <label class="field"><span>@T["Extra dangerous words (→ blocked, held for review)"]</span>
+            <textarea name="dangerWords" rows="4" placeholder="one term per line">@(ViewBag.DangerWords)</textarea>
+        </label>
+        <p class="muted small">@T["These add to the built-in lists. Matching is diacritics- and leetspeak-insensitive."]</p>
+
+        <button type="submit" class="btn btn-primary btn-block mt-16">💾 @T["Save settings"]</button>
+    </form>
+</div>

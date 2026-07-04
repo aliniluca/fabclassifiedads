@@ -16,6 +16,11 @@ public class ApplicationUser : IdentityUser
     public string? ApiKeyHash { get; set; }
     public DateTime? ApiKeyCreatedAt { get; set; }
 
+    /// <summary>Granted from the admin Users tab (in addition to the ADMIN_EMAILS allow-list).</summary>
+    public bool IsAdmin { get; set; }
+    /// <summary>Banned users can't sign in or post.</summary>
+    public bool IsBanned { get; set; }
+
     public List<Listing> Listings { get; set; } = [];
     public List<Favorite> Favorites { get; set; } = [];
 }

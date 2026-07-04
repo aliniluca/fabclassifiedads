@@ -19,6 +19,7 @@ public class ListingsController(
     SafeHttpFetcher fetcher,
     CategoryDetector categoryDetector,
     ContentModerationService moderation,
+    SettingsStore settings,
     IConfiguration config) : Controller
 {
     private string? UserId => User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -80,7 +81,7 @@ public class ListingsController(
         // their owner and to admins — everyone else gets a 404
         if (listing.Status != ListingStatus.Active && listing.Status != ListingStatus.Sold)
         {
-            var isOwnerOrAdmin = UserId == listing.UserId || AdminAccess.IsAdmin(User, config);
+            var isOwnerOrAdmin = UserId == listing.UserId || User.IsInRole(AdminAccess.Role);
             if (!isOwnerOrAdmin) return NotFound();
         }
 
@@ -112,7 +113,17 @@ public class ListingsController(
     [HttpGet("/post")]
     public async Task<IActionResult> Create()
     {
+        if (await IsBannedAsync()) return BannedRedirect();
         return View(await PopulateAsync(new CreateListingViewModel()));
+    }
+
+    private async Task<bool> IsBannedAsync() =>
+        await db.Users.Where(u => u.Id == UserId).Select(u => u.IsBanned).FirstOrDefaultAsync();
+
+    private IActionResult BannedRedirect()
+    {
+        TempData["Flash"] = "Your account is suspended.";
+        return RedirectToAction("Index", "Home");
     }
 
     /// <summary>
@@ -167,6 +178,8 @@ public class ListingsController(
     [RequestFormLimits(MultipartBodyLengthLimit = 120_000_000)]
     public async Task<IActionResult> Create(CreateListingViewModel vm)
     {
+        if (await IsBannedAsync()) return BannedRedirect();
+
         var category = await db.Categories.FindAsync(vm.CategoryId);
         if (category is null) ModelState.AddModelError(nameof(vm.CategoryId), "Please pick a category.");
 
@@ -193,7 +206,7 @@ public class ListingsController(
         // content moderation: dangerous/profane text is held for admin review;
         // clean ads publish immediately unless the operator holds everything
         var verdict = moderation.Analyze(vm.Title, vm.Description);
-        var holdAll = config.GetValue("Moderation:HoldAllNewListings", false);
+        var holdAll = settings.GetBool(SettingsStore.HoldAllKey);
         var status = verdict.NeedsReview || holdAll ? ListingStatus.PendingReview : ListingStatus.Active;
 
         var listing = new Listing

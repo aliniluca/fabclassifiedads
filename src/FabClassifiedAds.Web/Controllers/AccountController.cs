@@ -49,6 +49,14 @@ public class AccountController(
     public async Task<IActionResult> Login(LoginViewModel vm)
     {
         if (!ModelState.IsValid) return View(vm);
+
+        var account = await userManager.FindByEmailAsync(vm.Email);
+        if (account is { IsBanned: true })
+        {
+            ModelState.AddModelError("", "This account is suspended.");
+            return View(vm);
+        }
+
         var result = await signInManager.PasswordSignInAsync(vm.Email, vm.Password, vm.RememberMe, lockoutOnFailure: true);
         if (!result.Succeeded)
         {

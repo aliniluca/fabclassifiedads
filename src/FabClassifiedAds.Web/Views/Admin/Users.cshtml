@@ -1,0 +1,55 @@
+@model List<FabClassifiedAds.Web.Controllers.AdminUserRow>
+@{
+    ViewData["Title"] = T["Users"];
+}
+<div class="container section-pad">
+    <h1>👤 @T["Users"]</h1>
+    <partial name="_AdminNav" />
+
+    <form method="get" action="/admin/users" class="admin-search mt-16">
+        <input type="search" name="q" value="@ViewBag.Query" placeholder="@T["Search by email or name"]" />
+        <button type="submit" class="btn btn-ghost btn-sm">@T["Search"]</button>
+    </form>
+
+    <div class="admin-users mt-16">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>@T["User"]</th><th>@T["Ads"]</th><th>@T["Rating"]</th><th>@T["Joined"]</th><th>@T["Flags"]</th><th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var u in Model)
+                {
+                    <tr class="@(u.IsBanned ? "row-banned" : "")">
+                        <td>
+                            <strong>@u.DisplayName</strong>
+                            <div class="muted small">@u.Email @(string.IsNullOrEmpty(u.City) ? "" : $"· {u.City}")</div>
+                        </td>
+                        <td>@u.ListingCount</td>
+                        <td>@(u.RatingCount > 0 ? $"★ {u.RatingAverage:0.0} ({u.RatingCount})" : "—")</td>
+                        <td class="muted small">@u.CreatedAt.ToString("d MMM yyyy")</td>
+                        <td>
+                            @if (u.IsBusiness) { <span class="badge badge-business">@T["Business"]</span> }
+                            @if (u.IsAdmin) { <span class="trust-chip trust-good">Admin</span> }
+                            @if (u.IsBanned) { <span class="trust-chip trust-bad">@T["Banned"]</span> }
+                        </td>
+                        <td class="admin-user-actions">
+                            <form method="post" action="/admin/users/@u.Id/admin" class="inline-form">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="grant" value="@((!u.IsAdmin).ToString().ToLower())" />
+                                <button type="submit" class="btn btn-ghost btn-sm">@(u.IsAdmin ? T["Revoke admin"] : T["Make admin"])</button>
+                            </form>
+                            <form method="post" action="/admin/users/@u.Id/ban" class="inline-form"
+                                  onsubmit="return confirm('@T["Are you sure?"]')">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="ban" value="@((!u.IsBanned).ToString().ToLower())" />
+                                <button type="submit" class="btn btn-ghost btn-sm btn-danger">@(u.IsBanned ? T["Unban"] : T["Ban"])</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
