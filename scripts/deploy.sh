@@ -82,10 +82,14 @@ Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=ASPNETCORE_URLS=$ASPNETCORE_URLS
 Environment=DOTNET_CLI_TELEMETRY_OPTOUT=1
 EOF
-# Pass through the import API key if provided at deploy time (locks /api/import otherwise)
-if [ -n "${IMPORT_API_KEY:-}" ]; then
-    echo "Environment=IMPORT_API_KEY=$IMPORT_API_KEY" >> "$NEW_UNIT"
-fi
+# Pass through runtime env if provided at deploy time. IMPORT_API_KEY locks /api/*;
+# ADMIN_EMAILS is the bootstrap admin allow-list (comma-separated).
+# Existing values are preserved across deploys when the vars aren't re-supplied.
+current_env() { [ -f "$UNIT" ] && grep "^Environment=$1=" "$UNIT" | tail -1 | sed "s/^Environment=$1=//"; }
+IMPORT_API_KEY="${IMPORT_API_KEY:-$(current_env IMPORT_API_KEY)}"
+ADMIN_EMAILS="${ADMIN_EMAILS:-$(current_env ADMIN_EMAILS)}"
+[ -n "$IMPORT_API_KEY" ] && echo "Environment=IMPORT_API_KEY=$IMPORT_API_KEY" >> "$NEW_UNIT"
+[ -n "$ADMIN_EMAILS" ] && echo "Environment=ADMIN_EMAILS=$ADMIN_EMAILS" >> "$NEW_UNIT"
 cat >> "$NEW_UNIT" <<EOF
 
 [Install]

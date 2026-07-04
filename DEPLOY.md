@@ -280,6 +280,21 @@ tar czf ~/uploads-$(date +%F).tgz -C /var/www/aicigasesti/wwwroot uploads
 
 ---
 
+## Administratori
+
+Adminii se setează prin **`ADMIN_EMAILS`** (listă separată prin virgulă) la deploy —
+ea intră automat în serviciul systemd și e păstrată la deploy-urile următoare:
+
+```bash
+sudo IMPORT_API_KEY="cheia-master" ADMIN_EMAILS="email@tau.ro" ./scripts/deploy.sh
+```
+
+Loghează-te cu acel email → apare linkul **🛡️ Admin** în meniu. Restul adminilor îi
+poți adăuga din **/admin/users** (fără redeploy). Dacă `/admin` te trimite la o pagină
+„Acces interzis", înseamnă că emailul tău nu e în listă — ești tot autentificat, doar
+nu ai drept de admin (verifică `ADMIN_EMAILS` din serviciu:
+`sudo systemctl show aicigasesti -p Environment`).
+
 ## API de import (opțional)
 
 Aplicația expune `POST /api/import/listings` pentru a alimenta anunțuri dintr-o sursă

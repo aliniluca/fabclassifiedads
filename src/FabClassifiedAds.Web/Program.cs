@@ -31,7 +31,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/login";
-    options.AccessDeniedPath = "/login";
+    options.AccessDeniedPath = "/access-denied";   // 403 (e.g. non-admin) — not a logout
     options.ExpireTimeSpan = TimeSpan.FromDays(30);
 });
 

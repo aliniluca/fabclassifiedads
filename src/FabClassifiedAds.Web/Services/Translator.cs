@@ -311,6 +311,10 @@ public class Translator
         ["Make admin"] = "Fă admin",
         ["Revoke admin"] = "Retrage admin",
         ["Are you sure?"] = "Ești sigur?",
+        ["Access denied"] = "Acces interzis",
+        ["You're signed in, but this area is for admins only."] =
+            "Ești autentificat, dar această zonă este doar pentru administratori.",
+        ["Back home"] = "Înapoi acasă",
         ["Your ad was submitted and is awaiting review. ⏳"] =
             "Anunțul a fost trimis și așteaptă verificarea. ⏳",
         ["Your ad is live! 🎉"] = "Anunțul tău este publicat! 🎉",

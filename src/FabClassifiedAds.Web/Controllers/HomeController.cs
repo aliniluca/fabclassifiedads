@@ -40,4 +40,7 @@ public class HomeController(AppDbContext db) : Controller
 
     [Route("/error")]
     public IActionResult Error() => View();
+
+    [Route("/access-denied")]
+    public IActionResult AccessDenied() => View();
 }
