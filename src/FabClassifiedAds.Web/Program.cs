@@ -60,7 +60,13 @@ builder.Services.AddScoped<Microsoft.AspNetCore.Authentication.IClaimsTransforma
 
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AdminAccess.PolicyName, policy => policy.RequireRole(AdminAccess.Role));
-builder.Services.AddSingleton<IEmailSender, OutboxEmailSender>();
+// Real SMTP sender when configured (Smtp:* config / SMTP_* env), else the dev outbox
+var smtp = SmtpOptions.FromConfig(builder.Configuration);
+builder.Services.AddSingleton(smtp);
+if (smtp.IsConfigured)
+    builder.Services.AddSingleton<IEmailSender, SmtpEmailSender>();
+else
+    builder.Services.AddSingleton<IEmailSender, OutboxEmailSender>();
 builder.Services.AddHostedService<SavedSearchAlertService>();
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(

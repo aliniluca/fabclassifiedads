@@ -1,56 +1,178 @@
 @using FabClassifiedAds.Web.Services
 @{
     ViewData["Title"] = Translator.IsRo ? "Termeni și condiții" : "Terms of Service";
+    ViewData["MetaDescription"] = Translator.IsRo
+        ? "Termenii și condițiile de utilizare a platformei de anunțuri AiciGăsești."
+        : "Terms and conditions for using the AiciGăsești classifieds platform.";
 }
 <div class="container narrow section-pad legal">
-    @if (Translator.IsRo)
-    {
-        <h1>Termeni și condiții</h1>
-        <p class="muted">Ultima actualizare: @DateTime.UtcNow.ToString("d MMMM yyyy")</p>
-        <h2>1. Acceptarea termenilor</h2>
-        <p>Prin utilizarea AiciGăsești accepți acești termeni. Dacă nu ești de acord, nu folosi platforma.</p>
-        <h2>2. Contul tău</h2>
-        <p>Ești responsabil pentru păstrarea confidențialității contului și pentru toate acțiunile efectuate din el.
-        Trebuie să ai cel puțin 18 ani sau acordul reprezentantului legal.</p>
-        <h2>3. Anunțuri</h2>
-        <p>Ești responsabil pentru conținutul anunțurilor tale și pentru dreptul de a le publica. Sunt interzise:
-        produsele ilegale, armele, drogurile, actele false, produsele contrafăcute, datele cu caracter personal
-        ale terților, precum și orice conținut care încalcă legea sau drepturile altora.</p>
-        <h2>4. Moderare</h2>
-        <p>Ne rezervăm dreptul de a modera, ascunde sau șterge anunțuri și de a suspenda conturi care încalcă
-        acești termeni, fără notificare prealabilă.</p>
-        <h2>5. Rolul platformei</h2>
-        <p>AiciGăsești este un intermediar care găzduiește anunțuri. Nu suntem parte în tranzacțiile dintre
-        utilizatori și nu garantăm calitatea, legalitatea sau existența bunurilor anunțate.</p>
-        <h2>6. Limitarea răspunderii</h2>
-        <p>Serviciul este oferit „ca atare". Nu răspundem pentru pierderi rezultate din tranzacții între utilizatori
-        sau din utilizarea platformei, în limitele permise de lege.</p>
-        <h2>7. Modificări</h2>
-        <p>Putem actualiza acești termeni. Continuarea utilizării după modificări înseamnă acceptarea lor.</p>
-        <p class="muted small">Model de bază — a se revizui juridic înainte de lansare.</p>
-    }
-    else
-    {
-        <h1>Terms of Service</h1>
-        <p class="muted">Last updated: @DateTime.UtcNow.ToString("d MMMM yyyy")</p>
-        <h2>1. Acceptance</h2>
-        <p>By using AiciGăsești you accept these terms. If you disagree, do not use the platform.</p>
-        <h2>2. Your account</h2>
-        <p>You are responsible for your account's security and all activity under it, and must be 18+ or have
-        guardian consent.</p>
-        <h2>3. Listings</h2>
-        <p>You are responsible for your listings and your right to publish them. Prohibited: illegal goods,
-        weapons, drugs, fake documents, counterfeit goods, third-party personal data, and any unlawful content.</p>
-        <h2>4. Moderation</h2>
-        <p>We may moderate, hide or remove listings and suspend accounts that breach these terms, without notice.</p>
-        <h2>5. Platform role</h2>
-        <p>AiciGăsești is an intermediary hosting listings. We are not party to transactions between users and do
-        not guarantee the quality, legality or existence of advertised items.</p>
-        <h2>6. Liability</h2>
-        <p>The service is provided "as is". We are not liable for losses from user transactions or platform use,
-        to the extent permitted by law.</p>
-        <h2>7. Changes</h2>
-        <p>We may update these terms; continued use means acceptance.</p>
-        <p class="muted small">Baseline template — have it legally reviewed before launch.</p>
-    }
+@if (Translator.IsRo)
+{
+    <h1>Termeni și condiții</h1>
+    <p class="muted">Ultima actualizare: @DateTime.UtcNow.ToString("d MMMM yyyy")</p>
+    <p>Bine ai venit pe <strong>AiciGăsești</strong> („Platforma", „noi"), disponibilă la aicigasesti.ro.
+    Acești Termeni și condiții („Termenii") reglementează accesul și utilizarea Platformei. Prin crearea unui
+    cont sau prin utilizarea Platformei, confirmi că ai citit, ai înțeles și accepți acești Termeni, precum și
+    <a href="/privacy">Politica de confidențialitate</a> și <a href="/cookies">Politica de cookie-uri</a>.</p>
+
+    <h2>1. Definiții</h2>
+    <ul>
+        <li><strong>Utilizator</strong> — orice persoană care accesează Platforma, cu sau fără cont.</li>
+        <li><strong>Anunț</strong> — conținutul (text, imagini, video, preț, locație) publicat de un Utilizator.</li>
+        <li><strong>Conținut</strong> — orice material încărcat, transmis sau afișat pe Platformă.</li>
+        <li><strong>Vânzător / Cumpărător</strong> — Utilizatori care publică, respectiv răspund la un Anunț.</li>
+    </ul>
+
+    <h2>2. Eligibilitate și cont</h2>
+    <p>Trebuie să ai cel puțin 18 ani sau acordul reprezentantului legal. Ești responsabil pentru exactitatea
+    datelor furnizate, pentru păstrarea confidențialității parolei și pentru toate activitățile desfășurate din
+    contul tău. Ne poți anunța imediat despre orice utilizare neautorizată. Un Utilizator poate deține un singur
+    cont, cu excepția conturilor de firmă autorizate.</p>
+
+    <h2>3. Publicarea anunțurilor</h2>
+    <p>Ești singurul responsabil pentru Anunțurile tale și declari că ai dreptul legal de a publica și de a vinde
+    bunul/serviciul. Anunțurile trebuie să fie reale, complete, într-o singură categorie relevantă și să respecte
+    legislația în vigoare. Este interzisă publicarea, printre altele, a:</p>
+    <ul>
+        <li>armelor, munițiilor, explozibililor și materialelor periculoase;</li>
+        <li>drogurilor, substanțelor interzise și produselor din tutun/alcool către minori;</li>
+        <li>actelor de identitate, documentelor false ori a datelor personale ale terților;</li>
+        <li>produselor contrafăcute sau care încalcă drepturi de proprietate intelectuală;</li>
+        <li>cardurilor/instrumentelor de plată furate, serviciilor de fraudă sau hacking;</li>
+        <li>organelor umane, animalelor pe cale de dispariție și oricăror bunuri ilegale;</li>
+        <li>conținutului cu caracter sexual explicit, discriminatoriu, calomnios sau care incită la ură;</li>
+        <li>schemelor piramidale, spam-ului și publicității înșelătoare.</li>
+    </ul>
+
+    <h2>4. Licența asupra conținutului</h2>
+    <p>Păstrezi drepturile asupra Conținutului tău. Prin publicare, ne acorzi o licență neexclusivă, mondială și
+    fără redevențe de a găzdui, afișa, redimensiona și promova Anunțul în cadrul Platformei și în materialele de
+    promovare ale acesteia, exclusiv în scopul funcționării și promovării serviciului.</p>
+
+    <h2>5. Servicii cu plată</h2>
+    <p>Anumite funcții (promovarea anunțurilor, spații publicitare) pot fi contra cost. Prețurile și condițiile
+    vor fi afișate înainte de achiziție. Pentru consumatori, dreptul legal de retragere poate să nu se aplice
+    serviciilor digitale executate integral cu acordul expres al utilizatorului.</p>
+
+    <h2>6. Moderare, suspendare și încetare</h2>
+    <p>Ne rezervăm dreptul, la libera noastră apreciere, de a modera, edita, ascunde sau elimina Anunțuri și de a
+    limita, suspenda sau închide conturi care încalcă acești Termeni sau legea, cu sau fără notificare prealabilă.
+    Poți să-ți închizi contul oricând din <a href="/account/data">Datele mele</a>.</p>
+
+    <h2>7. Conduita utilizatorilor</h2>
+    <p>Te obligi să nu utilizezi Platforma în scopuri ilegale, să nu hărțuiești alți Utilizatori, să nu colectezi
+    date prin mijloace automate neautorizate și să nu perturbi funcționarea serviciului. Mesageria trebuie folosită
+    exclusiv în legătură cu tranzacțiile.</p>
+
+    <h2>8. Rolul Platformei</h2>
+    <p>AiciGăsești este un <strong>intermediar</strong> care găzduiește Anunțuri. Nu suntem parte în contractele
+    dintre Utilizatori, nu deținem, nu verificăm și nu garantăm existența, calitatea, siguranța sau legalitatea
+    bunurilor și serviciilor anunțate și nici capacitatea părților de a tranzacționa. Tranzacțiile se desfășoară
+    pe riscul Utilizatorilor.</p>
+
+    <h2>9. Limitarea răspunderii</h2>
+    <p>Platforma este oferită „ca atare" și „în funcție de disponibilitate". În limitele permise de lege, nu
+    răspundem pentru prejudicii directe sau indirecte rezultate din utilizarea Platformei ori din tranzacții între
+    Utilizatori, inclusiv pierderi de date, profit sau reputație.</p>
+
+    <h2>10. Despăgubiri</h2>
+    <p>Ești de acord să ne despăgubești pentru orice pretenție, pierdere sau cheltuială (inclusiv onorarii
+    avocațiale) rezultată din încălcarea de către tine a acestor Termeni sau a drepturilor terților.</p>
+
+    <h2>11. Protecția datelor</h2>
+    <p>Prelucrarea datelor cu caracter personal este descrisă în <a href="/privacy">Politica de confidențialitate</a>,
+    conform GDPR (Regulamentul UE 2016/679).</p>
+
+    <h2>12. Legea aplicabilă și litigii</h2>
+    <p>Acești Termeni sunt guvernați de legea română. Eventualele litigii se soluționează pe cale amiabilă, iar în
+    caz contrar de instanțele competente din România. Consumatorii se pot adresa <strong>ANPC</strong> (Autoritatea
+    Națională pentru Protecția Consumatorilor) și pot folosi platforma europeană <strong>SOL</strong> de soluționare
+    online a litigiilor (ec.europa.eu/consumers/odr).</p>
+
+    <h2>13. Modificarea Termenilor</h2>
+    <p>Putem actualiza acești Termeni. Vom afișa data ultimei actualizări, iar modificările intră în vigoare la
+    publicare. Continuarea utilizării după modificări constituie acceptarea acestora.</p>
+
+    <h2>14. Contact</h2>
+    <p>Pentru întrebări legate de acești Termeni: <strong>contact@@aicigasesti.ro</strong>.</p>
+
+    <p class="muted small">Acest document este un model general și <strong>nu constituie consultanță juridică</strong>.
+    Recomandăm revizuirea de către un avocat înainte de lansarea comercială.</p>
+}
+else
+{
+    <h1>Terms of Service</h1>
+    <p class="muted">Last updated: @DateTime.UtcNow.ToString("d MMMM yyyy")</p>
+    <p>Welcome to <strong>AiciGăsești</strong> ("the Platform", "we"), at aicigasesti.ro. These Terms govern your
+    access to and use of the Platform. By creating an account or using the Platform you confirm that you have read
+    and accept these Terms, the <a href="/privacy">Privacy Policy</a> and the <a href="/cookies">Cookie Policy</a>.</p>
+
+    <h2>1. Definitions</h2>
+    <ul>
+        <li><strong>User</strong> — anyone accessing the Platform, with or without an account.</li>
+        <li><strong>Listing</strong> — content (text, images, video, price, location) posted by a User.</li>
+        <li><strong>Content</strong> — any material uploaded, sent or displayed on the Platform.</li>
+        <li><strong>Seller / Buyer</strong> — Users who post or respond to a Listing.</li>
+    </ul>
+
+    <h2>2. Eligibility & account</h2>
+    <p>You must be 18+ or have guardian consent. You are responsible for the accuracy of your data, your password's
+    confidentiality and all activity under your account. Notify us of any unauthorized use.</p>
+
+    <h2>3. Posting listings</h2>
+    <p>You are solely responsible for your Listings and warrant you have the legal right to publish and sell the
+    item/service. Listings must be genuine, complete, in a single relevant category and lawful. Prohibited content
+    includes: weapons, ammunition and explosives; drugs and controlled substances; ID/fake documents or third-party
+    personal data; counterfeit or IP-infringing goods; stolen payment instruments, fraud or hacking services; human
+    organs and protected wildlife; sexually explicit, discriminatory, defamatory or hateful content; pyramid schemes,
+    spam and misleading advertising.</p>
+
+    <h2>4. Content licence</h2>
+    <p>You keep your rights. By posting, you grant us a non-exclusive, worldwide, royalty-free licence to host,
+    display, resize and promote the Listing within the Platform and its promotional materials, solely to operate and
+    promote the service.</p>
+
+    <h2>5. Paid services</h2>
+    <p>Some features (promotion, ad space) may be paid; prices and terms are shown before purchase. The consumer
+    right of withdrawal may not apply to digital services fully performed with your express consent.</p>
+
+    <h2>6. Moderation, suspension & termination</h2>
+    <p>We may, at our discretion, moderate, edit, hide or remove Listings and limit, suspend or close accounts that
+    breach these Terms or the law, with or without notice. You can close your account anytime from
+    <a href="/account/data">My data</a>.</p>
+
+    <h2>7. User conduct</h2>
+    <p>Don't use the Platform unlawfully, harass others, scrape via unauthorized automated means, or disrupt the
+    service. Messaging is for transaction-related communication only.</p>
+
+    <h2>8. Platform role</h2>
+    <p>AiciGăsești is an <strong>intermediary</strong> hosting Listings. We are not a party to contracts between
+    Users and do not own, verify or guarantee the existence, quality, safety or legality of advertised items, nor
+    the parties' ability to transact. Transactions are at Users' own risk.</p>
+
+    <h2>9. Limitation of liability</h2>
+    <p>The Platform is provided "as is" and "as available". To the extent permitted by law, we are not liable for
+    direct or indirect damages arising from use of the Platform or from transactions between Users.</p>
+
+    <h2>10. Indemnity</h2>
+    <p>You agree to indemnify us against any claim, loss or expense (including legal fees) arising from your breach
+    of these Terms or of third-party rights.</p>
+
+    <h2>11. Data protection</h2>
+    <p>Personal data processing is described in our <a href="/privacy">Privacy Policy</a>, under the GDPR.</p>
+
+    <h2>12. Governing law & disputes</h2>
+    <p>These Terms are governed by Romanian law; disputes are resolved amicably or by the competent Romanian courts.
+    Consumers may contact the Romanian consumer authority (ANPC) and use the EU ODR platform
+    (ec.europa.eu/consumers/odr).</p>
+
+    <h2>13. Changes</h2>
+    <p>We may update these Terms; the "last updated" date will change and continued use means acceptance.</p>
+
+    <h2>14. Contact</h2>
+    <p>Questions about these Terms: <strong>contact@@aicigasesti.ro</strong>.</p>
+
+    <p class="muted small">This is a general template and <strong>not legal advice</strong>. Have it reviewed by a
+    lawyer before commercial launch.</p>
+}
 </div>

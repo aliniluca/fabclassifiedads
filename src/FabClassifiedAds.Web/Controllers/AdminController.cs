@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using FabClassifiedAds.Web.Data;
 using FabClassifiedAds.Web.Helpers;
 using FabClassifiedAds.Web.Models.Admin;
@@ -293,6 +294,26 @@ public class AdminController(
         await settings.SetAsync(SettingsStore.BannedWordsKey, bannedWords);
         await settings.SetAsync(SettingsStore.DangerWordsKey, dangerWords);
         TempData["Flash"] = "Settings saved.";
+        return RedirectToAction(nameof(Settings));
+    }
+
+    /// <summary>Sends a test email to the admin — verifies the SMTP configuration live.</summary>
+    [HttpPost("settings/test-email")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> TestEmail([FromServices] IEmailSender email)
+    {
+        var to = User.FindFirstValue(ClaimTypes.Email) ?? User.Identity?.Name;
+        if (string.IsNullOrEmpty(to)) { TempData["Flash"] = "No admin email on file."; return RedirectToAction(nameof(Settings)); }
+        try
+        {
+            await email.SendAsync(to, "AiciGăsești — test email",
+                "<h2>✅ Email works</h2><p>Your SMTP configuration is sending correctly.</p>");
+            TempData["Flash"] = $"Test email sent to {to}.";
+        }
+        catch (Exception ex)
+        {
+            TempData["Flash"] = $"Email failed: {ex.Message}";
+        }
         return RedirectToAction(nameof(Settings));
     }
 

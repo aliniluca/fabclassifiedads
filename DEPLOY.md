@@ -311,9 +311,30 @@ sunt promovate manual (`POST /api/import/{id}/publish`). Vezi `scraper/README.md
 clientul de colectare și **notele legale** (ToS, drepturi de autor, GDPR) înainte de a
 colecta din orice sursă.
 
-## Notă despre email-uri (alertele de căutare salvată)
+## Email (SMTP)
 
-În prezent expeditorul de email scrie fișiere HTML în `App_Data/outbox` (mod demo).
-Pentru email-uri reale către utilizatori, înlocuiește `IEmailSender` cu un serviciu SMTP
-(ex. cont SMTP de la provider, sau un serviciu tranzacțional). Spune-mi când ești gata
-și îl conectez.
+Aplicația trimite email-uri reale prin SMTP când setezi variabilele `SMTP_*` la deploy
+(altfel scrie fișiere `.html` în `App_Data/outbox`, util pentru test). Ele intră automat
+în serviciul systemd și sunt păstrate la deploy-urile următoare:
+
+```bash
+sudo IMPORT_API_KEY="..." ADMIN_EMAILS="email@tau.ro" \
+     SMTP_HOST="smtp.provider.ro" SMTP_PORT="587" \
+     SMTP_USER="utilizator" SMTP_PASSWORD="parola" \
+     SMTP_FROM="no-reply@aicigasesti.ro" \
+     ./scripts/deploy.sh
+```
+
+Portul alege automat modul TLS: `465` = SSL, `587`/`25` = STARTTLS. Verifică rapid din
+**Admin → Setări → „Trimite email de test"** — îți trimite un email de probă pe adresa ta.
+
+## Backup automat
+
+`scripts/backup.sh` face backup consistent la baza SQLite (snapshot online) + arhivează
+pozele/video-urile și păstrează ultimele 14 zile. Programează-l zilnic din cron:
+
+```bash
+sudo crontab -e
+# adaugă:
+30 3 * * * /var/www/aicigasesti-src/scripts/backup.sh >> /var/log/aicigasesti-backup.log 2>&1
+```

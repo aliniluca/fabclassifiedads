@@ -363,6 +363,10 @@ public class Translator
         ["We use only essential cookies to run the site."] = "Folosim doar cookie-uri esențiale pentru funcționarea site-ului.",
         ["Learn more"] = "Află mai multe",
         ["Got it"] = "Am înțeles",
+        ["Email (SMTP)"] = "Email (SMTP)",
+        ["Configured via SMTP_* environment variables at deploy. Send yourself a test to verify."] =
+            "Configurat prin variabilele de mediu SMTP_* la deploy. Trimite-ți un test pentru verificare.",
+        ["Send test email"] = "Trimite email de test",
         ["Your ad was submitted and is awaiting review. ⏳"] =
             "Anunțul a fost trimis și așteaptă verificarea. ⏳",
         ["Your ad is live! 🎉"] = "Anunțul tău este publicat! 🎉",

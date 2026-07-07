@@ -29,7 +29,7 @@ die() { printf '\033[1;31m✗ %s\033[0m\n' "$*" >&2; exit 1; }
 # ---- 1. base packages ----
 log "Installing base packages"
 apt-get update -y
-apt-get install -y git nginx ffmpeg curl ca-certificates
+apt-get install -y git nginx ffmpeg curl ca-certificates sqlite3
 
 # ---- 2. .NET 11 SDK ----
 if ! command -v dotnet >/dev/null 2>&1 && [ ! -x /usr/local/bin/dotnet ]; then

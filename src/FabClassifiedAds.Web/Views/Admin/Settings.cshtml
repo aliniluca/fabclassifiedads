@@ -24,4 +24,13 @@
 
         <button type="submit" class="btn btn-primary btn-block mt-16">💾 @T["Save settings"]</button>
     </form>
+
+    <div class="panel form-panel mt-16">
+        <h3>@T["Email (SMTP)"]</h3>
+        <p class="muted small">@T["Configured via SMTP_* environment variables at deploy. Send yourself a test to verify."]</p>
+        <form method="post" action="/admin/settings/test-email">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-ghost btn-sm">✉️ @T["Send test email"]</button>
+        </form>
+    </div>
 </div>
