@@ -57,6 +57,26 @@ public static class ImportSchema
             );
             """);
 
+        // advertising banners (managed from the admin panel)
+        await db.Database.ExecuteSqlRawAsync("""
+            CREATE TABLE IF NOT EXISTS "Banners" (
+                "Id" INTEGER NOT NULL CONSTRAINT "PK_Banners" PRIMARY KEY AUTOINCREMENT,
+                "Title" TEXT NOT NULL,
+                "ImageUrl" TEXT NOT NULL,
+                "LinkUrl" TEXT NOT NULL,
+                "Placement" INTEGER NOT NULL,
+                "IsActive" INTEGER NOT NULL,
+                "SortOrder" INTEGER NOT NULL,
+                "StartsAt" TEXT NULL,
+                "EndsAt" TEXT NULL,
+                "Impressions" INTEGER NOT NULL,
+                "Clicks" INTEGER NOT NULL,
+                "CreatedAt" TEXT NOT NULL
+            );
+            """);
+        await db.Database.ExecuteSqlRawAsync(
+            "CREATE INDEX IF NOT EXISTS \"IX_Banners_Placement_IsActive\" ON \"Banners\" (\"Placement\", \"IsActive\");");
+
         // one-time correction: the API/import system accounts and their listings are not
         // businesses (an earlier version marked them as such)
         await db.Database.ExecuteSqlRawAsync(

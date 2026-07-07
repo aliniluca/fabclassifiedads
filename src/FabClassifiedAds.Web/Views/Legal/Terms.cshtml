@@ -1,0 +1,56 @@
+@using FabClassifiedAds.Web.Services
+@{
+    ViewData["Title"] = Translator.IsRo ? "Termeni și condiții" : "Terms of Service";
+}
+<div class="container narrow section-pad legal">
+    @if (Translator.IsRo)
+    {
+        <h1>Termeni și condiții</h1>
+        <p class="muted">Ultima actualizare: @DateTime.UtcNow.ToString("d MMMM yyyy")</p>
+        <h2>1. Acceptarea termenilor</h2>
+        <p>Prin utilizarea AiciGăsești accepți acești termeni. Dacă nu ești de acord, nu folosi platforma.</p>
+        <h2>2. Contul tău</h2>
+        <p>Ești responsabil pentru păstrarea confidențialității contului și pentru toate acțiunile efectuate din el.
+        Trebuie să ai cel puțin 18 ani sau acordul reprezentantului legal.</p>
+        <h2>3. Anunțuri</h2>
+        <p>Ești responsabil pentru conținutul anunțurilor tale și pentru dreptul de a le publica. Sunt interzise:
+        produsele ilegale, armele, drogurile, actele false, produsele contrafăcute, datele cu caracter personal
+        ale terților, precum și orice conținut care încalcă legea sau drepturile altora.</p>
+        <h2>4. Moderare</h2>
+        <p>Ne rezervăm dreptul de a modera, ascunde sau șterge anunțuri și de a suspenda conturi care încalcă
+        acești termeni, fără notificare prealabilă.</p>
+        <h2>5. Rolul platformei</h2>
+        <p>AiciGăsești este un intermediar care găzduiește anunțuri. Nu suntem parte în tranzacțiile dintre
+        utilizatori și nu garantăm calitatea, legalitatea sau existența bunurilor anunțate.</p>
+        <h2>6. Limitarea răspunderii</h2>
+        <p>Serviciul este oferit „ca atare". Nu răspundem pentru pierderi rezultate din tranzacții între utilizatori
+        sau din utilizarea platformei, în limitele permise de lege.</p>
+        <h2>7. Modificări</h2>
+        <p>Putem actualiza acești termeni. Continuarea utilizării după modificări înseamnă acceptarea lor.</p>
+        <p class="muted small">Model de bază — a se revizui juridic înainte de lansare.</p>
+    }
+    else
+    {
+        <h1>Terms of Service</h1>
+        <p class="muted">Last updated: @DateTime.UtcNow.ToString("d MMMM yyyy")</p>
+        <h2>1. Acceptance</h2>
+        <p>By using AiciGăsești you accept these terms. If you disagree, do not use the platform.</p>
+        <h2>2. Your account</h2>
+        <p>You are responsible for your account's security and all activity under it, and must be 18+ or have
+        guardian consent.</p>
+        <h2>3. Listings</h2>
+        <p>You are responsible for your listings and your right to publish them. Prohibited: illegal goods,
+        weapons, drugs, fake documents, counterfeit goods, third-party personal data, and any unlawful content.</p>
+        <h2>4. Moderation</h2>
+        <p>We may moderate, hide or remove listings and suspend accounts that breach these terms, without notice.</p>
+        <h2>5. Platform role</h2>
+        <p>AiciGăsești is an intermediary hosting listings. We are not party to transactions between users and do
+        not guarantee the quality, legality or existence of advertised items.</p>
+        <h2>6. Liability</h2>
+        <p>The service is provided "as is". We are not liable for losses from user transactions or platform use,
+        to the extent permitted by law.</p>
+        <h2>7. Changes</h2>
+        <p>We may update these terms; continued use means acceptance.</p>
+        <p class="muted small">Baseline template — have it legally reviewed before launch.</p>
+    }
+</div>

@@ -3,6 +3,7 @@
 }
 <div class="admin-topnav">
     <a href="/admin" class="admin-topnav-link @(active == "Index" ? "active" : "")">🛡️ @T["Moderation"]</a>
+    <a href="/admin/banners" class="admin-topnav-link @(active is "Banners" or "BannerCreate" or "BannerEdit" ? "active" : "")">📢 @T["Banners"]</a>
     <a href="/admin/users" class="admin-topnav-link @(active == "Users" ? "active" : "")">👤 @T["Users"]</a>
     <a href="/admin/settings" class="admin-topnav-link @(active == "Settings" ? "active" : "")">⚙️ @T["Settings"]</a>
 </div>

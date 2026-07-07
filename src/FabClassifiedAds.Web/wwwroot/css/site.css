@@ -352,6 +352,23 @@ code { background: var(--surface-2); padding: 2px 7px; border-radius: 6px; font-
 .import-box-msg.ok { color: #7ce6ab; }
 .import-box-msg.err { color: #ff9a9b; }
 
+/* ===== Banners, consent, legal ===== */
+.banner-slot { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+.banner-ad { position: relative; display: block; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+.banner-ad img { width: 100%; display: block; max-height: 240px; object-fit: cover; }
+.banner-tag { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,.6); color: #fff; font-size: .68rem; text-transform: uppercase; letter-spacing: .5px; padding: 2px 8px; border-radius: 999px; }
+.banner-preview { max-width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border); margin: 4px 0 12px; max-height: 180px; object-fit: contain; }
+.cookie-consent { position: fixed; bottom: 16px; left: 16px; right: 16px; max-width: 720px; margin: 0 auto; z-index: 60; display: flex; align-items: center; gap: 16px; justify-content: space-between; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--primary); border-radius: var(--radius); padding: 14px 18px; box-shadow: var(--shadow); }
+.cookie-consent p { margin: 0; font-size: .9rem; }
+.cookie-consent a { color: var(--primary); font-weight: 600; }
+.legal { max-width: 780px; }
+.legal h2 { font-size: 1.15rem; margin-top: 26px; }
+.legal p, .legal li { color: #cfd3e8; }
+.legal-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+.legal-table th, .legal-table td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); font-size: .88rem; }
+.legal-table th { color: var(--text-muted); }
+.danger-panel { border-color: rgba(234,84,85,.4); }
+
 /* ===== Admin panel ===== */
 .nav-admin { color: var(--warning); }
 .badge-review { background: var(--warning); color: #3a2c05; left: 10px; top: 40px; }

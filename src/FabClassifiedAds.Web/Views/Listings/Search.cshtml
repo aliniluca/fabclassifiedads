@@ -50,6 +50,8 @@
         </div>
     }
 
+    @await Component.InvokeAsync("Banner", new { placement = BannerPlacement.SearchTop })
+
     <div class="search-layout">
         <aside class="filter-panel">
             <form method="get" action="@(Model.CurrentCategory != null ? $"/c/{Model.CurrentCategory.Slug}" : "/search")" id="filterForm">

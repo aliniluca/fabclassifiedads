@@ -1,0 +1,41 @@
+@using FabClassifiedAds.Web.Services
+@{
+    ViewData["Title"] = Translator.IsRo ? "Politica de cookie-uri" : "Cookie Policy";
+}
+<div class="container narrow section-pad legal">
+    @if (Translator.IsRo)
+    {
+        <h1>Politica de cookie-uri</h1>
+        <p>Folosim doar cookie-uri <strong>esențiale</strong>, necesare pentru funcționarea platformei. Nu folosim
+        cookie-uri de publicitate sau de urmărire (tracking).</p>
+        <h2>Cookie-uri folosite</h2>
+        <table class="legal-table">
+            <thead><tr><th>Cookie</th><th>Scop</th><th>Durată</th></tr></thead>
+            <tbody>
+                <tr><td>.AspNetCore.Identity.Application</td><td>Autentificare (te menține conectat)</td><td>30 zile</td></tr>
+                <tr><td>.AspNetCore.Culture</td><td>Reține limba aleasă (RO/EN)</td><td>1 an</td></tr>
+                <tr><td>.AspNetCore.Antiforgery</td><td>Protecție împotriva atacurilor CSRF</td><td>sesiune</td></tr>
+                <tr><td>cookie_consent</td><td>Reține că ai văzut acest mesaj</td><td>1 an</td></tr>
+            </tbody>
+        </table>
+        <p>Poți controla cookie-urile din setările browserului, dar blocarea celor esențiale poate afecta
+        funcționarea site-ului.</p>
+    }
+    else
+    {
+        <h1>Cookie Policy</h1>
+        <p>We use only <strong>essential</strong> cookies required for the platform to work. We do not use
+        advertising or tracking cookies.</p>
+        <h2>Cookies we use</h2>
+        <table class="legal-table">
+            <thead><tr><th>Cookie</th><th>Purpose</th><th>Duration</th></tr></thead>
+            <tbody>
+                <tr><td>.AspNetCore.Identity.Application</td><td>Authentication (keeps you signed in)</td><td>30 days</td></tr>
+                <tr><td>.AspNetCore.Culture</td><td>Remembers your language (RO/EN)</td><td>1 year</td></tr>
+                <tr><td>.AspNetCore.Antiforgery</td><td>CSRF protection</td><td>session</td></tr>
+                <tr><td>cookie_consent</td><td>Remembers you saw this notice</td><td>1 year</td></tr>
+            </tbody>
+        </table>
+        <p>You can control cookies in your browser settings, but blocking essential ones may break the site.</p>
+    }
+</div>

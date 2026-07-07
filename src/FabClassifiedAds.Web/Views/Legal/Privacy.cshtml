@@ -1,0 +1,98 @@
+@using FabClassifiedAds.Web.Services
+@{
+    ViewData["Title"] = Translator.IsRo ? "Politica de confidențialitate" : "Privacy Policy";
+    ViewData["MetaDescription"] = Translator.IsRo
+        ? "Cum colectează și protejează AiciGăsești datele tale personale, conform GDPR."
+        : "How AiciGăsești collects and protects your personal data under the GDPR.";
+}
+<div class="container narrow section-pad legal">
+    @if (Translator.IsRo)
+    {
+        <h1>Politica de confidențialitate</h1>
+        <p class="muted">Ultima actualizare: @DateTime.UtcNow.ToString("d MMMM yyyy")</p>
+
+        <p>Această politică explică cum AiciGăsești („noi", „operatorul") colectează, folosește și
+        protejează datele tale personale, în conformitate cu Regulamentul (UE) 2016/679 (GDPR) și
+        legislația română aplicabilă.</p>
+
+        <h2>1. Operatorul de date</h2>
+        <p>Platforma AiciGăsești, disponibilă la aicigasesti.ro. Pentru orice solicitare privind datele
+        tale, ne poți contacta la <strong>privacy@@aicigasesti.ro</strong>.</p>
+
+        <h2>2. Ce date colectăm</h2>
+        <ul>
+            <li><strong>Cont:</strong> nume afișat, adresă de email, oraș, parolă (criptată).</li>
+            <li><strong>Anunțuri:</strong> titlu, descriere, preț, locație, fotografii/video încărcate.</li>
+            <li><strong>Mesaje:</strong> conținutul conversațiilor dintre utilizatori.</li>
+            <li><strong>Tehnice:</strong> adresă IP, tip de browser, cookie-uri esențiale (vezi Politica de cookie-uri).</li>
+        </ul>
+
+        <h2>3. Scopurile și temeiul legal</h2>
+        <ul>
+            <li>Furnizarea serviciului (crearea contului, publicarea anunțurilor, mesageria) — <em>executarea contractului</em>.</li>
+            <li>Siguranța platformei și prevenirea fraudei/abuzului — <em>interes legitim</em>.</li>
+            <li>Alerte pe email pentru căutări salvate — <em>consimțământ</em> (le poți dezactiva oricând).</li>
+            <li>Respectarea obligațiilor legale — <em>obligație legală</em>.</li>
+        </ul>
+
+        <h2>4. Cât timp păstrăm datele</h2>
+        <p>Păstrăm datele contului cât timp contul este activ. Anunțurile expiră și pot fi șterse după
+        perioada de valabilitate. La ștergerea contului, datele tale personale sunt eliminate, cu excepția
+        celor pe care legea ne obligă să le păstrăm.</p>
+
+        <h2>5. Drepturile tale (GDPR)</h2>
+        <p>Ai dreptul de acces, rectificare, ștergere („dreptul de a fi uitat"), restricționare, portabilitate
+        și opoziție. Poți:</p>
+        <ul>
+            <li><strong>Descărca datele tale</strong> din <a href="/account/data">contul tău → Datele mele</a>.</li>
+            <li><strong>Șterge contul</strong> și datele asociate din aceeași pagină.</li>
+            <li>Depune o plângere la <strong>ANSPDCP</strong> (Autoritatea Națională de Supraveghere a Prelucrării Datelor cu Caracter Personal).</li>
+        </ul>
+
+        <h2>6. Partajarea datelor</h2>
+        <p>Nu vindem datele tale. Anunțurile și numele afișat sunt publice prin natura serviciului. Putem
+        folosi furnizori (găzduire, email) care prelucrează date în numele nostru, pe bază de contract.</p>
+
+        <h2>7. Securitate</h2>
+        <p>Folosim HTTPS, parole criptate și măsuri tehnice și organizatorice pentru a proteja datele.</p>
+
+        <p class="muted small">Acest document este un model de bază și trebuie revizuit de un consultant juridic
+        înainte de lansarea comercială.</p>
+    }
+    else
+    {
+        <h1>Privacy Policy</h1>
+        <p class="muted">Last updated: @DateTime.UtcNow.ToString("d MMMM yyyy")</p>
+        <p>This policy explains how AiciGăsești collects, uses and protects your personal data under the
+        EU GDPR (Regulation 2016/679) and applicable Romanian law.</p>
+        <h2>1. Controller</h2>
+        <p>AiciGăsești (aicigasesti.ro). Contact: <strong>privacy@@aicigasesti.ro</strong>.</p>
+        <h2>2. Data we collect</h2>
+        <ul>
+            <li><strong>Account:</strong> display name, email, city, hashed password.</li>
+            <li><strong>Listings:</strong> title, description, price, location, uploaded photos/videos.</li>
+            <li><strong>Messages:</strong> the content of conversations between users.</li>
+            <li><strong>Technical:</strong> IP address, browser type, essential cookies.</li>
+        </ul>
+        <h2>3. Purposes & legal basis</h2>
+        <ul>
+            <li>Providing the service — <em>contract</em>.</li>
+            <li>Safety and fraud/abuse prevention — <em>legitimate interest</em>.</li>
+            <li>Saved-search email alerts — <em>consent</em> (opt out anytime).</li>
+            <li>Legal compliance — <em>legal obligation</em>.</li>
+        </ul>
+        <h2>4. Retention</h2>
+        <p>We keep account data while the account is active. On account deletion, your personal data is
+        removed except where the law requires retention.</p>
+        <h2>5. Your rights</h2>
+        <p>Access, rectification, erasure, restriction, portability and objection. You can
+        <a href="/account/data">download your data or delete your account</a>, and lodge a complaint with the
+        Romanian DPA (ANSPDCP).</p>
+        <h2>6. Sharing</h2>
+        <p>We don't sell your data. Listings and your display name are public by design. Processors (hosting,
+        email) act on our behalf under contract.</p>
+        <h2>7. Security</h2>
+        <p>HTTPS, hashed passwords, and appropriate technical and organizational measures.</p>
+        <p class="muted small">This is a baseline template; have it reviewed by a lawyer before commercial launch.</p>
+    }
+</div>

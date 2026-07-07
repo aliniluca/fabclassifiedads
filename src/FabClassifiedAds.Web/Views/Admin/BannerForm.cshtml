@@ -1,0 +1,38 @@
+@model Banner
+@{
+    ViewData["Title"] = Model.Id == 0 ? T["New banner"] : T["Edit banner"];
+}
+<div class="container narrow section-pad">
+    <partial name="_AdminNav" />
+    <h1>📢 @(Model.Id == 0 ? T["New banner"] : T["Edit banner"])</h1>
+
+    <form method="post" action="/admin/banners/save" class="panel form-panel mt-16">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="All" class="validation-summary"></div>
+
+        <label class="field"><span>@T["Title"]</span><input asp-for="Title" required /></label>
+        <label class="field"><span>@T["Image URL"]</span><input asp-for="ImageUrl" type="url" placeholder="https://…" required /></label>
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" alt="" class="banner-preview" />
+        }
+        <label class="field"><span>@T["Link URL (where the ad sends users)"]</span><input asp-for="LinkUrl" type="url" placeholder="https://…" required /></label>
+
+        <div class="field-row">
+            <label class="field"><span>@T["Placement"]</span>
+                <select asp-for="Placement">
+                    @foreach (var p in Enum.GetValues<BannerPlacement>()) { <option value="@p">@p.TranslateEnum()</option> }
+                </select>
+            </label>
+            <label class="field"><span>@T["Sort order"]</span><input asp-for="SortOrder" type="number" /></label>
+        </div>
+        <div class="field-row">
+            <label class="field"><span>@T["Starts at (optional)"]</span><input asp-for="StartsAt" type="date" /></label>
+            <label class="field"><span>@T["Ends at (optional)"]</span><input asp-for="EndsAt" type="date" /></label>
+        </div>
+        <label class="check-row"><input asp-for="IsActive" /> @T["Active"]</label>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg mt-16">💾 @T["Save banner"]</button>
+    </form>
+</div>

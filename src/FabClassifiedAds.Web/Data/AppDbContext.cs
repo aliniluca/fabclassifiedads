@@ -20,6 +20,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<SavedSearch> SavedSearches => Set<SavedSearch>();
     public DbSet<ImportedListing> ImportedListings => Set<ImportedListing>();
     public DbSet<SiteSetting> SiteSettings => Set<SiteSetting>();
+    public DbSet<Banner> Banners => Set<Banner>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -91,5 +92,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         });
 
         b.Entity<SiteSetting>().HasKey(s => s.Key);
+        b.Entity<Banner>().HasIndex(x => new { x.Placement, x.IsActive });
     }
 }

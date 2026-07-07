@@ -71,6 +71,15 @@ The database is created and seeded automatically on first start (full category t
 - **Staging import API** (`POST /api/import/listings` → `pending` → `publish`/`reject`) for bulk review-before-publish; deduped by `(source, externalId)`. Staging table is created idempotently at startup so it lands on existing production DBs without a wipe
 - A companion polite, robots-respecting collector lives in `scraper/` (Python) — see its README for the ToS/copyright/GDPR notes
 
+### Monetization & GDPR
+- **Ad banners** managed from `/admin/banners` — image + link, placement (home top / search top / sidebar), active toggle, optional start/end dates, live impression & click tracking via a `/b/{id}/click` redirect. Rendered by a `Banner` view component
+- **GDPR (Romania/EU)** — cookie-consent banner (essential cookies only), Privacy / Terms / Cookie policy pages (RO+EN), registration consent checkbox, and a `/account/data` hub for **data export** (full JSON download) and **account deletion** (right to erasure, cascades listings/messages/etc.)
+
+### Production hardening
+- `robots.txt`, `sitemap.xml` (categories + up to 5000 active listings with SEO slugs), `/health` check
+- Security response headers (nosniff, X-Frame-Options, Referrer-Policy), HSTS in production, forwarded-headers for the reverse proxy
+- Idempotent schema guard so every new table/column lands on existing production DBs without data loss
+
 ### Languages
 - **Romanian is the primary language**, English secondary — RO|EN switcher in the header (culture cookie). ~350 translated strings including all filter labels, enum values, category names and relative dates, via a simple dictionary `Translator` with English fallback
 

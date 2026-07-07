@@ -70,6 +70,17 @@ var app = builder.Build();
 
 app.UseForwardedHeaders();
 
+// baseline security response headers
+app.Use(async (ctx, next) =>
+{
+    var h = ctx.Response.Headers;
+    h["X-Content-Type-Options"] = "nosniff";
+    h["X-Frame-Options"] = "SAMEORIGIN";
+    h["Referrer-Policy"] = "strict-origin-when-cross-origin";
+    h["X-Permitted-Cross-Domain-Policies"] = "none";
+    await next();
+});
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/error");

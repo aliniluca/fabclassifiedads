@@ -56,6 +56,15 @@ if (photoInput) {
     });
 }
 
+// Cookie consent
+const cookieAccept = document.getElementById('cookieAccept');
+if (cookieAccept) {
+    cookieAccept.addEventListener('click', () => {
+        document.cookie = 'cookie_consent=1; path=/; max-age=' + (60 * 60 * 24 * 365) + '; samesite=lax';
+        document.getElementById('cookieConsent')?.remove();
+    });
+}
+
 // Cross-post bridge: paste a link to your own ad → pre-fill the post form
 const importBtn = document.getElementById('importBtn');
 if (importBtn) {

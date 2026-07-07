@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = T["My data & privacy"];
+}
+<div class="container narrow section-pad">
+    <h1>🔐 @T["My data & privacy"]</h1>
+    <p class="muted">@T["Under the GDPR you can download all your data or delete your account at any time."]</p>
+
+    <div class="panel mt-16">
+        <h3>📥 @T["Download my data"]</h3>
+        <p class="muted small">@T["Export your account, listings, favorites, saved searches and messages as a JSON file."]</p>
+        <a href="/account/data-export" class="btn btn-primary">@T["Download (JSON)"]</a>
+    </div>
+
+    <div class="panel mt-16 danger-panel">
+        <h3>🗑 @T["Delete my account"]</h3>
+        <p class="muted small">@T["This permanently deletes your account, listings, messages and all personal data. This cannot be undone."]</p>
+        <form method="post" action="/account/delete" onsubmit="return confirm('@T["Are you absolutely sure? This cannot be undone."]')">
+            @Html.AntiForgeryToken()
+            <label class="field"><span>@T["Type DELETE to confirm"]</span>
+                <input name="confirm" placeholder="DELETE" autocomplete="off" required />
+            </label>
+            <button type="submit" class="btn btn-ghost btn-danger">@T["Permanently delete my account"]</button>
+        </form>
+    </div>
+
+    <p class="muted small mt-16">@T["See our"] <a href="/privacy">@T["Privacy Policy"]</a> @T["for details."]</p>
+</div>

@@ -117,6 +117,7 @@ public class RegisterViewModel
     public string ConfirmPassword { get; set; } = "";
     public string? City { get; set; }
     public bool IsBusiness { get; set; }
+    public bool AcceptTerms { get; set; }
 }
 
 public class LoginViewModel

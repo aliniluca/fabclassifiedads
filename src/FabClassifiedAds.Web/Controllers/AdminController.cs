@@ -204,6 +204,76 @@ public class AdminController(
         return RedirectToAction(nameof(Index));
     }
 
+    // ---------- banners ----------
+
+    [HttpGet("banners")]
+    public async Task<IActionResult> Banners()
+    {
+        var banners = await db.Banners.AsNoTracking()
+            .OrderBy(b => b.Placement).ThenBy(b => b.SortOrder).ToListAsync();
+        return View(banners);
+    }
+
+    [HttpGet("banners/create")]
+    public IActionResult BannerCreate() => View("BannerForm", new Banner());
+
+    [HttpGet("banners/{id:int}/edit")]
+    public async Task<IActionResult> BannerEdit(int id)
+    {
+        var banner = await db.Banners.FirstOrDefaultAsync(b => b.Id == id);
+        return banner is null ? NotFound() : View("BannerForm", banner);
+    }
+
+    [HttpPost("banners/save")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> BannerSave(Banner form)
+    {
+        if (string.IsNullOrWhiteSpace(form.Title) || string.IsNullOrWhiteSpace(form.ImageUrl) || string.IsNullOrWhiteSpace(form.LinkUrl))
+        {
+            ModelState.AddModelError("", "Title, image URL and link URL are required.");
+            return View("BannerForm", form);
+        }
+
+        if (form.Id == 0)
+        {
+            db.Banners.Add(form);
+        }
+        else
+        {
+            var banner = await db.Banners.FirstOrDefaultAsync(b => b.Id == form.Id);
+            if (banner is null) return NotFound();
+            banner.Title = form.Title; banner.ImageUrl = form.ImageUrl; banner.LinkUrl = form.LinkUrl;
+            banner.Placement = form.Placement; banner.IsActive = form.IsActive; banner.SortOrder = form.SortOrder;
+            banner.StartsAt = form.StartsAt; banner.EndsAt = form.EndsAt;
+        }
+        await db.SaveChangesAsync();
+        TempData["Flash"] = "Banner saved.";
+        return RedirectToAction(nameof(Banners));
+    }
+
+    [HttpPost("banners/{id:int}/toggle")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> BannerToggle(int id)
+    {
+        var banner = await db.Banners.FirstOrDefaultAsync(b => b.Id == id);
+        if (banner is null) return NotFound();
+        banner.IsActive = !banner.IsActive;
+        await db.SaveChangesAsync();
+        return RedirectToAction(nameof(Banners));
+    }
+
+    [HttpPost("banners/{id:int}/delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> BannerDelete(int id)
+    {
+        var banner = await db.Banners.FirstOrDefaultAsync(b => b.Id == id);
+        if (banner is null) return NotFound();
+        db.Banners.Remove(banner);
+        await db.SaveChangesAsync();
+        TempData["Flash"] = "Banner deleted.";
+        return RedirectToAction(nameof(Banners));
+    }
+
     // ---------- settings ----------
 
     [HttpGet("settings")]

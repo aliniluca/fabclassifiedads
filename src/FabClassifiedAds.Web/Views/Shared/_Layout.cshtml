@@ -87,12 +87,23 @@
             <a href="/my-ads">@T["My ads"]</a>
         </div>
         <div>
-            <h4>@T["Built with"]</h4>
-            <p class="footer-tagline">.NET 11 • ASP.NET Core MVC • EF Core • SQLite</p>
+            <h4>@T["Legal"]</h4>
+            <a href="/terms">@T["Terms"]</a>
+            <a href="/privacy">@T["Privacy Policy"]</a>
+            <a href="/cookies">@T["Cookies"]</a>
+            <a href="/account/data">@T["My data & privacy"]</a>
         </div>
     </div>
     <div class="container footer-bottom">© @DateTime.UtcNow.Year AiciGăsești. @T["All rights reserved."]</div>
 </footer>
+
+@if (Context.Request.Cookies["cookie_consent"] == null)
+{
+    <div class="cookie-consent" id="cookieConsent">
+        <p>@T["We use only essential cookies to run the site."] <a href="/cookies">@T["Learn more"]</a></p>
+        <button type="button" class="btn btn-primary btn-sm" id="cookieAccept">@T["Got it"]</button>
+    </div>
+}
 
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)

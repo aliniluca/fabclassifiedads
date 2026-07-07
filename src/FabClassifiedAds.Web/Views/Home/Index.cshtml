@@ -33,6 +33,10 @@
     </div>
 </section>
 
+<div class="container">
+    @await Component.InvokeAsync("Banner", new { placement = BannerPlacement.HomeTop })
+</div>
+
 <section class="container section-pad">
     <div class="section-head">
         <h2>@T["Browse categories"]</h2>
