@@ -92,10 +92,13 @@ public static class ImportSchema
     /// "TEXT" (nullable) or "INTEGER NOT NULL DEFAULT 0".</summary>
     private static async Task AddColumnIfMissingAsync(AppDbContext db, string table, string column, string definition)
     {
+        // table/column/definition are hardcoded constants from this file — never user input
+#pragma warning disable EF1002 // trusted, non-user-supplied identifiers
         var existing = await db.Database
             .SqlQueryRaw<string>($"SELECT name AS \"Value\" FROM pragma_table_info('{table}')")
             .ToListAsync();
         if (!existing.Contains(column))
             await db.Database.ExecuteSqlRawAsync($"ALTER TABLE \"{table}\" ADD COLUMN \"{column}\" {definition}");
+#pragma warning restore EF1002
     }
 }

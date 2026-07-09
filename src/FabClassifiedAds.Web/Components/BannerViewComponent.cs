@@ -21,8 +21,11 @@ public class BannerViewComponent(AppDbContext db) : ViewComponent
 
         if (banners.Count > 0)
         {
+            // ids are integer primary keys from the DB (never user input) — safe to inline
             var ids = string.Join(",", banners.Select(b => b.Id));
+#pragma warning disable EF1002 // interpolated values are trusted integer ids
             await db.Database.ExecuteSqlRawAsync($"UPDATE \"Banners\" SET \"Impressions\" = \"Impressions\" + 1 WHERE \"Id\" IN ({ids})");
+#pragma warning restore EF1002
         }
         return View(banners);
     }

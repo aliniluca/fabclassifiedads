@@ -19,8 +19,7 @@ public class ListingsController(
     SafeHttpFetcher fetcher,
     CategoryDetector categoryDetector,
     ContentModerationService moderation,
-    SettingsStore settings,
-    IConfiguration config) : Controller
+    SettingsStore settings) : Controller
 {
     private string? UserId => User.FindFirstValue(ClaimTypes.NameIdentifier);
 

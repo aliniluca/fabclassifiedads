@@ -55,9 +55,9 @@ public class SmtpEmailSender(SmtpOptions options, ILogger<SmtpEmailSender> logge
         };
 
         using var client = new SmtpClient();
-        await client.ConnectAsync(options.Host, options.Port, security, ct);
+        await client.ConnectAsync(options.Host!, options.Port, security, ct);   // Host is non-null when IsConfigured
         if (!string.IsNullOrEmpty(options.User))
-            await client.AuthenticateAsync(options.User, options.Password, ct);
+            await client.AuthenticateAsync(options.User, options.Password ?? "", ct);
         await client.SendAsync(msg, ct);
         await client.DisconnectAsync(true, ct);
         logger.LogInformation("Email sent to {To}: {Subject}", to, subject);
