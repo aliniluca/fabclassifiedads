@@ -1,6 +1,8 @@
 @model List<Listing>
 @{
     ViewData["Title"] = T["My ads"];
+    ViewData["FavoriteIds"] = new HashSet<int>();
+    var now = DateTime.UtcNow;
 }
 <div class="container section-pad">
     <div class="section-head">
@@ -20,10 +22,54 @@
     }
     else
     {
-        <div class="listing-grid">
-            @foreach (var listing in Model)
+        <div class="myads-list">
+            @foreach (var l in Model)
             {
-                <partial name="_ListingCard" model="listing" />
+                var image = l.Images.FirstOrDefault();
+                var daysLeft = l.ExpiresAt.HasValue ? (int)Math.Ceiling((l.ExpiresAt.Value - now).TotalDays) : (int?)null;
+                var expiringSoon = l.Status == ListingStatus.Active && daysLeft is <= 5 and >= 0;
+                <div class="myads-row panel">
+                    <a href="/l/@l.Id" class="myads-thumb">
+                        @if (image != null) { <img src="@image.Url" alt="" loading="lazy" /> } else { <span>📷</span> }
+                    </a>
+                    <div class="myads-main">
+                        <a href="/l/@l.Id" class="myads-title">@l.Title</a>
+                        <div class="muted small">@l.Category.Icon @T[l.Category.Name] · @l.Price() · 📍 @l.City</div>
+                        <div class="myads-status">
+                            @switch (l.Status)
+                            {
+                                case ListingStatus.Active:
+                                    <span class="trust-chip trust-good">@T["Active"]</span>
+                                    if (daysLeft is >= 0) { <span class="muted small">@T.Format("ExpiresInDays", daysLeft)</span> }
+                                    break;
+                                case ListingStatus.Expired:
+                                    <span class="trust-chip trust-bad">@T["Expired"]</span>
+                                    break;
+                                case ListingStatus.PendingReview:
+                                    <span class="trust-chip trust-warn">⏳ @T["In review"]</span>
+                                    break;
+                                case ListingStatus.Rejected:
+                                    <span class="trust-chip trust-bad">🚫 @T["Rejected"]</span>
+                                    break;
+                                case ListingStatus.Sold:
+                                    <span class="trust-chip">@T["Sold"]</span>
+                                    break;
+                                default:
+                                    <span class="trust-chip">@l.Status.TranslateEnum()</span>
+                                    break;
+                            }
+                        </div>
+                    </div>
+                    <div class="myads-actions">
+                        @if (l.Status is ListingStatus.Expired or ListingStatus.Active)
+                        {
+                            <form method="post" action="/l/@l.Id/republish" class="inline-form">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn @(l.Status == ListingStatus.Expired || expiringSoon ? "btn-primary" : "btn-ghost") btn-sm">🔄 @T["Republish"]</button>
+                            </form>
+                        }
+                    </div>
+                </div>
             }
         </div>
     }

@@ -68,6 +68,7 @@ if (smtp.IsConfigured)
 else
     builder.Services.AddSingleton<IEmailSender, OutboxEmailSender>();
 builder.Services.AddHostedService<SavedSearchAlertService>();
+builder.Services.AddHostedService<ListingMaintenanceService>();
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(
         new System.Text.Json.Serialization.JsonStringEnumConverter()));

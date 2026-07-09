@@ -25,7 +25,9 @@
             <button type="submit" class="btn-search" aria-label="@T["Search"]">🔍</button>
         </form>
 
-        <nav class="header-nav">
+        <button type="button" class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
+
+        <nav class="header-nav" id="headerNav">
             @{
                 var currentPath = Context.Request.Path + Context.Request.QueryString;
             }

@@ -56,6 +56,23 @@ if (photoInput) {
     });
 }
 
+// Mobile header menu toggle
+const navToggle = document.getElementById('navToggle');
+const headerNav = document.getElementById('headerNav');
+if (navToggle && headerNav) {
+    navToggle.addEventListener('click', () => {
+        const open = headerNav.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    // close when tapping outside
+    document.addEventListener('click', (e) => {
+        if (!headerNav.contains(e.target) && e.target !== navToggle && headerNav.classList.contains('open')) {
+            headerNav.classList.remove('open');
+            navToggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+}
+
 // Cookie consent
 const cookieAccept = document.getElementById('cookieAccept');
 if (cookieAccept) {

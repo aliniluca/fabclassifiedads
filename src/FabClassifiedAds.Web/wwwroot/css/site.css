@@ -25,6 +25,7 @@ body {
     background: var(--bg);
     color: var(--text);
     line-height: 1.55;
+    overflow-x: hidden;   /* prevent stray horizontal scroll on mobile */
 }
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
@@ -86,6 +87,25 @@ code { background: var(--surface-2); padding: 2px 7px; border-radius: 6px; font-
 .nav-label { display: none; }
 @media (min-width: 1080px) { .nav-label { display: inline; } }
 .btn-post { margin-left: 8px; }
+.nav-toggle { display: none; margin-left: auto; background: var(--surface-2); border: 1px solid var(--border); color: var(--text); font-size: 1.3rem; line-height: 1; padding: 8px 12px; border-radius: var(--radius-sm); cursor: pointer; }
+
+/* ----- mobile header: collapse nav behind a hamburger ----- */
+@media (max-width: 860px) {
+    .nav-toggle { display: block; }
+    .header-nav {
+        position: absolute; top: 100%; right: 12px; left: 12px;
+        flex-direction: column; align-items: stretch; gap: 4px;
+        background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+        padding: 10px; margin-top: 6px; box-shadow: var(--shadow);
+        display: none; z-index: 60;
+    }
+    .header-nav.open { display: flex; }
+    .header-nav .nav-link, .header-nav .nav-button, .header-nav .btn-post { width: 100%; justify-content: flex-start; }
+    .header-nav .nav-label { display: inline; }   /* show labels in the dropdown */
+    .header-nav .btn-post { margin: 6px 0 0; justify-content: center; }
+    .header-nav .lang-switch { justify-content: center; padding: 6px 0; }
+    .site-header { position: relative; }
+}
 .lang-switch { display: inline-flex; align-items: center; gap: 5px; margin-right: 4px; font-size: .82rem; font-weight: 700; color: var(--text-muted); }
 .lang-switch a { padding: 4px 6px; border-radius: 6px; color: var(--text-muted); }
 .lang-switch a:hover { color: var(--text); }
@@ -202,11 +222,16 @@ code { background: var(--surface-2); padding: 2px 7px; border-radius: 6px; font-
 .subcat-chip { padding: 7px 15px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; font-size: .86rem; font-weight: 600; }
 .subcat-chip:hover { border-color: var(--primary); color: var(--primary); }
 .search-layout { display: grid; grid-template-columns: 290px 1fr; gap: 26px; align-items: start; }
+.search-layout > * { min-width: 0; }   /* let grid children shrink instead of overflowing */
 @media (max-width: 920px) { .search-layout { grid-template-columns: 1fr; } }
 
 .filter-panel {
     background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
     padding: 20px; position: sticky; top: 86px; max-height: calc(100vh - 110px); overflow-y: auto;
+}
+/* on mobile the filters are a normal block above the results — not a sticky overlay */
+@media (max-width: 920px) {
+    .filter-panel { position: static; max-height: none; overflow: visible; margin-bottom: 18px; }
 }
 .filter-group { margin-bottom: 20px; }
 .filter-group h3 { font-size: .82rem; text-transform: uppercase; letter-spacing: .6px; color: var(--text-muted); margin-bottom: 9px; }
@@ -352,14 +377,26 @@ code { background: var(--surface-2); padding: 2px 7px; border-radius: 6px; font-
 .import-box-msg.ok { color: #7ce6ab; }
 .import-box-msg.err { color: #ff9a9b; }
 
+/* ===== My ads management ===== */
+.myads-list { display: flex; flex-direction: column; gap: 12px; }
+.myads-row { display: flex; gap: 16px; align-items: center; padding: 14px; }
+.myads-thumb { width: 96px; height: 72px; flex-shrink: 0; border-radius: var(--radius-sm); overflow: hidden; background: var(--surface-2); display: grid; place-items: center; }
+.myads-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.myads-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.myads-title { font-weight: 700; }
+.myads-title:hover { color: var(--primary); }
+.myads-status { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 2px; }
+.myads-actions { flex-shrink: 0; }
+@media (max-width: 560px) { .myads-row { flex-wrap: wrap; } .myads-actions { width: 100%; } .myads-actions .btn { width: 100%; } }
+
 /* ===== Banners, consent, legal ===== */
 .banner-slot { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
 .banner-ad { position: relative; display: block; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
 .banner-ad img { width: 100%; display: block; max-height: 240px; object-fit: cover; }
 .banner-tag { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,.6); color: #fff; font-size: .68rem; text-transform: uppercase; letter-spacing: .5px; padding: 2px 8px; border-radius: 999px; }
 .banner-preview { max-width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border); margin: 4px 0 12px; max-height: 180px; object-fit: contain; }
-.cookie-consent { position: fixed; bottom: 16px; left: 16px; right: 16px; max-width: 720px; margin: 0 auto; z-index: 60; display: flex; align-items: center; gap: 16px; justify-content: space-between; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--primary); border-radius: var(--radius); padding: 14px 18px; box-shadow: var(--shadow); }
-.cookie-consent p { margin: 0; font-size: .9rem; }
+.cookie-consent { position: fixed; bottom: 16px; left: 16px; right: 16px; max-width: 720px; margin: 0 auto; z-index: 60; display: flex; align-items: center; gap: 16px; justify-content: space-between; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--primary); border-radius: var(--radius); padding: 14px 18px; box-shadow: var(--shadow); box-sizing: border-box; }
+.cookie-consent p { margin: 0; font-size: .9rem; flex: 1; min-width: 0; }
 .cookie-consent a { color: var(--primary); font-weight: 600; }
 .legal { max-width: 780px; }
 .legal h2 { font-size: 1.15rem; margin-top: 26px; }

@@ -11,7 +11,9 @@
     <PackageReference Include="MailKit" Version="4.*" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.*" />
-    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.3" />
+    <!-- Note: EF Core pulls SQLitePCLRaw e_sqlite3 2.1.11 transitively, which NuGet flags
+         (NU1903). Do NOT override with the 3.x bundle — it mismatches EF's SQLitePCLRaw.core
+         and throws BadImageFormatException at runtime. This resolves cleanly at .NET 11 GA. -->
   </ItemGroup>
 
 </Project>

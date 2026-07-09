@@ -125,6 +125,27 @@ public class ListingsController(
         return RedirectToAction("Index", "Home");
     }
 
+    /// <summary>Owner re-lists their own expired/expiring ad for another 30 days.</summary>
+    [Authorize]
+    [HttpPost("/l/{id:int}/republish")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Republish(int id)
+    {
+        var listing = await db.Listings.FirstOrDefaultAsync(l => l.Id == id);
+        if (listing is null) return NotFound();
+        if (listing.UserId != UserId) return Forbid();
+
+        if (listing.Status is ListingStatus.Active or ListingStatus.Expired)
+        {
+            listing.Status = ListingStatus.Active;
+            listing.ExpiresAt = DateTime.UtcNow.AddDays(30);
+            listing.BumpedAt = DateTime.UtcNow;
+            await db.SaveChangesAsync();
+            TempData["Flash"] = "Listing republished for 30 more days. ✅";
+        }
+        return Redirect(Request.Headers.Referer.FirstOrDefault() ?? "/my-ads");
+    }
+
     /// <summary>
     /// Cross-post bridge: the signed-in owner pastes a link to their own ad elsewhere;
     /// we fetch that single page and return pre-fill data for the post form. Fetching is
