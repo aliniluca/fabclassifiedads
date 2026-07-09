@@ -44,8 +44,11 @@ public static class ImportSchema
         await AddColumnIfMissingAsync(db, "AspNetUsers", "ApiKeyHash", "TEXT");
         await AddColumnIfMissingAsync(db, "AspNetUsers", "ApiKeyCreatedAt", "TEXT");
 
-        // moderation note (added with the admin approval queue)
+        // columns added to Listings/Messages after the first release
+        await AddColumnIfMissingAsync(db, "Listings", "VideoUrl", "TEXT");
+        await AddColumnIfMissingAsync(db, "Listings", "TrustScore", "INTEGER NOT NULL DEFAULT 100");
         await AddColumnIfMissingAsync(db, "Listings", "ModerationNote", "TEXT");
+        await AddColumnIfMissingAsync(db, "Messages", "RiskFlags", "TEXT");
 
         // admin/ban flags + runtime settings table (added with the full admin panel)
         await AddColumnIfMissingAsync(db, "AspNetUsers", "IsAdmin", "INTEGER NOT NULL DEFAULT 0");
