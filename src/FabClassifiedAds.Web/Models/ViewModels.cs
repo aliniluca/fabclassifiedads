@@ -29,6 +29,21 @@ public class SearchPageViewModel
     public HashSet<int> FavoriteIds { get; set; } = [];
 }
 
+public class SellerProfileViewModel
+{
+    public ApplicationUser Seller { get; set; } = null!;
+    public List<Listing> Listings { get; set; } = [];
+    public int TotalActive { get; set; }
+    public int Page { get; set; }
+    public int PageSize { get; set; }
+    public SortOption Sort { get; set; }
+    public TrustReport? Trust { get; set; }
+    public HashSet<int> FavoriteIds { get; set; } = [];
+    public bool IsSelf { get; set; }
+
+    public int TotalPages => (int)Math.Ceiling(TotalActive / (double)Math.Max(1, PageSize));
+}
+
 public class ListingDetailViewModel
 {
     public Listing Listing { get; set; } = null!;

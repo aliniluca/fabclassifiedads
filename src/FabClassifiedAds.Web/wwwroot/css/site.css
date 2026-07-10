@@ -377,6 +377,15 @@ code { background: var(--surface-2); padding: 2px 7px; border-radius: 6px; font-
 .import-box-msg.ok { color: #7ce6ab; }
 .import-box-msg.err { color: #ff9a9b; }
 
+/* ===== Seller profile ===== */
+.seller-hero { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.avatar-lg { width: 72px; height: 72px; font-size: 2rem; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; flex-shrink: 0; }
+.seller-hero-info { flex: 1; min-width: 0; }
+.seller-hero-info h1 { margin: 0 0 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.seller-hero-meta { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; color: var(--text-muted); font-size: .9rem; }
+.seller-hero-meta .rating { color: var(--warning); font-weight: 700; }
+.seller-name-link:hover strong { color: var(--primary); }
+
 /* ===== My ads management ===== */
 .myads-list { display: flex; flex-direction: column; gap: 12px; }
 .myads-row { display: flex; gap: 16px; align-items: center; padding: 14px; }

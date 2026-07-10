@@ -1,0 +1,72 @@
+@model SellerProfileViewModel
+@{
+    var s = Model.Seller;
+    ViewData["Title"] = s.DisplayName;
+    ViewData["MetaDescription"] = $"{s.DisplayName} — {Model.TotalActive} {T["active ads"]} " + (s.City ?? "");
+    ViewData["FavoriteIds"] = Model.FavoriteIds;
+    var slug = FabClassifiedAds.Web.Data.CategorySeeder.Slugify(s.DisplayName);
+    string SortUrl(SortOption so) => $"/u/{s.Id}/{slug}?sort={so}";
+}
+
+<div class="container section-pad">
+    <div class="panel seller-hero">
+        <span class="avatar avatar-lg" style="background:@(s.AvatarColor ?? "#6d5dfc")">@(s.DisplayName.Length > 0 ? char.ToUpper(s.DisplayName[0]) : '?')</span>
+        <div class="seller-hero-info">
+            <h1>@s.DisplayName
+                @if (s.IsBusiness) { <span class="badge badge-business">@T["Business"]</span> }
+            </h1>
+            <div class="seller-hero-meta">
+                <span>📋 @Model.TotalActive @T["active ads"]</span>
+                @if (!string.IsNullOrEmpty(s.City)) { <span>📍 @s.City</span> }
+                <span>@T["Member since"] @s.CreatedAt.ToString("MMMM yyyy")</span>
+                @if (s.RatingCount > 0)
+                {
+                    <span class="rating">★ @s.RatingAverage.ToString("0.0") <span class="muted small">(@s.RatingCount)</span></span>
+                }
+                @if (Model.Trust is { } tr)
+                {
+                    <span class="trust-chip @tr.CssClass" title="@T[FabClassifiedAds.Web.Services.TrustService.ScoreLabel(tr.Score)]">🛡 @tr.Score</span>
+                }
+            </div>
+        </div>
+        @if (Model.IsSelf)
+        {
+            <a href="/my-ads" class="btn btn-ghost btn-sm">@T["Manage my ads"]</a>
+        }
+    </div>
+
+    @if (Model.TotalActive == 0)
+    {
+        <div class="empty-state"><span class="empty-icon">📭</span><h3>@T["This seller has no active ads."]</h3></div>
+    }
+    else
+    {
+        <div class="sort-bar mt-16">
+            <label>@T["Sort by"]
+                <select onchange="location.href=this.value">
+                    <option value="@SortUrl(SortOption.Newest)" selected="@(Model.Sort == SortOption.Newest)">@T["Newest first"]</option>
+                    <option value="@SortUrl(SortOption.PriceAsc)" selected="@(Model.Sort == SortOption.PriceAsc)">@T["Price: low → high"]</option>
+                    <option value="@SortUrl(SortOption.PriceDesc)" selected="@(Model.Sort == SortOption.PriceDesc)">@T["Price: high → low"]</option>
+                    <option value="@SortUrl(SortOption.MostViewed)" selected="@(Model.Sort == SortOption.MostViewed)">@T["Most viewed"]</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="listing-grid">
+            @foreach (var listing in Model.Listings)
+            {
+                <partial name="_ListingCard" model="listing" />
+            }
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <nav class="pagination">
+                @for (var p = 1; p <= Model.TotalPages; p++)
+                {
+                    <a href="/u/@s.Id/@slug?sort=@Model.Sort&page=@p" class="page-link @(p == Model.Page ? "active" : "")">@p</a>
+                }
+            </nav>
+        }
+    }
+</div>

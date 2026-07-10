@@ -227,11 +227,14 @@
                 </div>
             }
 
+            @{
+                var sellerUrl = $"/u/{l.UserId}/{FabClassifiedAds.Web.Data.CategorySeeder.Slugify(l.User.DisplayName)}";
+            }
             <div class="panel seller-panel">
                 <div class="seller-head">
-                    <span class="avatar" style="background:@(l.User.AvatarColor ?? "#6d5dfc")">@(l.User.DisplayName.Length > 0 ? l.User.DisplayName[0] : '?')</span>
+                    <a href="@sellerUrl"><span class="avatar" style="background:@(l.User.AvatarColor ?? "#6d5dfc")">@(l.User.DisplayName.Length > 0 ? l.User.DisplayName[0] : '?')</span></a>
                     <div>
-                        <strong>@l.User.DisplayName</strong>
+                        <a href="@sellerUrl" class="seller-name-link"><strong>@l.User.DisplayName</strong></a>
                         @if (l.User.IsBusiness) { <span class="badge badge-business">@T["Business"]</span> }
                         @if (Model.SellerTrust is { } sellerTrust)
                         {
@@ -247,6 +250,7 @@
                 </div>
 
                 <div class="seller-location">📍 @l.City@(string.IsNullOrEmpty(l.Region) ? "" : $", {l.Region}")</div>
+                <a href="@sellerUrl" class="btn btn-ghost btn-sm btn-block mt-8">🏬 @T["See all seller's ads"]</a>
 
                 @if (!Model.IsOwner)
                 {
