@@ -260,7 +260,7 @@ public class Translator
         ["Hi! Is this still available?"] = "Bună! Mai este valabil?",
         ["Saved — remove"] = "Salvat — elimină",
         ["Save to favorites"] = "Salvează la favorite",
-        ["Sign in to contact seller"] = "Conectează-te pentru a contacta vânzătorul",
+        ["Sign in to contact seller"] = "Conectează-te pentru a contacta",
         ["This is your ad."] = "Acesta este anunțul tău.",
         ["Similar ads"] = "Anunțuri similare",
         ["Featured"] = "Promovat",
