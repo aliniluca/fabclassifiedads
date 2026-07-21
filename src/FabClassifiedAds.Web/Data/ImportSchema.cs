@@ -48,6 +48,7 @@ public static class ImportSchema
         await AddColumnIfMissingAsync(db, "Listings", "VideoUrl", "TEXT");
         await AddColumnIfMissingAsync(db, "Listings", "TrustScore", "INTEGER NOT NULL DEFAULT 100");
         await AddColumnIfMissingAsync(db, "Listings", "ModerationNote", "TEXT");
+        await AddColumnIfMissingAsync(db, "Listings", "ContactPhone", "TEXT");
         await AddColumnIfMissingAsync(db, "Messages", "RiskFlags", "TEXT");
 
         // admin/ban flags + runtime settings table (added with the full admin panel)

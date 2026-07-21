@@ -251,6 +251,28 @@ public class Translator
         ["Member since"] = "Membru din",
         ["Manage my ads"] = "Administrează anunțurile",
         ["This seller has no active ads."] = "Acest vânzător nu are anunțuri active.",
+
+        // quick-start funnel
+        ["Post your ad in 30 seconds"] = "Publică anunțul în 30 de secunde",
+        ["Paste your OLX or Autovit link and publish it on AiciGăsești in seconds — free."] =
+            "Lipește linkul de pe OLX sau Autovit și publică-l pe AiciGăsești în câteva secunde — gratuit.",
+        ["Already on OLX or Autovit?"] = "Ai deja anunțul pe OLX sau Autovit?",
+        ["Move your ad here in 30 seconds"] = "Mută-l aici în 30 de secunde",
+        ["Paste the link — we fill everything in. Create a free account and it's live."] =
+            "Lipește linkul — completăm noi tot. Îți faci cont gratuit și e publicat.",
+        ["or"] = "sau",
+        ["Bring my ad"] = "Adu anunțul",
+        ["Free forever. Only publish ads you own."] = "Gratuit pentru totdeauna. Publică doar anunțurile tale.",
+        ["Almost done — create your free account"] = "Aproape gata — creează-ți contul gratuit",
+        ["Choose a category…"] = "Alege o categorie…",
+        ["Your name"] = "Numele tău",
+        ["Phone (shown on the ad)"] = "Telefon (afișat în anunț)",
+        ["Create account & publish"] = "Creează cont & publică",
+        ["Move my ad here"] = "Mută anunțul meu aici",
+        ["Paste a link first."] = "Lipește întâi un link.",
+        ["Reading your ad…"] = "Îți citim anunțul…",
+        ["Found it! Just fill in your details below."] = "L-am găsit! Completează datele mai jos.",
+        ["Couldn’t reach that link. Fill it in manually."] = "Nu am putut accesa linkul. Completează manual.",
         ["reviews"] = "recenzii",
         ["Stay safe"] = "Siguranța ta",
         ["Meet in a public place"] = "Întâlnește-te într-un loc public",

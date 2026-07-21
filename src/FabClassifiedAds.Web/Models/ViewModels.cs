@@ -29,6 +29,31 @@ public class SearchPageViewModel
     public HashSet<int> FavoriteIds { get; set; } = [];
 }
 
+/// <summary>Public "paste a link → create account → publish" growth funnel.</summary>
+public class QuickStartViewModel
+{
+    // account
+    [Required, StringLength(60, MinimumLength = 2)] public string DisplayName { get; set; } = "";
+    [Required, EmailAddress] public string Email { get; set; } = "";
+    [Required, DataType(DataType.Password), StringLength(100, MinimumLength = 6)] public string Password { get; set; } = "";
+    [Required, Phone] public string Phone { get; set; } = "";
+    public bool AcceptTerms { get; set; }
+
+    // the ad (carried from the preview step as hidden fields)
+    [Required, StringLength(120, MinimumLength = 8)] public string Title { get; set; } = "";
+    [Required, StringLength(8000, MinimumLength = 10)] public string Description { get; set; } = "";
+    public decimal? Price { get; set; }
+    public string Currency { get; set; } = "EUR";
+    [Required] public string City { get; set; } = "";
+    public string? Region { get; set; }
+    [Required] public int CategoryId { get; set; }
+    public List<string>? ImageUrls { get; set; }
+    public string? SourceUrl { get; set; }
+
+    // populated for the view
+    public List<Category> CategoryTree { get; set; } = [];
+}
+
 public class SellerProfileViewModel
 {
     public ApplicationUser Seller { get; set; } = null!;

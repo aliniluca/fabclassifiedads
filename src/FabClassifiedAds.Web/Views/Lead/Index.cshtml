@@ -1,0 +1,118 @@
+@model QuickStartViewModel
+@{
+    ViewData["Title"] = T["Post your ad in 30 seconds"];
+    ViewData["MetaDescription"] = T["Paste your OLX or Autovit link and publish it on AiciGăsești in seconds — free."];
+}
+<div class="lead-hero">
+    <div class="hero-bg"></div>
+    <div class="container lead-inner">
+        <h1 class="hero-title">@T["Already on OLX or Autovit?"]<br/><span class="gradient-text">@T["Move your ad here in 30 seconds"]</span></h1>
+        <p class="hero-subtitle">@T["Paste the link — we fill everything in. Create a free account and it's live."]</p>
+
+        <div class="lead-paste panel">
+            <span class="hero-search-icon">🔗</span>
+            <input type="url" id="leadUrl" placeholder="https://olx.ro/… @T["or"] autovit.ro/…" inputmode="url" autocomplete="off" />
+            <button type="button" class="btn btn-primary" id="leadImportBtn">@T["Bring my ad"]</button>
+        </div>
+        <div class="lead-msg" id="leadMsg" hidden></div>
+        <p class="muted small">@T["Free forever. Only publish ads you own."]</p>
+    </div>
+</div>
+
+<div class="container narrow section-pad">
+    <form method="post" action="/start/register" class="panel form-panel lead-form" id="leadForm" hidden>
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="validation-summary"></div>
+
+        <h2>@T["Almost done — create your free account"]</h2>
+
+        <div class="lead-preview" id="leadPreview"></div>
+
+        <label class="field"><span>@T["Title"]</span><input asp-for="Title" required minlength="8" /></label>
+        <div class="field-row">
+            <label class="field"><span>@T["Price"]</span><input asp-for="Price" type="number" step="0.01" min="0" /></label>
+            <label class="field"><span>@T["Currency"]</span>
+                <select asp-for="Currency"><option>EUR</option><option>USD</option><option>RON</option></select>
+            </label>
+            <label class="field"><span>@T["City"]</span><input asp-for="City" required /></label>
+        </div>
+        <label class="field"><span>@T["Category"]</span>
+            <select asp-for="CategoryId" required>
+                <option value="">@T["Choose a category…"]</option>
+                @foreach (var root in Model.CategoryTree)
+                {
+                    <optgroup label="@root.Icon @T[root.Name]">
+                        @foreach (var child in root.Children)
+                        {
+                            <option value="@child.Id">@T[child.Name]</option>
+                        }
+                    </optgroup>
+                }
+            </select>
+        </label>
+
+        <hr class="lead-divider" />
+
+        <div class="field-row">
+            <label class="field"><span>@T["Your name"]</span><input asp-for="DisplayName" required autocomplete="name" /></label>
+            <label class="field"><span>@T["Phone (shown on the ad)"]</span><input asp-for="Phone" type="tel" required autocomplete="tel" placeholder="07xx xxx xxx" /></label>
+        </div>
+        <div class="field-row">
+            <label class="field"><span>@T["Email"]</span><input asp-for="Email" type="email" required autocomplete="email" /></label>
+            <label class="field"><span>@T["Password"]</span><input asp-for="Password" type="password" required autocomplete="new-password" /></label>
+        </div>
+        <label class="check-row"><input asp-for="AcceptTerms" required />
+            @T["I accept the"] <a href="/terms" target="_blank">@T["Terms"]</a> @T["and"] <a href="/privacy" target="_blank">@T["Privacy Policy"]</a></label>
+
+        <input type="hidden" asp-for="Description" />
+        <input type="hidden" asp-for="Region" />
+        <input type="hidden" asp-for="SourceUrl" />
+        <div id="leadImages"></div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg">🚀 @T["Create account & publish"]</button>
+        <p class="muted small center-text mt-8">@T["Already have an account?"] <a href="/login">@T["Sign in"]</a></p>
+    </form>
+</div>
+
+@section Scripts {
+<script>
+    const btn = document.getElementById('leadImportBtn');
+    const urlInput = document.getElementById('leadUrl');
+    const msg = document.getElementById('leadMsg');
+    const form = document.getElementById('leadForm');
+    const setMsg = (t, k) => { msg.hidden = false; msg.textContent = t; msg.className = 'lead-msg ' + (k || ''); };
+    const set = (id, v) => { const el = document.getElementById(id); if (el && v != null && v !== '') el.value = v; };
+
+    async function run() {
+        const url = (urlInput.value || '').trim();
+        if (!url) { setMsg('@T["Paste a link first."]', 'err'); return; }
+        btn.disabled = true; const orig = btn.textContent; btn.textContent = '…';
+        setMsg('@T["Reading your ad…"]', '');
+        try {
+            const body = new FormData();
+            body.append('url', url);
+            body.append('__RequestVerificationToken', form.querySelector('input[name=__RequestVerificationToken]').value);
+            const res = await fetch('/start/preview', { method: 'POST', body });
+            const j = await res.json();
+            if (!j.ok) { setMsg(j.error, 'err'); return; }
+            const d = j.data;
+            set('Title', d.title); set('Description', d.description); set('Price', d.price);
+            set('Currency', d.currency); set('City', d.city); set('Region', d.region); set('SourceUrl', d.sourceUrl);
+            if (d.categoryId) { const c = document.getElementById('CategoryId'); if (c && c.querySelector(`option[value="${d.categoryId}"]`)) c.value = String(d.categoryId); }
+
+            const holder = document.getElementById('leadImages'); holder.innerHTML = '';
+            const preview = document.getElementById('leadPreview');
+            const imgs = d.images || [];
+            for (const src of imgs) { const i = document.createElement('input'); i.type = 'hidden'; i.name = 'ImageUrls'; i.value = src; holder.appendChild(i); }
+            preview.innerHTML = imgs.length ? `<img src="${imgs[0]}" alt="" class="lead-preview-img">` : '';
+
+            form.hidden = false;
+            setMsg('@T["Found it! Just fill in your details below."]', 'ok');
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } catch { setMsg('@T["Couldn’t reach that link. Fill it in manually."]', 'err'); form.hidden = false; }
+        finally { btn.disabled = false; btn.textContent = orig; }
+    }
+    btn.addEventListener('click', run);
+    urlInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); run(); } });
+</script>
+}

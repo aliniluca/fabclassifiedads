@@ -26,6 +26,8 @@ public class Listing
 
     public string City { get; set; } = "";
     public string Region { get; set; } = "";
+    /// <summary>Optional public contact phone shown on the ad.</summary>
+    public string? ContactPhone { get; set; }
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
 

@@ -250,6 +250,10 @@
                 </div>
 
                 <div class="seller-location">📍 @l.City@(string.IsNullOrEmpty(l.Region) ? "" : $", {l.Region}")</div>
+                @if (!string.IsNullOrWhiteSpace(l.ContactPhone))
+                {
+                    <a href="tel:@l.ContactPhone" class="btn btn-ghost btn-block mt-8">📞 @l.ContactPhone</a>
+                }
                 <a href="@sellerUrl" class="btn btn-ghost btn-sm btn-block mt-8">🏬 @T["See all seller's ads"]</a>
 
                 @if (!Model.IsOwner)
