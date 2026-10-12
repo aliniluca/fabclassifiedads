@@ -1,74 +1,218 @@
-@model List<Listing>
+@model FabClassifiedAds.Web.Models.Admin.AdminListingsViewModel
 @{
     ViewData["Title"] = T["Admin"];
-    var tab = (string)(ViewBag.Tab ?? "pending");
-    var c = ViewBag.Counts;
+    var c = Model.Counts;
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+    string AdminUrl(string? tab = null, int? page = null, string? sort = null)
+    {
+        var qs = new List<string> { $"tab={Uri.EscapeDataString(tab ?? Model.Tab)}" };
+        if (!string.IsNullOrEmpty(Model.Q)) qs.Add($"q={Uri.EscapeDataString(Model.Q)}");
+        if (!string.IsNullOrEmpty(Model.Category)) qs.Add($"category={Uri.EscapeDataString(Model.Category)}");
+        var s = sort ?? Model.Sort;
+        if (s != "newest") qs.Add($"sort={s}");
+        if ((page ?? 1) > 1) qs.Add($"page={page}");
+        return "/admin?" + string.Join("&", qs);
+    }
+    var tabs = new (string Key, string Label, int Count, string Icon)[]
+    {
+        ("pending", T["Pending"], c.Pending, "clock"),
+        ("risky", T["Risky (live)"], c.Risky, "alert"),
+        ("active", T["Active"], c.Active, "check"),
+        ("rejected", T["Rejected"], c.Rejected, "x"),
+        ("expired", T["Expired"], c.Expired, "clock"),
+        ("suspended", T["Suspended"], c.Suspended, "shield"),
+        ("all", T["All"], c.All, "list"),
+    };
 }
-<div class="container section-pad">
-    <h1>@Icons.Svg("shield") @T["Admin — moderation"]</h1>
+<div class="container section-pad admin-page">
+    <h1>@T["Admin — moderation"]</h1>
     <partial name="_AdminNav" />
 
     <div class="admin-stats">
         <div class="admin-stat"><span class="admin-stat-n">@c.Pending</span>@T["Pending"]</div>
+        <div class="admin-stat @(c.Risky > 0 ? "admin-stat-alert" : "")"><span class="admin-stat-n">@c.Risky</span>@T["Risky (live)"]</div>
         <div class="admin-stat"><span class="admin-stat-n">@c.Active</span>@T["Active"]</div>
-        <div class="admin-stat"><span class="admin-stat-n">@c.Rejected</span>@T["Rejected"]</div>
-        <div class="admin-stat"><span class="admin-stat-n">@c.Total</span>@T["Total ads"]</div>
+        <div class="admin-stat"><span class="admin-stat-n">@c.NewToday</span>@T["New today"]</div>
+        <div class="admin-stat"><span class="admin-stat-n">@c.All</span>@T["Total ads"]</div>
         <div class="admin-stat"><span class="admin-stat-n">@c.Users</span>@T["Users"]</div>
     </div>
 
-    <div class="admin-tabs">
-        <a href="/admin?tab=pending" class="admin-tab @(tab == "pending" ? "active" : "")">@Icons.Svg("clock", "icon-sm") @T["Pending"] (@c.Pending)</a>
-        <a href="/admin?tab=active" class="admin-tab @(tab == "active" ? "active" : "")">@Icons.Svg("check", "icon-sm") @T["Active"]</a>
-        <a href="/admin?tab=rejected" class="admin-tab @(tab == "rejected" ? "active" : "")">@Icons.Svg("x", "icon-sm") @T["Rejected"]</a>
-    </div>
+    <nav class="admin-tabs" aria-label="@T["Status"]">
+        @foreach (var t in tabs)
+        {
+            <a href="@AdminUrl(t.Key, 1)" class="admin-tab @(Model.Tab == t.Key ? "active" : "")" aria-current="@(Model.Tab == t.Key ? "page" : null)">@Icons.Svg(t.Icon, "icon-sm") @t.Label <span class="admin-tab-n">@t.Count</span></a>
+        }
+    </nav>
 
-    @if (Model.Count == 0)
+    <form method="get" action="/admin" class="admin-filters">
+        <input type="hidden" name="tab" value="@Model.Tab" />
+        <label class="admin-filter-q"><span class="visually-hidden">@T["Search"]</span>
+            <input type="search" name="q" value="@Model.Q" placeholder="@T["Title, description, ad no. or seller email"]" />
+        </label>
+        <label><span class="visually-hidden">@T["Category"]</span>
+            <select name="category">
+                <option value="">@T["All categories"]</option>
+                @foreach (var cat in Model.RootCategories)
+                {
+                    <option value="@cat.Slug" selected="@(Model.Category == cat.Slug)">@T[cat.Name]</option>
+                }
+            </select>
+        </label>
+        <label><span class="visually-hidden">@T["Sort by"]</span>
+            <select name="sort">
+                <option value="newest" selected="@(Model.Sort == "newest")">@T["Newest first"]</option>
+                <option value="oldest" selected="@(Model.Sort == "oldest")">@T["Oldest first"]</option>
+                <option value="trust" selected="@(Model.Sort == "trust")">@T["Lowest trust first"]</option>
+                <option value="views" selected="@(Model.Sort == "views")">@T["Most viewed"]</option>
+                <option value="price" selected="@(Model.Sort == "price")">@T["Highest price"]</option>
+            </select>
+        </label>
+        <button type="submit" class="btn btn-primary btn-sm">@Icons.Svg("search", "icon-sm")@T["Filter"]</button>
+        @if (!string.IsNullOrEmpty(Model.Q) || !string.IsNullOrEmpty(Model.Category) || Model.Sort != "newest")
+        {
+            <a href="/admin?tab=@Model.Tab" class="btn btn-ghost btn-sm">@T["Reset"]</a>
+        }
+        <span class="muted small admin-result-count">@Model.TotalCount.AdsCount()</span>
+    </form>
+
+    @if (Model.Listings.Count == 0)
     {
         <div class="empty-state"><span class="empty-icon">@Icons.Svg("check")</span><h3>@T["Nothing here"]</h3></div>
     }
     else
     {
-        <div class="admin-list">
-            @foreach (var l in Model)
-            {
-                var img = l.Images.FirstOrDefault();
-                <div class="admin-row panel">
-                    <a href="/l/@l.Id" target="_blank" class="admin-thumb">
-                        @if (img != null) { <img src="@img.Url" alt="" loading="lazy" /> } else { <img src="/media/ph/aicigasesti.svg" alt="" loading="lazy" /> }
-                    </a>
-                    <div class="admin-row-main">
-                        <a href="/l/@l.Id" target="_blank" class="admin-row-title">@l.Title</a>
-                        <div class="muted small">@T[l.Category.Name] · @l.Price() · @Icons.Svg("pin", "icon-sm") @l.City.Place() · @l.User.DisplayName · @l.CreatedAt.TimeAgo()</div>
-                        @if (!string.IsNullOrEmpty(l.ModerationNote))
+        <form method="post" action="/admin/listings/bulk" id="bulkForm">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+            <div class="admin-bulkbar" id="bulkBar">
+                <label class="check-row"><input type="checkbox" id="selectAll" /> @T["Select all on this page"]</label>
+                <span class="muted small" id="bulkCount" aria-live="polite"></span>
+                <span class="admin-bulk-actions">
+                    <button type="submit" name="action" value="approve" class="btn btn-primary btn-sm" disabled>@Icons.Svg("check", "icon-sm")@T["Approve"]</button>
+                    <input type="text" name="reason" class="admin-reason" placeholder="@T["Rejection reason (optional)"]" />
+                    <button type="submit" name="action" value="reject" class="btn btn-ghost btn-sm btn-danger" disabled>@Icons.Svg("x", "icon-sm")@T["Reject"]</button>
+                    <button type="submit" name="action" value="feature" class="btn btn-ghost btn-sm" disabled>@Icons.Svg("star", "icon-sm")@T["Feature"]</button>
+                    <button type="submit" name="action" value="unfeature" class="btn btn-ghost btn-sm" disabled>@T["Unfeature"]</button>
+                    <button type="submit" name="action" value="delete" class="btn btn-ghost btn-sm btn-danger" disabled data-confirm="@T["Delete the selected ads permanently?"]">@Icons.Svg("trash", "icon-sm")@T["Delete"]</button>
+                </span>
+            </div>
+
+            <div class="admin-table-wrap">
+                <table class="admin-table admin-listings">
+                    <thead>
+                        <tr>
+                            <th class="col-check"><span class="visually-hidden">@T["Select"]</span></th>
+                            <th>@T["Listing"]</th>
+                            <th>@T["Seller"]</th>
+                            <th>@T["Price"]</th>
+                            <th><a href="@AdminUrl(sort: "trust", page: 1)">@T["Trust"]</a></th>
+                            <th><a href="@AdminUrl(sort: "views", page: 1)">@T["Views"]</a></th>
+                            <th><a href="@AdminUrl(sort: Model.Sort == "oldest" ? "newest" : "oldest", page: 1)">@T["Posted"]</a></th>
+                            <th>@T["Status"]</th>
+                            <th class="col-actions"><span class="visually-hidden">@T["Actions"]</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var l in Model.Listings)
                         {
-                            <div class="admin-flag">@Icons.Svg("alert", "icon-sm") @l.ModerationNote</div>
+                            var img = l.Images.FirstOrDefault();
+                            var trustClass = l.TrustScore >= 75 ? "trust-good" : l.TrustScore >= 40 ? "trust-warn" : "trust-bad";
+                            <tr>
+                                <td class="col-check"><input type="checkbox" name="ids" value="@l.Id" class="row-check" aria-label="@T["Select"] #@l.Id" /></td>
+                                <td>
+                                    <div class="admin-ad">
+                                        <a href="@l.SeoUrl()" target="_blank" class="admin-thumb-sm"><img src="@(img?.Url ?? "/media/ph/aicigasesti.svg")" alt="" loading="lazy" /></a>
+                                        <div class="admin-ad-main">
+                                            <a href="@l.SeoUrl()" target="_blank" class="admin-row-title">@l.Title</a>
+                                            <div class="muted small">#@l.Id · @T[l.Category.Name] · @l.City.Place()@(l.IsFeatured ? " · " + T["Featured"] : "")</div>
+                                            @if (!string.IsNullOrEmpty(l.ModerationNote))
+                                            {
+                                                <div class="admin-flag">@Icons.Svg("alert", "icon-sm") @l.ModerationNote</div>
+                                            }
+                                            <details class="admin-desc-details">
+                                                <summary class="small">@T["Description"]</summary>
+                                                <p class="small">@l.Description</p>
+                                            </details>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="small">
+                                    <a href="/admin?tab=all&q=@Uri.EscapeDataString(l.User.Email ?? "")" title="@T["All ads from this seller"]">@l.User.DisplayName</a>
+                                    <div class="muted">@l.User.Email</div>
+                                    @if (l.User.IsBanned) { <span class="trust-chip trust-bad">@T["Banned"]</span> }
+                                </td>
+                                <td class="num">@l.Price()</td>
+                                <td><span class="trust-chip @trustClass">@l.TrustScore</span></td>
+                                <td class="num">@l.ViewCount.Number()</td>
+                                <td class="small muted">@l.CreatedAt.TimeAgo()</td>
+                                <td><span class="admin-status admin-status-@l.Status.ToString().ToLowerInvariant()">@T["Status." + l.Status]</span></td>
+                                <td class="col-actions">
+                                    <div class="admin-row-actions">
+                                        @if (l.Status != ListingStatus.Active)
+                                        {
+                                            <button type="submit" form="act-approve-@l.Id" class="btn btn-primary btn-sm" title="@T["Approve"]">@Icons.Svg("check", "icon-sm")<span class="visually-hidden">@T["Approve"]</span></button>
+                                        }
+                                        @if (l.Status != ListingStatus.Rejected)
+                                        {
+                                            <button type="submit" form="act-reject-@l.Id" class="btn btn-ghost btn-sm btn-danger" title="@T["Reject"]">@Icons.Svg("x", "icon-sm")<span class="visually-hidden">@T["Reject"]</span></button>
+                                        }
+                                        <a href="/admin/listings/@l.Id/edit" class="btn btn-ghost btn-sm" title="@T["Edit"]">@Icons.Svg("edit", "icon-sm")<span class="visually-hidden">@T["Edit"]</span></a>
+                                        <button type="submit" form="act-delete-@l.Id" class="btn btn-ghost btn-sm btn-danger" title="@T["Delete"]" data-confirm="@T["Delete this listing permanently?"]">@Icons.Svg("trash", "icon-sm")<span class="visually-hidden">@T["Delete"]</span></button>
+                                    </div>
+                                </td>
+                            </tr>
                         }
-                        <div class="admin-desc muted small">@(l.Description.Length > 220 ? l.Description[..220] + "…" : l.Description)</div>
-                    </div>
-                    <div class="admin-actions">
-                        @if (l.Status != ListingStatus.Active)
-                        {
-                            <form method="post" action="/admin/listings/@l.Id/approve" class="inline-form">
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-primary btn-sm">@Icons.Svg("check", "icon-sm") @T["Approve"]</button>
-                            </form>
-                        }
-                        @if (l.Status != ListingStatus.Rejected)
-                        {
-                            <form method="post" action="/admin/listings/@l.Id/reject" class="inline-form">
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-ghost btn-sm btn-danger">@Icons.Svg("x", "icon-sm") @T["Reject"]</button>
-                            </form>
-                        }
-                        <a href="/admin/listings/@l.Id/edit" class="btn btn-ghost btn-sm">@Icons.Svg("edit", "icon-sm") @T["Edit"]</a>
-                        <form method="post" action="/admin/listings/@l.Id/delete" class="inline-form"
-                              onsubmit="return confirm('@T["Delete this listing permanently?"]')">
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-ghost btn-sm btn-danger">@Icons.Svg("trash", "icon-sm") @T["Delete"]</button>
-                        </form>
-                    </div>
-                </div>
-            }
-        </div>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+
+        @* per-row action forms live outside the bulk form (forms can't nest); buttons point at them via form="…" *@
+        @foreach (var l in Model.Listings)
+        {
+            <form method="post" action="/admin/listings/@l.Id/approve" id="act-approve-@l.Id" hidden>@Html.AntiForgeryToken()</form>
+            <form method="post" action="/admin/listings/@l.Id/reject" id="act-reject-@l.Id" hidden>@Html.AntiForgeryToken()</form>
+            <form method="post" action="/admin/listings/@l.Id/delete" id="act-delete-@l.Id" hidden>@Html.AntiForgeryToken()</form>
+        }
+
+        @if (Model.TotalPages > 1)
+        {
+            <nav class="pagination" aria-label="@T["Pages"]">
+                @for (var p = 1; p <= Model.TotalPages; p++)
+                {
+                    <a href="@AdminUrl(page: p)" class="page-link @(p == Model.Page ? "active" : "")">@p</a>
+                }
+            </nav>
+        }
     }
 </div>
+
+@section Scripts {
+    <script>
+        (() => {
+            const form = document.getElementById('bulkForm');
+            if (!form) return;
+            const checks = [...form.querySelectorAll('.row-check')];
+            const all = document.getElementById('selectAll');
+            const count = document.getElementById('bulkCount');
+            const buttons = [...form.querySelectorAll('.admin-bulk-actions button')];
+            const sync = () => {
+                const n = checks.filter(c => c.checked).length;
+                buttons.forEach(b => b.disabled = n === 0);
+                count.textContent = n ? '@T["Selected"]: ' + n : '';
+                all.checked = n > 0 && n === checks.length;
+                all.indeterminate = n > 0 && n < checks.length;
+                checks.forEach(c => c.closest('tr').classList.toggle('is-selected', c.checked));
+            };
+            all.addEventListener('change', () => { checks.forEach(c => c.checked = all.checked); sync(); });
+            checks.forEach(c => c.addEventListener('change', sync));
+            sync();
+            // confirm destructive actions (bulk + per-row)
+            document.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-confirm]');
+                if (btn && !confirm(btn.dataset.confirm)) e.preventDefault();
+            });
+        })();
+    </script>
+}

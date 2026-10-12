@@ -4,7 +4,7 @@
 }
 <div class="container narrow section-pad account-page">
     <h1>@T["My account"]</h1>
-    <p class="muted">@Model.CurrentEmail · @T["On AiciGăsești since"] @Model.MemberSince.ToString("MMM yyyy")</p>
+    <p class="muted">@Model.CurrentEmail · @T["On AiciGăsești since"] @Model.MemberSince.Local("MMM yyyy")</p>
 
     <nav class="account-links" aria-label="@T["My account"]">
         <a href="/my-ads" class="btn btn-ghost btn-sm">@Icons.Svg("list", "icon-sm")@T["My ads"]</a>
@@ -32,6 +32,22 @@
     <section class="panel mt-16" aria-labelledby="emailTitle">
         <h2 id="emailTitle" class="h3">@T["Email address"]</h2>
         <p class="muted small">@T["You sign in with this address. Changing it needs your current password."]</p>
+        <div class="email-status">
+            <strong>@Model.CurrentEmail</strong>
+            @if (Model.EmailConfirmed)
+            {
+                <span class="trust-chip trust-good">@Icons.Svg("check")@T["Confirmed"]</span>
+            }
+            else
+            {
+                <span class="trust-chip trust-warn">@T["Not confirmed"]</span>
+                <form method="post" action="/account/resend-confirmation" class="inline-form">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-ghost btn-sm">@T["Resend confirmation email"]</button>
+                </form>
+            }
+        </div>
+        <p class="muted small">@T["The new address applies only after you click the link we send to it."]</p>
         <form method="post" action="/account/email">
             @Html.AntiForgeryToken()
             <label class="field"><span>@T["New email"]</span><input asp-for="EmailChange.NewEmail" type="email" required autocomplete="email" /></label>

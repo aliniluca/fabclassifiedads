@@ -208,7 +208,7 @@
                         @foreach (var heat in Enum.GetValues<HeatingType>().Where(h => h != HeatingType.None)) { <option value="@heat">@heat.TranslateEnum()</option> }
                     </select>
                 </label>
-                <label class="field"><span>@T["Furnished"]</span>
+                <label class="field"><span>@T["Furnishing"]</span>
                     <select asp-for="Furnished"><option value="">@T["Furnishing…"]</option>
                         @foreach (var furn in Enum.GetValues<FurnishedState>()) { <option value="@furn">@furn.TranslateEnum()</option> }
                     </select>

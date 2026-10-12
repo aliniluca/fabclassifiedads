@@ -174,6 +174,7 @@ public class AccountSettingsViewModel
     public string CurrentEmail { get; set; } = "";
     public DateTime MemberSince { get; set; }
     public bool HasApiKey { get; set; }
+    public bool EmailConfirmed { get; set; }
 }
 
 public class ProfileForm
@@ -199,6 +200,23 @@ public class PasswordForm
 {
     [Required, DataType(DataType.Password)]
     public string CurrentPassword { get; set; } = "";
+    [Required, DataType(DataType.Password), StringLength(100, MinimumLength = 6)]
+    public string NewPassword { get; set; } = "";
+    [DataType(DataType.Password), Compare(nameof(NewPassword))]
+    public string ConfirmPassword { get; set; } = "";
+}
+
+public class ForgotPasswordViewModel
+{
+    [Required, EmailAddress]
+    public string Email { get; set; } = "";
+    public bool Sent { get; set; }
+}
+
+public class ResetPasswordViewModel
+{
+    [Required] public string UserId { get; set; } = "";
+    [Required] public string Token { get; set; } = "";
     [Required, DataType(DataType.Password), StringLength(100, MinimumLength = 6)]
     public string NewPassword { get; set; } = "";
     [DataType(DataType.Password), Compare(nameof(NewPassword))]

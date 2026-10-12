@@ -15,8 +15,11 @@ public class AccountController(
     UserManager<ApplicationUser> userManager,
     SignInManager<ApplicationUser> signInManager,
     AppDbContext db,
-    Translator t) : Controller
+    Translator t,
+    AccountEmails accountEmails) : Controller
 {
+    private string BaseUrl => $"{Request.Scheme}://{Request.Host}";
+
     private static readonly string[] AvatarColors = ["#6d5dfc", "#fc5d8d", "#28c76f", "#ff9f43", "#00cfe8", "#ea5455"];
 
     [HttpGet("/register")]
@@ -44,6 +47,9 @@ public class AccountController(
             return View(vm);
         }
         await signInManager.SignInAsync(user, isPersistent: true);
+        TempData["Flash"] = await accountEmails.SendConfirmationAsync(user, BaseUrl)
+            ? "Account created. We sent you an email to confirm your address."
+            : "Account created. We couldn't send the confirmation email — resend it from My account.";
         return RedirectToAction("Index", "Home");
     }
 
@@ -176,20 +182,118 @@ public class AccountController(
             ModelState.AddModelError("EmailChange.NewEmail", t["This email is already used by another account."]);
         if (!ModelState.IsValid) return View("Settings", BuildSettings(user, email: form));
 
-        // the email is also the login name
-        user.Email = newEmail;
-        user.UserName = newEmail;
-        user.EmailConfirmed = false;
-        var result = await userManager.UpdateAsync(user);
-        if (!result.Succeeded)
+        // nothing changes yet: the new address takes effect when its owner clicks the link
+        if (!await accountEmails.SendEmailChangeAsync(user, newEmail, BaseUrl))
         {
-            foreach (var e in result.Errors) ModelState.AddModelError("", e.Description);
+            ModelState.AddModelError("", t["We couldn't send the confirmation email. Please try again later."]);
             return View("Settings", BuildSettings(user, email: form));
         }
-        await userManager.UpdateSecurityStampAsync(user);   // signs out other sessions
-        await signInManager.RefreshSignInAsync(user);
-        TempData["Flash"] = "Your email was changed. Use the new address to sign in.";
+        TempData["Flash"] = "We sent a confirmation link to the new address. The change applies after you click it.";
         return RedirectToAction(nameof(Settings));
+    }
+
+    /// <summary>Link from the email-change message: applies the new email (also the login name).</summary>
+    [HttpGet("/account/confirm-email-change")]
+    public async Task<IActionResult> ConfirmEmailChange(string userId, string email, string token)
+    {
+        var user = await userManager.FindByIdAsync(userId ?? "");
+        if (user is null || string.IsNullOrWhiteSpace(email)) return InvalidLink();
+        if (await userManager.FindByEmailAsync(email) is { } other && other.Id != user.Id)
+        {
+            TempData["Flash"] = "This email is already used by another account.";
+            return RedirectToAction(nameof(Settings));
+        }
+
+        // ChangeEmailAsync validates the token, sets Email + EmailConfirmed and rotates the security stamp
+        var changed = await userManager.ChangeEmailAsync(user, email, AccountEmails.Decode(token ?? ""));
+        if (!changed.Succeeded) return InvalidLink();
+        await userManager.SetUserNameAsync(user, email);
+
+        if (User.Identity?.IsAuthenticated == true && userManager.GetUserId(User) == user.Id)
+            await signInManager.RefreshSignInAsync(user);   // keep this browser signed in; other sessions end
+        TempData["Flash"] = "Your email was changed. Use the new address to sign in.";
+        return User.Identity?.IsAuthenticated == true ? RedirectToAction(nameof(Settings)) : Redirect("/login");
+    }
+
+    /// <summary>Link from the registration message.</summary>
+    [HttpGet("/account/confirm-email")]
+    public async Task<IActionResult> ConfirmEmail(string userId, string token)
+    {
+        var user = await userManager.FindByIdAsync(userId ?? "");
+        if (user is null) return InvalidLink();
+        if (!user.EmailConfirmed)
+        {
+            var confirmed = await userManager.ConfirmEmailAsync(user, AccountEmails.Decode(token ?? ""));
+            if (!confirmed.Succeeded) return InvalidLink();
+        }
+        TempData["Flash"] = "Your email is confirmed. Thank you!";
+        return User.Identity?.IsAuthenticated == true ? RedirectToAction(nameof(Settings)) : Redirect("/login");
+    }
+
+    [Authorize]
+    [HttpPost("/account/resend-confirmation")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ResendConfirmation()
+    {
+        var user = await userManager.GetUserAsync(User);
+        if (user is null) return Challenge();
+        if (!user.EmailConfirmed)
+            TempData["Flash"] = await accountEmails.SendConfirmationAsync(user, BaseUrl)
+                ? "We sent you a new confirmation email."
+                : "We couldn't send the confirmation email. Please try again later.";
+        return RedirectToAction(nameof(Settings));
+    }
+
+    private IActionResult InvalidLink()
+    {
+        TempData["Flash"] = "This link is invalid or has expired.";
+        return Redirect(User.Identity?.IsAuthenticated == true ? "/account" : "/login");
+    }
+
+    // ---------- forgot / reset password ----------
+
+    [HttpGet("/forgot-password")]
+    public IActionResult ForgotPassword() => View(new ForgotPasswordViewModel());
+
+    [HttpPost("/forgot-password")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel vm)
+    {
+        if (!ModelState.IsValid) return View(vm);
+        // same answer whether or not the address exists, so the form can't be used to probe accounts
+        if (await userManager.FindByEmailAsync(vm.Email.Trim()) is { IsBanned: false } user)
+            await accountEmails.SendPasswordResetAsync(user, BaseUrl);
+        vm.Sent = true;
+        return View(vm);
+    }
+
+    [HttpGet("/reset-password")]
+    public IActionResult ResetPassword(string userId, string token) =>
+        string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token)
+            ? InvalidLink()
+            : View(new ResetPasswordViewModel { UserId = userId, Token = token });
+
+    [HttpPost("/reset-password")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel vm)
+    {
+        if (!ModelState.IsValid) return View(vm);
+        var user = await userManager.FindByIdAsync(vm.UserId);
+        if (user is null) return InvalidLink();
+
+        var result = await userManager.ResetPasswordAsync(user, AccountEmails.Decode(vm.Token), vm.NewPassword);
+        if (!result.Succeeded)
+        {
+            if (result.Errors.Any(e => e.Code == "InvalidToken")) return InvalidLink();
+            foreach (var e in result.Errors) ModelState.AddModelError("", e.Description);
+            return View(vm);
+        }
+        // the link proves the user owns the inbox, so the address counts as confirmed too
+        if (!user.EmailConfirmed) { user.EmailConfirmed = true; await userManager.UpdateAsync(user); }
+        await userManager.ResetAccessFailedCountAsync(user);
+        await userManager.SetLockoutEndDateAsync(user, null);
+        TempData["Flash"] = "Your password was changed. You can sign in now.";
+        return Redirect("/login");
     }
 
     [Authorize]
@@ -218,6 +322,7 @@ public class AccountController(
         CurrentEmail = user.Email ?? "",
         MemberSince = user.CreatedAt,
         HasApiKey = user.ApiKeyHash != null,
+        EmailConfirmed = user.EmailConfirmed,
         Profile = profile ?? new ProfileForm
         {
             DisplayName = user.DisplayName,

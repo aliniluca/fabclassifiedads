@@ -23,7 +23,7 @@
         @if (hasKey)
         {
             <p>@T["Status:"] <span class="trust-chip trust-good">@T["active"]</span>
-                @if (createdAt.HasValue) { <span class="muted small">· @T["created"] @createdAt.Value.ToString("d MMM yyyy")</span> }
+                @if (createdAt.HasValue) { <span class="muted small">· @T["created"] @createdAt.Value.Local("d MMM yyyy")</span> }
             </p>
             <p class="muted small">@T["Only a hash of your key is stored, so we can't show it again. If you lost it, regenerate a new one (the old one stops working)."]</p>
             <div class="share-actions">

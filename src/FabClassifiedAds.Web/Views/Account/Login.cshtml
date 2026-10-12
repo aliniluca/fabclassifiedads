@@ -11,7 +11,8 @@
             <input type="hidden" asp-for="ReturnUrl" />
             <div asp-validation-summary="All" class="validation-summary"></div>
             <label class="field"><span>@T["Email"]</span><input asp-for="Email" type="email" required autofocus /></label>
-            <label class="field"><span>@T["Password"]</span><input asp-for="Password" type="password" required /></label>
+            <label class="field"><span>@T["Password"]</span><input asp-for="Password" type="password" required autocomplete="current-password" /></label>
+            <p class="forgot-link"><a href="/forgot-password">@T["Forgot your password?"]</a></p>
             <label class="check-row"><input asp-for="RememberMe" /> @T["Keep me signed in"]</label>
             <button type="submit" class="btn btn-primary btn-block">@T["Sign in"]</button>
         </form>

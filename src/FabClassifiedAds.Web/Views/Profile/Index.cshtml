@@ -2,7 +2,7 @@
 @{
     var s = Model.Seller;
     ViewData["Title"] = s.DisplayName;
-    ViewData["MetaDescription"] = $"{s.DisplayName} — {Model.TotalActive} {T["active ads"]} " + (s.City ?? "");
+    ViewData["MetaDescription"] = $"{s.DisplayName} — {Model.TotalActive.AdsCount(active: true)} " + s.City.Place();
     ViewData["FavoriteIds"] = Model.FavoriteIds;
     var slug = FabClassifiedAds.Web.Data.CategorySeeder.Slugify(s.DisplayName);
     string SortUrl(SortOption so) => $"/u/{s.Id}/{slug}?sort={so}";
@@ -16,16 +16,16 @@
                 @if (s.IsBusiness) { <span class="badge badge-business">@T["Business"]</span> }
             </h1>
             <div class="seller-hero-meta">
-                <span>@Icons.Svg("list", "icon-sm") @Model.TotalActive @T["active ads"]</span>
+                <span>@Icons.Svg("list", "icon-sm") @Model.TotalActive.AdsCount(active: true)</span>
                 @if (!string.IsNullOrEmpty(s.City)) { <span>@Icons.Svg("pin", "icon-sm") @s.City.Place()</span> }
-                <span>@T["Member since"] @s.CreatedAt.ToString("MMMM yyyy")</span>
+                <span>@T["Member since"] @s.CreatedAt.Local("MMMM yyyy")</span>
                 @if (s.RatingCount > 0)
                 {
                     <span class="rating">@Icons.Svg("star") @s.RatingAverage.ToString("0.0") <span class="muted small">(@s.RatingCount)</span></span>
                 }
                 @if (Model.Trust is { } tr)
                 {
-                    <span class="trust-chip @tr.CssClass" title="@T[FabClassifiedAds.Web.Services.TrustService.ScoreLabel(tr.Score)]">@Icons.Svg("shield") @tr.Score</span>
+                    <span class="trust-chip @tr.CssClass" title="@T[FabClassifiedAds.Web.Services.TrustService.ScoreLabel(tr.Score)]">@Icons.Svg("shield")@T["Trust"] @tr.Score/100</span>
                 }
             </div>
         </div>

@@ -18,7 +18,7 @@
 
     <div class="search-head">
         <h1>@(Model.CurrentCategory != null ? T[Model.CurrentCategory.Name] : (string.IsNullOrEmpty(f.Q) ? T["All ads"] : T.Format("ResultsFor", f.Q)))</h1>
-        <span class="result-count">@Model.Result.TotalCount.Number() @T["ads"]</span>
+        <span class="result-count">@Model.Result.TotalCount.AdsCount()</span>
     </div>
 
     @if (Model.ChildCategories.Count > 0)

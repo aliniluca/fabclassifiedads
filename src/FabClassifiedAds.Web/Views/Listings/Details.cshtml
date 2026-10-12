@@ -145,7 +145,7 @@
                         @if (re.YearBuilt.HasValue) { <div><dt>@T["Year built"]</dt><dd>@re.YearBuilt</dd></div> }
                         @if (re.Heating != HeatingType.None) { <div><dt>@T["Heating"]</dt><dd>@re.Heating.TranslateEnum()</dd></div> }
                         @if (re.EnergyClass != EnergyClass.Unknown) { <div><dt>@T["Energy class"]</dt><dd>@re.EnergyClass</dd></div> }
-                        <div><dt>@T["Furnished"]</dt><dd>@re.Furnished.TranslateEnum()</dd></div>
+                        <div><dt>@T["Furnishing"]</dt><dd>@re.Furnished.TranslateEnum()</dd></div>
                     </dl>
 
                     @if (re.Amenities != PropertyAmenities.None)
@@ -248,7 +248,7 @@
                             <span class="trust-chip @sellerTrust.CssClass" title="@T[TrustService.ScoreLabel(sellerTrust.Score)]">@Icons.Svg("shield")@sellerTrust.Score/100</span>
                             <div class="small trust-seller-label @sellerTrust.CssClass-text">@T[TrustService.ScoreLabel(sellerTrust.Score)]</div>
                         }
-                        <div class="muted small">@T["On AiciGăsești since"] @l.User.CreatedAt.ToString("MMM yyyy")</div>
+                        <div class="muted small">@T["On AiciGăsești since"] @l.User.CreatedAt.Local("MMM yyyy")</div>
                         @if (l.User.RatingCount > 0)
                         {
                             <div class="rating">@Icons.Svg("star")@l.User.RatingAverage.ToString("0.0") <span class="muted small">(@l.User.RatingCount @T["reviews"])</span></div>
@@ -257,9 +257,18 @@
                 </div>
 
                 <div class="seller-location">@Icons.Svg("pin", "icon-sm")@l.City.Place()@(string.IsNullOrEmpty(l.Region) || l.Region == l.City ? "" : $", {l.Region.Place()}")</div>
-                @if (!string.IsNullOrWhiteSpace(l.ContactPhone))
+                @{
+                    // the ad's own number, else the seller's account phone (mandatory at signup)
+                    var phone = !string.IsNullOrWhiteSpace(l.ContactPhone) ? l.ContactPhone : l.User.PhoneNumber;
+                }
+                @if (!string.IsNullOrWhiteSpace(phone) && !Model.IsOwner)
                 {
-                    <a href="tel:@l.ContactPhone" class="btn btn-ghost btn-block mt-8">@Icons.Svg("phone")@PhoneNumbers.Format(l.ContactPhone)</a>
+                    @* number stays hidden until asked for, like OLX: keeps casual scrapers off and counts real intent *@
+                    <button type="button" class="btn btn-primary btn-block mt-8 phone-reveal" data-phone="@Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(phone))">@Icons.Svg("phone")@T["Show phone number"]</button>
+                }
+                else if (!string.IsNullOrWhiteSpace(phone))
+                {
+                    <a href="tel:@phone" class="btn btn-ghost btn-block mt-8">@Icons.Svg("phone")@PhoneNumbers.Format(phone)</a>
                 }
                 <a href="@sellerUrl" class="btn btn-ghost btn-sm btn-block mt-8">@Icons.Svg("list", "icon-sm")@T["See all seller's ads"]</a>
 
@@ -279,7 +288,7 @@
                     }
                     else
                     {
-                        <a href="/login?returnUrl=/l/@l.Id" class="btn btn-primary btn-block">@T["Sign in to contact seller"]</a>
+                        <a href="/login?returnUrl=@Uri.EscapeDataString(l.SeoUrl())" class="btn btn-ghost btn-block mt-8">@Icons.Svg("message")@T["Sign in to message the seller"]</a>
                     }
                 }
                 else
@@ -326,7 +335,7 @@
     {
         <section class="section-pad">
             <h2>@T["Similar ads"]</h2>
-            <div class="listing-grid mt-16">
+            <div class="listing-grid listing-grid-4 mt-16">
                 @foreach (var similar in Model.SimilarListings)
                 {
                     <partial name="_ListingCard" model="similar" />

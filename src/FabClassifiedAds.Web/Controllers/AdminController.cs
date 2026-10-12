@@ -16,42 +16,139 @@ public class AdminController(
     AppDbContext db,
     PhotoStorage photos,
     SafeHttpFetcher fetcher,
-    SettingsStore settings) : Controller
+    SettingsStore settings,
+    SearchService search) : Controller
 {
     // ---------- moderation queue ----------
 
+    private const int RiskyBelow = 40;
+
+    /// <summary>
+    /// Moderation table. Tabs per status (+ "risky" = live ads with a trust score under 40),
+    /// free-text search (title, description, ad no., seller email/name), root category, sort, paging.
+    /// </summary>
     [HttpGet("")]
-    public async Task<IActionResult> Index(string tab = "pending")
+    public async Task<IActionResult> Index(string tab = "pending", string? q = null, string? category = null,
+        string sort = "newest", int page = 1)
     {
-        ViewBag.Tab = tab;
-        ViewBag.Counts = new
+        var today = DateTime.UtcNow.Date;
+        var vm = new AdminListingsViewModel
         {
-            Pending = await db.Listings.CountAsync(l => l.Status == ListingStatus.PendingReview),
-            Active = await db.Listings.CountAsync(l => l.Status == ListingStatus.Active),
-            Rejected = await db.Listings.CountAsync(l => l.Status == ListingStatus.Rejected),
-            Total = await db.Listings.CountAsync(),
-            Users = await db.Users.CountAsync(),
+            Tab = tab, Q = q?.Trim(), Category = category, Sort = sort, Page = Math.Max(1, page),
+            RootCategories = await db.Categories.AsNoTracking().Where(c => c.ParentId == null).OrderBy(c => c.SortOrder).ToListAsync(),
+            Counts = new AdminCounts
+            {
+                Pending = await db.Listings.CountAsync(l => l.Status == ListingStatus.PendingReview),
+                Active = await db.Listings.CountAsync(l => l.Status == ListingStatus.Active),
+                Rejected = await db.Listings.CountAsync(l => l.Status == ListingStatus.Rejected),
+                Expired = await db.Listings.CountAsync(l => l.Status == ListingStatus.Expired),
+                Suspended = await db.Listings.CountAsync(l => l.Status == ListingStatus.Suspended),
+                Risky = await db.Listings.CountAsync(l => l.Status == ListingStatus.Active && l.TrustScore < RiskyBelow),
+                All = await db.Listings.CountAsync(),
+                NewToday = await db.Listings.CountAsync(l => l.CreatedAt >= today),
+                Users = await db.Users.CountAsync(),
+            },
         };
 
-        var status = tab switch
+        var query = db.Listings.AsNoTracking();
+        query = tab switch
         {
-            "rejected" => ListingStatus.Rejected,
-            "active" => ListingStatus.Active,
-            _ => ListingStatus.PendingReview,
+            "active" => query.Where(l => l.Status == ListingStatus.Active),
+            "rejected" => query.Where(l => l.Status == ListingStatus.Rejected),
+            "expired" => query.Where(l => l.Status == ListingStatus.Expired),
+            "suspended" => query.Where(l => l.Status == ListingStatus.Suspended),
+            "risky" => query.Where(l => l.Status == ListingStatus.Active && l.TrustScore < RiskyBelow),
+            "all" => query,
+            _ => query.Where(l => l.Status == ListingStatus.PendingReview),
         };
 
-        var listings = await db.Listings.AsNoTracking()
-            .Where(l => l.Status == status)
+        if (!string.IsNullOrEmpty(vm.Q))
+        {
+            var term = vm.Q.TrimStart('#');
+            if (int.TryParse(term, out var adId))
+                query = query.Where(l => l.Id == adId);
+            else
+                query = query.Where(l => EF.Functions.Like(l.Title, $"%{term}%") || EF.Functions.Like(l.Description, $"%{term}%")
+                    || EF.Functions.Like(l.User.Email!, $"%{term}%") || EF.Functions.Like(l.User.DisplayName, $"%{term}%"));
+        }
+        if (!string.IsNullOrEmpty(category))
+        {
+            var ids = await search.GetCategoryWithDescendantsAsync(category);
+            query = query.Where(l => ids.Contains(l.CategoryId));
+        }
+
+        query = sort switch
+        {
+            "oldest" => query.OrderBy(l => l.CreatedAt),
+            "trust" => query.OrderBy(l => l.TrustScore).ThenByDescending(l => l.CreatedAt),
+            "views" => query.OrderByDescending(l => l.ViewCount),
+            "price" => query.OrderByDescending(l => l.Price),
+            _ => query.OrderByDescending(l => l.CreatedAt),
+        };
+
+        vm.TotalCount = await query.CountAsync();
+        vm.Page = Math.Min(vm.Page, vm.TotalPages);
+        vm.Listings = await query
             .Include(l => l.Images.OrderBy(i => i.SortOrder).Take(1))
             .Include(l => l.Category)
             .Include(l => l.User)
             .Include(l => l.CarDetails!).ThenInclude(c => c.Brand)
             .Include(l => l.RealEstateDetails)
-            .OrderByDescending(l => l.CreatedAt)
-            .Take(100)
+            .Skip((vm.Page - 1) * vm.PageSize).Take(vm.PageSize)
             .ToListAsync();
 
-        return View(listings);
+        return View(vm);
+    }
+
+    /// <summary>Bulk moderation on the ticked rows: approve, reject (with reason), delete, feature, unfeature.</summary>
+    [HttpPost("listings/bulk")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Bulk(int[] ids, string action, string? reason, string? returnUrl)
+    {
+        var back = returnUrl is { Length: > 0 } && Url.IsLocalUrl(returnUrl) ? returnUrl : "/admin";
+        if (ids.Length == 0)
+        {
+            TempData["Flash"] = "Select at least one ad.";
+            return LocalRedirect(back);
+        }
+
+        var listings = await db.Listings.Where(l => ids.Contains(l.Id)).ToListAsync();
+        switch (action)
+        {
+            case "approve":
+                foreach (var l in listings) { l.Status = ListingStatus.Active; l.ModerationNote = null; l.BumpedAt = DateTime.UtcNow; l.ExpiresAt ??= DateTime.UtcNow.AddDays(30); }
+                break;
+            case "reject":
+                foreach (var l in listings)
+                {
+                    l.Status = ListingStatus.Rejected;
+                    if (!string.IsNullOrWhiteSpace(reason)) l.ModerationNote = $"Rejected by admin: {reason.Trim()}";
+                }
+                break;
+            case "delete":
+                db.Listings.RemoveRange(listings);
+                break;
+            case "feature":
+                foreach (var l in listings) l.IsFeatured = true;
+                break;
+            case "unfeature":
+                foreach (var l in listings) l.IsFeatured = false;
+                break;
+            default:
+                TempData["Flash"] = "Unknown action.";
+                return LocalRedirect(back);
+        }
+        await db.SaveChangesAsync();
+        var done = action switch
+        {
+            "approve" => Translator.IsRo ? "aprobate" : "approved",
+            "reject" => Translator.IsRo ? "respinse" : "rejected",
+            "delete" => Translator.IsRo ? "șterse" : "deleted",
+            "feature" => Translator.IsRo ? "promovate" : "featured",
+            _ => Translator.IsRo ? "fără promovare" : "unfeatured",
+        };
+        TempData["Flash"] = Translator.IsRo ? $"Anunțuri {done}: {listings.Count}." : $"Ads {done}: {listings.Count}.";
+        return LocalRedirect(back);
     }
 
     [HttpPost("listings/{id:int}/approve")]
@@ -61,7 +158,9 @@ public class AdminController(
         var listing = await db.Listings.FirstOrDefaultAsync(l => l.Id == id);
         if (listing is null) return NotFound();
         listing.Status = ListingStatus.Active;
+        listing.ModerationNote = null;   // an old rejection note no longer applies
         listing.BumpedAt = DateTime.UtcNow;
+        listing.ExpiresAt ??= DateTime.UtcNow.AddDays(30);
         await db.SaveChangesAsync();
         TempData["Flash"] = $"Approved: {listing.Title}";
         return Redirect(Request.Headers.Referer.FirstOrDefault() ?? "/admin");
@@ -202,7 +301,9 @@ public class AdminController(
         db.Listings.Remove(l);
         await db.SaveChangesAsync();
         TempData["Flash"] = $"Deleted: {l.Title}";
-        return RedirectToAction(nameof(Index));
+        // back to the same filtered moderation view (never to the deleted ad's edit page)
+        var referer = Request.Headers.Referer.FirstOrDefault();
+        return Redirect(referer is not null && referer.Contains("/admin") && !referer.Contains("/edit") ? referer : "/admin");
     }
 
     // ---------- banners ----------
@@ -362,6 +463,11 @@ public class AdminController(
     {
         var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
         if (user is null) return NotFound();
+        if (grant && !AdminAccess.HasAdminDomain(user.Email))
+        {
+            TempData["Flash"] = $"Only @{AdminAccess.RequiredDomain} addresses can be admins.";
+            return RedirectToAction(nameof(Users));
+        }
         user.IsAdmin = grant;
         await db.SaveChangesAsync();
         TempData["Flash"] = grant ? "Admin granted." : "Admin revoked.";

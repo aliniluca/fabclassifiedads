@@ -235,3 +235,18 @@ document.addEventListener('click', async (e) => {
         window.open(link.href, '_blank');
     }
 });
+
+// "Arată numărul": swap the button for a tel: link with the formatted number
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.phone-reveal');
+    if (!btn) return;
+    let number;
+    try { number = new TextDecoder().decode(Uint8Array.from(atob(btn.dataset.phone), c => c.charCodeAt(0))); } catch { return; }
+    const shown = /^\+40\d{9}$/.test(number) ? '0' + number.slice(3, 6) + ' ' + number.slice(6, 9) + ' ' + number.slice(9) : number;
+    const link = document.createElement('a');
+    link.href = 'tel:' + number;
+    link.className = 'btn btn-ghost btn-block mt-8 phone-number';
+    link.innerHTML = btn.querySelector('svg')?.outerHTML ?? '';
+    link.append(shown);
+    btn.replaceWith(link);
+});

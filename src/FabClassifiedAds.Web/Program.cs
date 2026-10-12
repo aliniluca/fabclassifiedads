@@ -50,6 +50,7 @@ builder.Services.AddSingleton<Translator>();
 builder.Services.AddScoped<SearchService>();
 builder.Services.AddScoped<PhotoStorage>();
 builder.Services.AddScoped<TrustService>();
+builder.Services.AddScoped<AccountEmails>();
 builder.Services.AddSingleton<SafeHttpFetcher>();
 builder.Services.AddSingleton<ShareCardRenderer>();
 builder.Services.AddScoped<ListingUrlImporter>();

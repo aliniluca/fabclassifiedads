@@ -93,19 +93,12 @@ public class ListingsController(
         listing.ViewCount++;
         await db.SaveChangesAsync();
 
-        var similar = await db.Listings.AsNoTracking()
-            .Where(l => l.Status == ListingStatus.Active && l.CategoryId == listing.CategoryId && l.Id != id)
-            .Include(l => l.Images.OrderBy(i => i.SortOrder).Take(1))
-            .Include(l => l.Category)
-            .Include(l => l.CarDetails!).ThenInclude(c => c.Brand)
-            .Include(l => l.RealEstateDetails)
-            .OrderByDescending(l => l.BumpedAt).Take(4).ToListAsync();
-
+        var breadcrumb = await BuildBreadcrumbAsync(listing.Category);
         var vm = new ListingDetailViewModel
         {
             Listing = listing,
-            SimilarListings = similar,
-            Breadcrumb = await BuildBreadcrumbAsync(listing.Category),
+            SimilarListings = await FindSimilarAsync(listing, breadcrumb),
+            Breadcrumb = breadcrumb,
             IsOwner = UserId == listing.UserId,
             IsFavorite = UserId != null && await db.Favorites.AnyAsync(f => f.UserId == UserId && f.ListingId == id),
             Trust = await trust.AnalyzeListingAsync(listing),
@@ -391,6 +384,40 @@ public class ListingsController(
             .Where(c => c.ParentId == null).OrderBy(c => c.SortOrder).ToListAsync();
         vm.Brands = await db.CarBrands.AsNoTracking().OrderByDescending(b => b.IsPopular).ThenBy(b => b.Name).ToListAsync();
         return vm;
+    }
+
+    /// <summary>
+    /// Similar ads, widening step by step until the grid is full: same car brand, then the ad's
+    /// own category, then each parent up to the root ("Autoturisme" -> "Auto, moto și ambarcațiuni").
+    /// </summary>
+    private async Task<List<Listing>> FindSimilarAsync(Listing listing, List<Category> breadcrumb, int count = 8)
+    {
+        var found = new List<Listing>();
+
+        async Task AddAsync(Func<IQueryable<Listing>, IQueryable<Listing>> filter)
+        {
+            if (found.Count >= count) return;
+            var exclude = found.Select(l => l.Id).Append(listing.Id).ToList();
+            var query = db.Listings.AsNoTracking()
+                .Where(l => l.Status == ListingStatus.Active && !exclude.Contains(l.Id));
+            found.AddRange(await filter(query)
+                .Include(l => l.Images.OrderBy(i => i.SortOrder).Take(1))
+                .Include(l => l.Category)
+                .Include(l => l.CarDetails!).ThenInclude(c => c.Brand)
+                .Include(l => l.RealEstateDetails)
+                .OrderByDescending(l => l.BumpedAt)
+                .Take(count - found.Count)
+                .ToListAsync());
+        }
+
+        if (listing.CarDetails is { } car)
+            await AddAsync(q => q.Where(l => l.CarDetails != null && l.CarDetails.BrandId == car.BrandId));
+        for (var i = breadcrumb.Count - 1; i >= 0 && found.Count < count; i--)
+        {
+            var ids = await search.GetCategoryWithDescendantsAsync(breadcrumb[i].Slug);
+            await AddAsync(q => q.Where(l => ids.Contains(l.CategoryId)));
+        }
+        return found;
     }
 
     private async Task<List<Category>> BuildBreadcrumbAsync(Category category)

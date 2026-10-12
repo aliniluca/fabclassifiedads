@@ -16,7 +16,13 @@ public static class AdminAccess
     public const string PolicyName = "Admin";
     public const string Role = "Admin";
 
+    /// <summary>Only addresses on this domain can ever hold the Admin role (bootstrap or granted).</summary>
+    public const string RequiredDomain = "aicigasesti.ro";
+
     public static bool IsAdmin(ClaimsPrincipal user) => user.IsInRole(Role);
+
+    public static bool HasAdminDomain(string? email) =>
+        email is not null && email.Trim().EndsWith("@" + RequiredDomain, StringComparison.OrdinalIgnoreCase);
 
     public static IReadOnlySet<string> BootstrapEmails(IConfiguration config)
     {
@@ -49,6 +55,11 @@ public class AdminClaimsTransformation(IServiceScopeFactory scopeFactory, IConfi
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
     {
         if (principal.Identity is not { IsAuthenticated: true } || principal.IsInRole(AdminAccess.Role))
+            return principal;
+
+        // hard rule: no admin rights for addresses outside @aicigasesti.ro, whatever the config or DB says
+        var email = principal.FindFirstValue(ClaimTypes.Email) ?? principal.Identity?.Name;
+        if (!AdminAccess.HasAdminDomain(email))
             return principal;
 
         var isAdmin = AdminAccess.IsBootstrapAdmin(principal, config);

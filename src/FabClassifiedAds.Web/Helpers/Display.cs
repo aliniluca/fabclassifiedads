@@ -70,6 +70,23 @@ public static partial class Display
     public static string Place(this string? name) =>
         string.IsNullOrWhiteSpace(name) ? "" : RoPlaces.GetValueOrDefault(name.Trim(), name);
 
+    private static readonly CultureInfo RoCulture = CultureInfo.GetCultureInfo("ro-RO");
+    private static readonly CultureInfo EnCulture = CultureInfo.GetCultureInfo("en-GB");
+
+    /// <summary>Date in the visitor's language ("octombrie 2026" / "October 2026").</summary>
+    public static string Local(this DateTime d, string format) => d.ToString(format, Translator.IsRo ? RoCulture : EnCulture);
+
+    /// <summary>Count with the right Romanian plural: 1 anunț, 2 anunțuri, 20 de anunțuri, 101 anunțuri.</summary>
+    public static string AdsCount(this int n, bool active = false)
+    {
+        if (!Translator.IsRo)
+            return n == 1 ? (active ? "1 active ad" : "1 ad") : $"{n.Number()} {(active ? "active ads" : "ads")}";
+        if (n == 1) return active ? "1 anunț activ" : "1 anunț";
+        var rest = n % 100;
+        var de = n >= 20 && (rest == 0 || rest >= 20) ? "de " : "";
+        return $"{n.Number()} {de}{(active ? "anunțuri active" : "anunțuri")}";
+    }
+
     public static string Number(this int n) => n.ToString("#,0", CultureInfo.InvariantCulture).Replace(",", " ");
 
     public static IEnumerable<TEnum> Flags<TEnum>(this TEnum value) where TEnum : struct, Enum =>

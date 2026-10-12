@@ -115,7 +115,7 @@
                 <div class="field-row">
                     <label class="field"><span>@T["Year built"]</span><input asp-for="YearBuilt" type="number" /></label>
                     <label class="field"><span>@T["Heating"]</span><select asp-for="Heating">@foreach (var f in Enum.GetValues<HeatingType>()) { <option value="@f">@f.TranslateEnum()</option> }</select></label>
-                    <label class="field"><span>@T["Furnished"]</span><select asp-for="Furnished">@foreach (var f in Enum.GetValues<FurnishedState>()) { <option value="@f">@f.TranslateEnum()</option> }</select></label>
+                    <label class="field"><span>@T["Furnishing"]</span><select asp-for="Furnished">@foreach (var f in Enum.GetValues<FurnishedState>()) { <option value="@f">@f.TranslateEnum()</option> }</select></label>
                 </div>
                 <details class="options-details"><summary>@T["Amenities"]</summary>
                     <div class="options-list options-grid">

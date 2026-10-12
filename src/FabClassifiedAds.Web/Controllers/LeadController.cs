@@ -23,7 +23,8 @@ public class LeadController(
     SafeHttpFetcher fetcher,
     PhotoStorage photos,
     ContentModerationService moderation,
-    SettingsStore settings) : Controller
+    SettingsStore settings,
+    AccountEmails accountEmails) : Controller
 {
     private static readonly string[] AvatarColors = ["#6d5dfc", "#fc5d8d", "#28c76f", "#ff9f43", "#00cfe8", "#ea5455"];
 
@@ -100,6 +101,7 @@ public class LeadController(
             return View("Index", await PopulateAsync(vm));
         }
         await signInManager.SignInAsync(user, isPersistent: true);
+        await accountEmails.SendConfirmationAsync(user, $"{Request.Scheme}://{Request.Host}");   // failure is logged; resend from My account
 
         // moderation → publish or hold
         var verdict = moderation.Analyze(vm.Title, vm.Description);
