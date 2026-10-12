@@ -1,35 +1,76 @@
 @model HomeViewModel
 @{
-    ViewData["Title"] = T["Buy, sell, discover anything"];
+    ViewData["Title"] = T["Checked classifieds from all over Romania"];
 }
 
 <section class="hero">
-    <div class="hero-bg"></div>
     <div class="container hero-inner">
-        <h1 class="hero-title">@T["Find"] <span class="gradient-text">@T["anything"]</span>.<br/>@T["Sell"] <span class="gradient-text">@T["everything"]</span>.</h1>
-        <p class="hero-subtitle">@T.Format("HeroSubtitle", Model.TotalActiveListings.Number(), Model.TotalCategories.Number())</p>
+        <div>
+            <h1 class="hero-title">@T["Checked ads, from all over the country"]</h1>
+            <p class="hero-subtitle">@T["HomeIntro"]</p>
 
-        <form class="hero-search" action="/search" method="get">
-            <span class="hero-search-icon">🔍</span>
-            <input type="search" name="Q" placeholder="@T["What are you looking for today?"]" aria-label="@T["Search"]" />
-            <select name="Category" aria-label="@T["Category"]">
-                <option value="">@T["All categories"]</option>
-                @foreach (var cat in Model.RootCategories)
-                {
-                    <option value="@cat.Slug">@cat.Icon @T[cat.Name]</option>
-                }
-            </select>
-            <button type="submit" class="btn btn-primary">@T["Search"]</button>
-        </form>
+            <form class="hero-search" action="/search" method="get" role="search">
+                <label class="hero-field">
+                    @Icons.Svg("search")
+                    <span class="visually-hidden">@T["What are you looking for?"]</span>
+                    <input type="search" name="Q" placeholder="@T["What are you looking for?"]" />
+                </label>
+                <label class="hero-field">
+                    @Icons.Svg("pin")
+                    <span class="visually-hidden">@T["City or county"]</span>
+                    <input type="text" name="City" placeholder="@T["Whole country"]" autocomplete="address-level2" />
+                </label>
+                <button type="submit" class="btn btn-primary">@T["Search"]</button>
+            </form>
 
-        <div class="hero-quick">
-            <span>@T["Trending:"]</span>
-            <a href="/search?Q=BMW">BMW</a>
-            <a href="/c/apartments-for-rent">@T["Apartments for rent"]</a>
-            <a href="/c/iphone">iPhone 15</a>
-            <a href="/c/gaming-pcs">Gaming PC</a>
-            <a href="/c/e-bikes">E-bikes</a>
+            <p class="hero-seller">
+                @T["Already selling on OLX or Autovit?"]
+                <a href="/start">@Icons.Svg("link", "icon-sm")@T["Paste the link, we publish it here for free"]</a>
+            </p>
+
+            <div class="hero-quick">
+                <span>@T["Popular searches:"]</span>
+                <a href="/search?Q=BMW">BMW</a>
+                <a href="/c/apartments-for-rent">@T["Apartments for rent"]</a>
+                <a href="/c/iphone">iPhone</a>
+                <a href="/c/e-bikes">@T["E-bikes"]</a>
+            </div>
         </div>
+
+        <aside class="sheet hero-sheet" aria-labelledby="sheetTitle">
+            <div class="sheet-head">
+                <h2 class="sheet-title" id="sheetTitle">@T["AiciGăsești verification"]</h2>
+                <span class="sheet-ref">@T["on every ad"]</span>
+            </div>
+            <ul class="sheet-rows">
+                <li class="sheet-row">
+                    <span class="sheet-tick">@Icons.Svg("check")</span>
+                    <div><strong>@T["Price checked against the market"]</strong><span>@T["Compared with the median of similar ads; suspiciously cheap gets flagged."]</span></div>
+                </li>
+                <li class="sheet-row">
+                    <span class="sheet-tick">@Icons.Svg("check")</span>
+                    <div><strong>@T["Text scanned for scam tricks"]</strong><span>@T["Advance-payment requests, outside links and pressure phrases."]</span></div>
+                </li>
+                <li class="sheet-row">
+                    <span class="sheet-tick">@Icons.Svg("check")</span>
+                    <div><strong>@T["Photos and copied ads"]</strong><span>@T["Real photos count; descriptions copied from other accounts don't."]</span></div>
+                </li>
+                <li class="sheet-row">
+                    <span class="sheet-tick">@Icons.Svg("check")</span>
+                    <div><strong>@T["Protected chat"]</strong><span>@T["We warn you if someone asks for money upfront or moves you to WhatsApp."]</span></div>
+                </li>
+            </ul>
+            <div class="sheet-foot">
+                <span>@T["Every ad gets a score from 0 to 100."]</span>
+                @if (Model.RiskExample is { } risky)
+                {
+                    <a href="/l/@risky.Id">@T["See an ad we flagged"] (@risky.TrustScore/100)</a>
+                }
+            </div>
+            <div class="stamp" aria-hidden="true">
+                <div><div class="stamp-word">@T["CHECKED"]</div><div class="stamp-score">0–100</div><div class="stamp-sub">AICIGĂSEȘTI</div></div>
+            </div>
+        </aside>
     </div>
 </section>
 
@@ -39,14 +80,13 @@
 
 <section class="container section-pad">
     <div class="section-head">
-        <h2>@T["Browse categories"]</h2>
-        <p class="muted">@T["Every category has tailored filters — engine specs for cars, floor plans for homes."]</p>
+        <h2>@T["Categories"]</h2>
     </div>
     <div class="category-grid">
         @foreach (var cat in Model.RootCategories)
         {
             <a href="/c/@cat.Slug" class="category-tile">
-                <span class="category-icon">@cat.Icon</span>
+                <span class="category-icon">@Icons.Category(cat.Slug)</span>
                 <span class="category-name">@T[cat.Name]</span>
                 <span class="category-sub">@T.Format("CountSubcategories", cat.Children.Count)</span>
             </a>
@@ -59,10 +99,10 @@
     <section class="featured-band">
         <div class="container section-pad">
             <div class="section-head">
-                <h2>★ @T["Featured ads"]</h2>
-                <a href="/search" class="see-all">@T["See all →"]</a>
+                <h2>@T["Featured ads"]</h2>
+                <a href="/search" class="see-all">@T["See all"]@Icons.Svg("arrow", "icon-sm")</a>
             </div>
-            <div class="listing-grid">
+            <div class="listing-grid listing-grid-4">
                 @foreach (var listing in Model.FeaturedListings)
                 {
                     <partial name="_ListingCard" model="listing" />
@@ -74,43 +114,49 @@
 
 <section class="container section-pad">
     <div class="section-head">
-        <h2>@T["Shop cars by brand"]</h2>
-        <a href="/c/cars" class="see-all">@T["All cars →"]</a>
+        <h2>@T["Latest ads"]</h2>
+        <a href="/search?Sort=Newest" class="see-all">@T["See all"]@Icons.Svg("arrow", "icon-sm")</a>
     </div>
-    <div class="brand-strip">
-        @foreach (var brand in Model.PopularBrands)
-        {
-            <a href="/c/cars?BrandId=@brand.Id" class="brand-chip">@brand.Name</a>
-        }
-    </div>
+    @if (Model.LatestListings.Count > 0)
+    {
+        <div class="listing-grid listing-grid-4">
+            @foreach (var listing in Model.LatestListings)
+            {
+                <partial name="_ListingCard" model="listing" />
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-inline">
+            <p>@T["No ads yet. Be the first to post one."]</p>
+            <a href="/start" class="btn btn-primary">@Icons.Svg("plus")@T["Post ad"]</a>
+        </div>
+    }
 </section>
 
-<section class="container section-pad">
-    <div class="section-head">
-        <h2>@T["Fresh on AiciGăsești"]</h2>
-        <a href="/search" class="see-all">@T["See all →"]</a>
-    </div>
-    <div class="listing-grid">
-        @foreach (var listing in Model.LatestListings)
-        {
-            <partial name="_ListingCard" model="listing" />
-        }
-    </div>
-</section>
+@if (Model.PopularBrands.Count > 0)
+{
+    <section class="container section-pad">
+        <div class="section-head">
+            <h2>@T["Cars by brand"]</h2>
+            <a href="/c/cars" class="see-all">@T["All cars"]@Icons.Svg("arrow", "icon-sm")</a>
+        </div>
+        <div class="brand-strip">
+            @foreach (var brand in Model.PopularBrands)
+            {
+                <a href="/c/cars?BrandId=@brand.Id" class="brand-chip">@brand.Name</a>
+            }
+        </div>
+    </section>
+}
 
 <section class="cta-band">
     <div class="container cta-inner">
         <div>
             <h2>@T["Already on OLX or Autovit?"]</h2>
-            <p>@T["Paste the link — we fill everything in. Create a free account and it's live."]</p>
+            <p>@T["CtaImport"]</p>
         </div>
-        <a href="/start" class="btn btn-light">🔗 @T["Move my ad here"]</a>
+        <a href="/start" class="btn btn-light btn-lg">@Icons.Svg("link")@T["Bring my ad over"]</a>
     </div>
-</section>
-
-<section class="container section-pad trust-grid">
-    <div class="trust-item"><span>🛡️</span><h3>@T["Verified sellers"]</h3><p>@T["Ratings and reviews on every account, business badges for dealers."]</p></div>
-    <div class="trust-item"><span>🎯</span><h3>@T["Surgical filters"]</h3><p>@T["Filter cars by engine, power, options. Homes by floor, heating, amenities."]</p></div>
-    <div class="trust-item"><span>💬</span><h3>@T["Built-in chat"]</h3><p>@T["Message sellers instantly without sharing your phone number."]</p></div>
-    <div class="trust-item"><span>⚡</span><h3>@T["Always fast"]</h3><p>@T["Built on .NET 11 — pages render in milliseconds, even on mobile."]</p></div>
 </section>

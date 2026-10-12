@@ -52,7 +52,7 @@ if (photoInput) {
             previews.appendChild(img);
         }
         const hint = document.querySelector('.photo-drop-hint');
-        if (hint) hint.innerHTML = `📸 ${photoInput.files.length} photo(s) selected — click to change`;
+        if (hint) hint.innerHTML = `${photoInput.files.length} photo(s) selected — click to change`;
     });
 }
 
@@ -163,7 +163,7 @@ if (importBtn) {
             }
 
             const catMsg = detected ? 'category detected' : 'pick a category';
-            setMsg(`Done — filled the form${imgs.length ? ` with ${imgs.length} photo(s)` : ''} (${catMsg}). Review and publish. ✅`, 'ok');
+            setMsg(`Done — filled the form${imgs.length ? ` with ${imgs.length} photo(s)` : ''} (${catMsg}). Review and publish.`, 'ok');
             document.getElementById('categorySelect')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } catch {
             setMsg('Could not reach that link. Fill the form in manually.', 'err');
@@ -182,7 +182,7 @@ const videoInput = document.getElementById('videoInput');
 if (videoInput) {
     videoInput.addEventListener('change', () => {
         const hint = document.getElementById('videoHint');
-        if (hint && videoInput.files.length > 0) hint.textContent = `🎬 ${videoInput.files[0].name}`;
+        if (hint && videoInput.files.length > 0) hint.textContent = `${videoInput.files[0].name}`;
     });
 }
 
@@ -201,7 +201,7 @@ document.addEventListener('submit', async (e) => {
         if (res.redirected) { window.location = res.url; return; }
         const data = await res.json();
         btn.classList.toggle('is-fav', data.isFavorite);
-        btn.textContent = data.isFavorite ? '♥' : '♡';
+        btn.setAttribute('aria-pressed', data.isFavorite ? 'true' : 'false');
     } catch {
         form.submit();
     }

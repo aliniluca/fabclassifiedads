@@ -141,7 +141,7 @@ public class ListingsController(
             listing.ExpiresAt = DateTime.UtcNow.AddDays(30);
             listing.BumpedAt = DateTime.UtcNow;
             await db.SaveChangesAsync();
-            TempData["Flash"] = "Listing republished for 30 more days. ✅";
+            TempData["Flash"] = "Listing republished for 30 more days.";
         }
         return Redirect(Request.Headers.Referer.FirstOrDefault() ?? "/my-ads");
     }
@@ -309,8 +309,8 @@ public class ListingsController(
         db.Listings.Add(listing);
         await db.SaveChangesAsync();
         TempData["Flash"] = status == ListingStatus.Active
-            ? "Your ad is live! 🎉"
-            : "Your ad was submitted and is awaiting review. ⏳";
+            ? "Your ad is live!"
+            : "Your ad was submitted and is awaiting review.";
         return RedirectToAction(nameof(Details), new { id = listing.Id });
     }
 

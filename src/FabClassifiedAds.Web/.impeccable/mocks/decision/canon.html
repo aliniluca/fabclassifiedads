@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ro"><head><meta charset="utf-8"><title>AiciGăsești — Canon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--w:#fff;--pg:#f2f4f5;--tx:#1b1f23;--br:#0e7c66;--mut:#6b7280;--ln:#e3e6e8}
+*{box-sizing:border-box}
+html,body{width:1440px;height:900px;overflow:hidden;margin:0}
+body{background:var(--pg);color:var(--tx);font:400 15px/1.4 "Source Sans 3",system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+.w{width:1280px;margin:0 auto}
+svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+header{background:var(--w);border-bottom:1px solid var(--ln)}
+header .w{height:72px;display:flex;align-items:center;gap:28px}
+.logo{font-weight:700;font-size:26px;letter-spacing:-.02em;color:var(--br);width:150px}
+.search{flex:1;display:flex;gap:8px;height:44px}
+.search .f{display:flex;align-items:center;gap:10px;padding:0 14px;border:1px solid #cfd4d8;border-radius:8px;background:var(--w);color:var(--mut)}
+.search .q{flex:1}.search .loc{width:180px;justify-content:space-between;color:var(--tx)}
+.search .f svg{width:20px;height:20px;color:var(--mut)}
+.search .go{background:var(--br);color:#fff;font-weight:600;border-radius:8px;display:flex;align-items:center;padding:0 22px}
+.nav{display:flex;gap:20px;font-weight:600;font-size:15px}
+.add{background:var(--br);color:#fff;font-weight:700;height:44px;padding:0 20px;border-radius:8px;display:flex;align-items:center}
+.lang{font-size:14px;color:var(--mut)}.lang b{color:var(--tx);font-weight:600}
+.seller{background:var(--w);border-bottom:1px solid var(--ln);height:40px;display:flex;align-items:center;font-size:14.5px}
+.seller a{color:var(--br);font-weight:600;margin-left:4px}
+.cats{margin-top:16px;background:var(--w);border:1px solid var(--ln);border-radius:8px;display:grid;grid-template-columns:repeat(11,1fr);gap:4px;padding:16px 8px}
+.cat{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-size:13px;line-height:1.25;font-weight:500}
+.cat span.c{width:52px;height:52px;border-radius:50%;background:#e6f2ef;color:var(--br);display:flex;align-items:center;justify-content:center}
+.head{display:flex;align-items:baseline;justify-content:space-between;margin:20px 0 12px}
+.head h2{margin:0;font-size:21px;font-weight:700;letter-spacing:-.01em}
+.head a{color:var(--br);font-weight:600;font-size:14.5px}
+.card{background:var(--w);border:1px solid var(--ln);border-radius:8px;overflow:hidden}
+.promo{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.promo .card{display:flex;gap:14px;padding:12px}
+.promo .ph{width:120px;flex:none;border-radius:6px}
+.promo .b{min-width:0;flex:1;display:flex;flex-direction:column}
+.promo .t{height:auto;-webkit-line-clamp:1}
+.promo .p{margin-top:auto}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.ph{aspect-ratio:4/3;position:relative}
+.ph .n{position:absolute;left:8px;bottom:8px;background:rgba(27,31,35,.72);color:#fff;font-size:12px;padding:1px 7px;border-radius:4px;font-variant-numeric:tabular-nums}
+.ph .fav{position:absolute;right:8px;top:8px;width:32px;height:32px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+.ph .fav svg{width:18px;height:18px}
+.ph .tag{position:absolute;left:8px;top:8px;background:var(--tx);color:#fff;font-size:11.5px;font-weight:600;padding:2px 7px;border-radius:4px}
+.grid .b{padding:12px 14px 14px}
+.t{margin:0;font-weight:600;font-size:15.5px;line-height:20px;height:40px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.s{font-size:13.5px;color:var(--mut);margin-top:3px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p{font-size:19px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+.ft{display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:8px}
+.m{font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:600;color:#374151;background:#eef1f3;border-radius:999px;padding:2px 9px 2px 7px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pill svg{width:13px;height:13px;stroke-width:2}
+</style></head>
+<body>
+<header><div class="w">
+  <a class="logo" href="#">AiciGăsești</a>
+  <div class="search">
+    <div class="f q"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Ce cauți?</div>
+    <div class="f loc">Toată țara<svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+    <a class="go" href="#">Caută</a>
+  </div>
+  <nav class="nav"><a href="#">Favorite</a><a href="#">Mesaje</a><a href="#">Contul meu</a></nav>
+  <a class="add" href="#">Adaugă anunț</a>
+  <div class="lang"><b>RO</b> | EN</div>
+</div></header>
+<div class="seller"><div class="w">Ai deja anunțul pe OLX sau Autovit?<a href="#">Lipește linkul, completăm noi tot →</a></div></div>
+
+<main class="w">
+<nav class="cats">
+  <a class="cat" href="#"><span class="c"><svg class="i" viewBox="0 0 24 24"><path d="M4 16v-4l2-5h12l2 5v4z"/><path d="M4 12h16"/><circle cx="7.5" cy="16.5" r="1.5"/><circle cx="16.5" cy="16.5" r="1.5"/></svg></span>Auto, moto și ambarcațiuni</a>
+  <a class="cat" href="#"><span class="c"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M5 10v10h14V10M10 20v-6h4v6"/></svg></span>Imobiliare</a>
+  <a class="cat" href="#"><span class="c"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M8 20h8M12 16v4"/></svg></span>Electronice și electrocasnice</a>
+  <a class="cat" href="#"><span class="c"><svg class="i" viewBox="0 0 24 24"><path d="M12 21V11M12 11c0-4 3-6 7-6 0 4-3 6-7 6zM12 14c0-3-2-5-6-5 0 3 2 5 6 5zM7 21h10"/></svg></span>Casă și grădină</a>
+  <a class="cat" href="#"><span class="c"><svg class="i" viewBox="0 0 24 24"><path d="M10 5a2 2 0 1 1 2 2v1.5L21 15v2H3v-2l9-6.5"/></svg></span>Modă și frumusețe</a>
+  <a class="cat" href="#"><span class="c"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v8h8a8 8 0 0 0-8-8zM3 6h2l2 5h13a7 7 0 0 1-7 5h-4"/><circle cx="8" cy="19" r="2"/><circle cx="17" cy="19" r="2"/></svg></span>Mama și copilul</a>
+  <a class="cat" href="#"><span class="c"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>Sport, timp liber</a>
+  <a class="cat" href="#"><span class="c"><svg class="i" viewBox="0 0 24 24"><circle cx="6.5" cy="10" r="1.8"/><circle cx="10" cy="6" r="1.8"/><circle cx="14" cy="6" r="1.8"/><circle cx="17.5" cy="10" r="1.8"/><path d="M8 17c0-3 2-5.5 4-5.5s4 2.5 4 5.5c0 2-2 2-4 2s-4 0-4-2z"/></svg></span>Animale</a>
+  <a class="cat" href="#"><span class="c"><svg class="i" viewBox="0 0 24 24"><circle cx="7" cy="16" r="4"/><circle cx="18" cy="17" r="2.5"/><path d="M5 12V6h6l2 6h6v3M11 6v6"/></svg></span>Agro și industrie</a>
+  <a class="cat" href="#"><span class="c"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="1.5"/><path d="M9 7V5h6v2M3 13h18"/></svg></span>Locuri de muncă</a>
+  <a class="cat" href="#"><span class="c"><svg class="i" viewBox="0 0 24 24"><path d="M14.5 6.5a4 4 0 0 0-5 5L4 17l3 3 5.5-5.5a4 4 0 0 0 5-5L15 12l-3-3z"/></svg></span>Servicii</a>
+</nav>
+
+<div class="head"><h2>Promovate</h2><a href="#">Vezi toate →</a></div>
+<div class="promo">
+  <article class="card"><div class="ph" style="background:#d3d8dc"></div><div class="b"><h3 class="t">BMW Seria 3 320d xDrive, 2021</h3><div class="s">78&nbsp;000 km · Diesel · Automată</div><div class="p">28.900 €</div><div class="ft"><span class="m">Cluj-Napoca · azi, 14:20</span><span class="pill"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Verificat 92</span></div></div></article>
+  <article class="card"><div class="ph" style="background:#dcd6cc"></div><div class="b"><h3 class="t">Apartament 2 camere, Floreasca</h3><div class="s">54 m² · et. 3/8 · Decomandat</div><div class="p">145.000 €</div><div class="ft"><span class="m">București · azi, 11:05</span><span class="pill"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Verificat 84</span></div></div></article>
+  <article class="card"><div class="ph" style="background:#cdd6d2"></div><div class="b"><h3 class="t">Bicicletă electrică Cube Reaction Hybrid</h3><div class="s">Utilizat · mărime L · 625 Wh</div><div class="p">7.800 lei</div><div class="ft"><span class="m">Constanța · azi, 10:48</span><span class="pill"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Verificat 88</span></div></div></article>
+</div>
+
+<div class="head"><h2>Anunțuri noi</h2><a href="#">Vezi toate anunțurile →</a></div>
+<div class="grid">
+  <article class="card"><div class="ph" style="background:#cfd5d1"><span class="n">9 foto</span><span class="fav"><svg class="i" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span></div>
+    <div class="b"><h3 class="t">Dacia Logan 1.0 SCe, 2019</h3><div class="s">61&nbsp;000 km · Benzină · Manuală</div><div class="p">6.400 €</div><div class="ft"><span class="m">Iași · azi, 14:02</span><span class="pill"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Verificat 74</span></div></div></article>
+  <article class="card"><div class="ph" style="background:#d6d3d8"><span class="n">5 foto</span><span class="fav"><svg class="i" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span></div>
+    <div class="b"><h3 class="t">iPhone 15 Pro Max 256 GB</h3><div class="s">Utilizat · Titan natural</div><div class="p">4.900 lei</div><div class="ft"><span class="m">Timișoara · azi, 13:37</span><span class="pill"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Verificat 81</span></div></div></article>
+  <article class="card"><div class="ph" style="background:#dad4c9"><span class="n">7 foto</span><span class="fav"><svg class="i" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span></div>
+    <div class="b"><h3 class="t">Canapea extensibilă 3 locuri</h3><div class="s">Utilizat · 220 × 95 cm</div><div class="p">1.200 lei</div><div class="ft"><span class="m">Brașov · azi, 12:15</span><span class="pill"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Verificat 96</span></div></div></article>
+  <article class="card"><div class="ph" style="background:#d2d7dd"><span class="n">16 foto</span><span class="fav"><svg class="i" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span></div>
+    <div class="b"><h3 class="t">Volkswagen Golf 7 1.6 TDI, 2017</h3><div class="s">142&nbsp;000 km · Diesel · Manuală</div><div class="p">9.700 €</div><div class="ft"><span class="m">Cluj-Napoca · azi, 11:40</span><span class="pill"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Verificat 87</span></div></div></article>
+  <article class="card"><div class="ph" style="background:#ddd7cf"><span class="n">11 foto</span><span class="fav"><svg class="i" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span></div>
+    <div class="b"><h3 class="t">Garsonieră renovată, Copou</h3><div class="s">32 m² · et. 2/4 · Bloc 1985</div><div class="p">58.500 €</div><div class="ft"><span class="m">Iași · ieri, 19:26</span><span class="pill"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Verificat 79</span></div></div></article>
+</div>
+</main>
+</body></html>

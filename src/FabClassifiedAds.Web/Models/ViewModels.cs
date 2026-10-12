@@ -13,6 +13,8 @@ public class HomeViewModel
     public int TotalUsers { get; set; }
     public int TotalCategories { get; set; }
     public List<CarBrand> PopularBrands { get; set; } = [];
+    /// <summary>Lowest-scoring live ad, shown as a worked example of the anti-scam check.</summary>
+    public Listing? RiskExample { get; set; }
 }
 
 public class SearchPageViewModel

@@ -2,25 +2,29 @@
 @{
     var isFav = ViewData["FavoriteIds"] is HashSet<int> favs && favs.Contains(Model.Id);
     var image = Model.Images.FirstOrDefault();
+    var trustClass = Model.TrustScore >= 75 ? "trust-good" : Model.TrustScore >= 40 ? "trust-warn" : "trust-bad";
+    var trustLabel = Model.TrustScore >= 75 ? T["Verified"] : Model.TrustScore >= 40 ? T["Caution"] : T["Risky ad"];
 }
 <article class="card listing-card">
-    <a href="@Model.SeoUrl()" class="card-media">
+    <a href="@Model.SeoUrl()" class="card-media" tabindex="-1" aria-hidden="true">
         @if (image != null)
         {
-            <img src="@image.Url" alt="@Model.Title" loading="lazy" />
+            <img src="@image.Url" alt="" loading="lazy" />
         }
         else
         {
-            <div class="card-media-empty">📷</div>
+            <img src="/media/ph/aicigasesti.svg" alt="" loading="lazy" />
         }
-        @if (Model.IsFeatured) { <span class="badge badge-featured">★ @T["Featured"]</span> }
-        @if (!string.IsNullOrEmpty(Model.VideoUrl)) { <span class="badge badge-video">🎬</span> }
-        @if (Model.Status == ListingStatus.PendingReview) { <span class="badge badge-review">⏳ @T["In review"]</span> }
-        else if (Model.Status == ListingStatus.Rejected) { <span class="badge badge-rejected">🚫 @T["Rejected"]</span> }
-        @if (Model.Condition == ItemCondition.New) { <span class="badge badge-new">@T["New"]</span> }
+        <span class="badge-stack">
+            @if (Model.IsFeatured) { <span class="badge badge-featured">@T["Featured"]</span> }
+            @if (Model.Condition == ItemCondition.New) { <span class="badge badge-new">@T["New"]</span> }
+            @if (Model.Status == ListingStatus.PendingReview) { <span class="badge badge-review">@T["In review"]</span> }
+            else if (Model.Status == ListingStatus.Rejected) { <span class="badge badge-rejected">@T["Rejected"]</span> }
+            @if (!string.IsNullOrEmpty(Model.VideoUrl)) { <span class="badge badge-video">@Icons.Svg("video")@T["Video"]</span> }
+        </span>
     </a>
     <div class="card-body">
-        <div class="card-meta">@Model.Category.Icon @T[Model.Category.Name]</div>
+        <div class="card-meta">@T[Model.Category.Name]</div>
         <a href="@Model.SeoUrl()" class="card-title">@Model.Title</a>
         <div class="card-summary">@Model.ListingSummary()</div>
         <div class="card-price-row">
@@ -29,14 +33,18 @@
             {
                 <form action="/favorites/toggle/@Model.Id" method="post" class="inline-form fav-form">
                     @Html.AntiForgeryToken()
-                    <button type="submit" class="fav-btn @(isFav ? "is-fav" : "")" title="@T["Save to favorites"]">@(isFav ? "♥" : "♡")</button>
+                    <button type="submit" class="fav-btn @(isFav ? "is-fav" : "")" aria-pressed="@(isFav ? "true" : "false")" aria-label="@T["Save to favorites"]">@Icons.Svg("heart")</button>
                 </form>
             }
         </div>
         <div class="card-footer">
-            <span>📍 @Model.City</span>
-            <span class="trust-chip @(Model.TrustScore >= 75 ? "trust-good" : Model.TrustScore >= 40 ? "trust-warn" : "trust-bad")" title="@T["Trust score"]">🛡 @Model.TrustScore</span>
+            <span>@Icons.Svg("pin", "icon-sm")@Model.City.Place()</span>
             <span>@Model.CreatedAt.TimeAgo()</span>
+        </div>
+        <div class="check-strip @trustClass" title="@T["AiciGăsești verification"]">
+            @Icons.Svg(Model.TrustScore >= 75 ? "check" : "alert")
+            <span class="check-strip-label">@trustLabel</span>
+            <span class="check-strip-score">@Model.TrustScore/100</span>
         </div>
     </div>
 </article>

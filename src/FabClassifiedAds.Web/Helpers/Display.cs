@@ -39,6 +39,7 @@ public static partial class Display
                 { TotalMinutes: < 1 } => "chiar acum",
                 { TotalMinutes: < 60 } => $"acum {(int)span.TotalMinutes} min",
                 { TotalHours: < 24 } => $"acum {(int)span.TotalHours}h",
+                { TotalDays: < 2 } => "ieri",
                 { TotalDays: < 7 } => $"acum {(int)span.TotalDays} zile",
                 { TotalDays: < 30 } => $"acum {(int)(span.TotalDays / 7)} săpt.",
                 _ => utc.ToString("d MMM yyyy", new CultureInfo("ro")),
@@ -49,11 +50,25 @@ public static partial class Display
             { TotalMinutes: < 1 } => "just now",
             { TotalMinutes: < 60 } => $"{(int)span.TotalMinutes} min ago",
             { TotalHours: < 24 } => $"{(int)span.TotalHours}h ago",
+            { TotalDays: < 2 } => "yesterday",
             { TotalDays: < 7 } => $"{(int)span.TotalDays}d ago",
             { TotalDays: < 30 } => $"{(int)(span.TotalDays / 7)}w ago",
             _ => utc.ToString("d MMM yyyy"),
         };
     }
+
+    // ASCII / English place names (seed data, imports) -> proper Romanian spelling
+    private static readonly Dictionary<string, string> RoPlaces = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Bucharest"] = "București", ["Bucuresti"] = "București", ["Timisoara"] = "Timișoara", ["Iasi"] = "Iași",
+        ["Constanta"] = "Constanța", ["Brasov"] = "Brașov", ["Galati"] = "Galați", ["Ploiesti"] = "Ploiești",
+        ["Pitesti"] = "Pitești", ["Bacau"] = "Bacău", ["Targu Mures"] = "Târgu Mureș", ["Buzau"] = "Buzău",
+        ["Floresti"] = "Florești", ["Timis"] = "Timiș", ["Mures"] = "Mureș",
+    };
+
+    /// <summary>Shows a city/region with its Romanian diacritics ("Iasi" -> "Iași").</summary>
+    public static string Place(this string? name) =>
+        string.IsNullOrWhiteSpace(name) ? "" : RoPlaces.GetValueOrDefault(name.Trim(), name);
 
     public static string Number(this int n) => n.ToString("#,0", CultureInfo.InvariantCulture).Replace(",", " ");
 

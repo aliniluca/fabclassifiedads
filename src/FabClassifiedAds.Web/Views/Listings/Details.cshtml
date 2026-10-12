@@ -47,7 +47,7 @@
         <a href="/">@T["Home"]</a>
         @foreach (var crumb in Model.Breadcrumb)
         {
-            <span>›</span>
+            <span aria-hidden="true">/</span>
             <a href="/c/@crumb.Slug">@T[crumb.Name]</a>
         }
     </nav>
@@ -76,7 +76,7 @@
                 }
                 else
                 {
-                    <div class="gallery-main card-media-empty">📷</div>
+                    <div class="gallery-main"><img src="/media/ph/aicigasesti.svg" alt="@T["No photo"]" /></div>
                 }
             </div>
 
@@ -84,7 +84,7 @@
                 <div class="detail-title-row">
                     <div>
                         <h1>@l.Title</h1>
-                        <div class="muted">@T["Posted"] @l.CreatedAt.TimeAgo() • 👁 @l.ViewCount.Number() @T["views"] • #@l.Id</div>
+                        <div class="muted">@T["Posted"] @l.CreatedAt.TimeAgo() · @l.ViewCount.Number() @T["views"] · @T["Ad no."] @l.Id</div>
                     </div>
                     <div class="detail-price">@l.Price()
                         @if (l.IsNegotiable) { <span class="negotiable">@T["negotiable"]</span> }
@@ -93,7 +93,7 @@
 
                 @if (car != null)
                 {
-                    <h2 class="panel-subtitle">🚗 @T["Vehicle specifications"]</h2>
+                    <h2 class="panel-subtitle">@T["Vehicle specifications"]</h2>
                     <dl class="spec-grid">
                         @if (car.Brand != null) { <div><dt>@T["Brand"]</dt><dd>@car.Brand.Name</dd></div> }
                         @if (car.Model != null) { <div><dt>@T["Model"]</dt><dd>@car.Model.Name</dd></div> }
@@ -113,8 +113,8 @@
                         @if (car.EmissionStandard.HasValue) { <div><dt>@T["Emission"]</dt><dd>Euro @car.EmissionStandard</dd></div> }
                         @if (car.FuelConsumption.HasValue) { <div><dt>@T["Consumption"]</dt><dd>@car.FuelConsumption @(car.Fuel == FuelType.Electric ? "kWh" : "l")/100km</dd></div> }
                         <div><dt>@T["Owners"]</dt><dd>@car.OwnersCount</dd></div>
-                        <div><dt>@T["Accident-free"]</dt><dd>@(car.AccidentFree ? $"✅ {T["Yes"]}" : T["No"])</dd></div>
-                        <div><dt>@T["Service book"]</dt><dd>@(car.ServiceBook ? $"✅ {T["Yes"]}" : T["No"])</dd></div>
+                        <div><dt>@T["Accident-free"]</dt><dd>@(car.AccidentFree ? T["Yes"] : T["No"])</dd></div>
+                        <div><dt>@T["Service book"]</dt><dd>@(car.ServiceBook ? T["Yes"] : T["No"])</dd></div>
                     </dl>
 
                     @if (car.Options != CarOptions.None)
@@ -123,7 +123,7 @@
                         <div class="tag-cloud">
                             @foreach (var option in car.Options.Flags())
                             {
-                                <span class="tag">✓ @option.TranslateEnum()</span>
+                                <span class="tag">@Icons.Svg("check")@option.TranslateEnum()</span>
                             }
                         </div>
                     }
@@ -131,7 +131,7 @@
 
                 @if (re != null)
                 {
-                    <h2 class="panel-subtitle">🏠 @T["Property details"]</h2>
+                    <h2 class="panel-subtitle">@T["Property details"]</h2>
                     <dl class="spec-grid">
                         <div><dt>@T["Type"]</dt><dd>@re.PropertyType.TranslateEnum()</dd></div>
                         <div><dt>@T["Transaction"]</dt><dd>@re.Transaction.TranslateEnum()</dd></div>
@@ -153,7 +153,7 @@
                         <div class="tag-cloud">
                             @foreach (var amenity in re.Amenities.Flags())
                             {
-                                <span class="tag">✓ @amenity.TranslateEnum()</span>
+                                <span class="tag">@Icons.Svg("check")@amenity.TranslateEnum()</span>
                             }
                         </div>
                     }
@@ -177,15 +177,18 @@
         <aside class="detail-side">
             @if (Model.Trust != null)
             {
-                <div class="panel trust-panel @Model.Trust.CssClass">
+                var stampClass = Model.Trust.Score >= 75 ? "" : Model.Trust.Score >= 40 ? "stamp-warn" : "stamp-bad";
+                <section class="panel trust-panel @Model.Trust.CssClass" aria-labelledby="trustTitle">
                     <div class="trust-head">
-                        <span class="trust-shield">🛡</span>
                         <div>
-                            <h3>@T["AiciGăsești verification"]</h3>
+                            <h3 id="trustTitle">@T["Inspection sheet"]</h3>
                             <div class="trust-score-line">
                                 <span class="trust-score">@Model.Trust.Score<small>/100</small></span>
                                 <span class="trust-label">@T[TrustService.ListingScoreLabel(Model.Trust.Score)]</span>
                             </div>
+                        </div>
+                        <div class="stamp @stampClass" aria-hidden="true">
+                            <div><div class="stamp-word">@(Model.Trust.Score >= 40 ? T["CHECKED"] : T["RISK"])</div><div class="stamp-score">@Model.Trust.Score</div><div class="stamp-sub">AICIGĂSEȘTI</div></div>
                         </div>
                     </div>
                     @if (Model.Trust.Price is { } price)
@@ -199,32 +202,35 @@
                         </div>
                     }
                     <ul class="trust-checks">
-                        @foreach (var check in Model.Trust.Checks)
+                        @* the price box above already states the market verdict, so price checks are not repeated *@
+                        @foreach (var check in Model.Trust.Checks.Where(c => Model.Trust.Price == null || !c.Label.Contains("price", StringComparison.OrdinalIgnoreCase)))
                         {
                             <li class="trust-@check.Level.ToString().ToLowerInvariant()">
-                                <span>@(check.Level switch { TrustLevel.Good => "✓", TrustLevel.Info => "ℹ", TrustLevel.Warning => "⚠", _ => "✗" })</span>
-                                @T[check.Label]@(check.Detail != null ? $" ({check.Detail})" : "")
+                                <span>@Icons.Svg(check.Level switch { TrustLevel.Good => "check", TrustLevel.Info => "info", TrustLevel.Warning => "alert", _ => "x" })</span>
+                                <span>@T[check.Label]@(check.Detail != null ? $" ({check.Detail})" : "")</span>
                             </li>
                         }
                     </ul>
                     @if (Model.SellerTrust is { } st)
                     {
-                        <div class="trust-divider"></div>
-                        <div class="trust-score-line">
-                            <span class="trust-chip @st.CssClass">🛡 @st.Score</span>
-                            <span class="trust-label">@T[TrustService.ScoreLabel(st.Score)]</span>
+                        <div class="trust-seller">
+                            <div class="trust-score-line">
+                                <strong>@T["Seller"]</strong>
+                                <span class="trust-chip @st.CssClass">@Icons.Svg("shield")@st.Score/100</span>
+                                <span class="trust-label">@T[TrustService.ScoreLabel(st.Score)]</span>
+                            </div>
+                            <ul class="trust-checks">
+                                @foreach (var check in st.Checks)
+                                {
+                                    <li class="trust-@check.Level.ToString().ToLowerInvariant()">
+                                        <span>@Icons.Svg(check.Level switch { TrustLevel.Good => "check", TrustLevel.Info => "info", TrustLevel.Warning => "alert", _ => "x" })</span>
+                                        <span>@T[check.Label]@(check.Detail != null ? $" ({check.Detail})" : "")</span>
+                                    </li>
+                                }
+                            </ul>
                         </div>
-                        <ul class="trust-checks mt-8">
-                            @foreach (var check in st.Checks)
-                            {
-                                <li class="trust-@check.Level.ToString().ToLowerInvariant()">
-                                    <span>@(check.Level switch { TrustLevel.Good => "✓", TrustLevel.Info => "ℹ", TrustLevel.Warning => "⚠", _ => "✗" })</span>
-                                    @T[check.Label]@(check.Detail != null ? $" ({check.Detail})" : "")
-                                </li>
-                            }
-                        </ul>
                     }
-                </div>
+                </section>
             }
 
             @{
@@ -238,23 +244,23 @@
                         @if (l.User.IsBusiness) { <span class="badge badge-business">@T["Business"]</span> }
                         @if (Model.SellerTrust is { } sellerTrust)
                         {
-                            <span class="trust-chip @sellerTrust.CssClass" title="@T[TrustService.ScoreLabel(sellerTrust.Score)]">🛡 @sellerTrust.Score</span>
+                            <span class="trust-chip @sellerTrust.CssClass" title="@T[TrustService.ScoreLabel(sellerTrust.Score)]">@Icons.Svg("shield")@sellerTrust.Score/100</span>
                             <div class="small trust-seller-label @sellerTrust.CssClass-text">@T[TrustService.ScoreLabel(sellerTrust.Score)]</div>
                         }
                         <div class="muted small">@T["On AiciGăsești since"] @l.User.CreatedAt.ToString("MMM yyyy")</div>
                         @if (l.User.RatingCount > 0)
                         {
-                            <div class="rating">★ @l.User.RatingAverage.ToString("0.0") <span class="muted small">(@l.User.RatingCount @T["reviews"])</span></div>
+                            <div class="rating">@Icons.Svg("star")@l.User.RatingAverage.ToString("0.0") <span class="muted small">(@l.User.RatingCount @T["reviews"])</span></div>
                         }
                     </div>
                 </div>
 
-                <div class="seller-location">📍 @l.City@(string.IsNullOrEmpty(l.Region) ? "" : $", {l.Region}")</div>
+                <div class="seller-location">@Icons.Svg("pin", "icon-sm")@l.City.Place()@(string.IsNullOrEmpty(l.Region) || l.Region == l.City ? "" : $", {l.Region.Place()}")</div>
                 @if (!string.IsNullOrWhiteSpace(l.ContactPhone))
                 {
-                    <a href="tel:@l.ContactPhone" class="btn btn-ghost btn-block mt-8">📞 @l.ContactPhone</a>
+                    <a href="tel:@l.ContactPhone" class="btn btn-ghost btn-block mt-8">@Icons.Svg("phone")@l.ContactPhone</a>
                 }
-                <a href="@sellerUrl" class="btn btn-ghost btn-sm btn-block mt-8">🏬 @T["See all seller's ads"]</a>
+                <a href="@sellerUrl" class="btn btn-ghost btn-sm btn-block mt-8">@Icons.Svg("list", "icon-sm")@T["See all seller's ads"]</a>
 
                 @if (!Model.IsOwner)
                 {
@@ -263,11 +269,11 @@
                         <form action="/messages/start/@l.Id" method="post">
                             @Html.AntiForgeryToken()
                             <textarea name="body" rows="3" placeholder="@T["Hi! Is this still available?"]" required></textarea>
-                            <button type="submit" class="btn btn-primary btn-block mt-8">💬 @T["Send message"]</button>
+                            <button type="submit" class="btn btn-primary btn-block mt-8">@Icons.Svg("message")@T["Send message"]</button>
                         </form>
                         <form action="/favorites/toggle/@l.Id" method="post" class="mt-8">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-ghost btn-block">@(Model.IsFavorite ? $"♥ {T["Saved — remove"]}" : $"♡ {T["Save to favorites"]}")</button>
+                            <button type="submit" class="btn btn-ghost btn-block">@(Model.IsFavorite ? T["Saved — remove"] : T["Save to favorites"])</button>
                         </form>
                     }
                     else
@@ -282,16 +288,16 @@
             </div>
 
             <div class="panel share-panel mt-16">
-                <h3>↗ @T["Share"]</h3>
+                <h3>@T["Share"]</h3>
                 <div class="share-actions">
-                    <button type="button" class="btn btn-ghost btn-sm" id="shareBtn" data-title="@l.Title">↗ @T["Share link"]</button>
-                    <a href="/l/@l.Id/share-card.svg" target="_blank" class="btn btn-ghost btn-sm">🖼 @T["Share card"]</a>
+                    <button type="button" class="btn btn-ghost btn-sm" id="shareBtn" data-title="@l.Title">@Icons.Svg("share", "icon-sm")@T["Share link"]</button>
+                    <a href="/l/@l.Id/share-card.svg" target="_blank" class="btn btn-ghost btn-sm">@Icons.Svg("image", "icon-sm")@T["Share card"]</a>
                 </div>
                 <p class="muted small">@T["Post the 9:16 card straight to TikTok or Instagram stories."]</p>
             </div>
 
             <div class="panel safety-panel">
-                <h3>🛡️ @T["Stay safe"]</h3>
+                <h3>@Icons.Svg("shield")@T["Stay safe"]</h3>
                 <ul>
                     <li>@T["Meet in a public place"]</li>
                     <li>@T["Check the item before paying"]</li>
@@ -309,7 +315,7 @@
                     try { await navigator.share({ title: btn.dataset.title, url: location.href }); } catch {}
                 } else {
                     await navigator.clipboard.writeText(location.href);
-                    btn.textContent = '✓ @T["Link copied"]';
+                    btn.textContent = '@T["Link copied"]';
                 }
             });
         </script>

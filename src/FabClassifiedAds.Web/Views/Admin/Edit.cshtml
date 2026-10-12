@@ -6,13 +6,13 @@
 <div class="container narrow section-pad">
     <partial name="_AdminNav" />
     <div class="section-head">
-        <h1>✏️ @T["Edit listing"] #@Model.Id</h1>
-        <a href="/l/@Model.Id" target="_blank" class="btn btn-ghost btn-sm">@T["Preview"] ↗</a>
+        <h1>@Icons.Svg("edit") @T["Edit listing"] #@Model.Id</h1>
+        <a href="/l/@Model.Id" target="_blank" class="btn btn-ghost btn-sm">@T["Preview"] @Icons.Svg("arrow", "icon-sm")</a>
     </div>
 
     @if (!string.IsNullOrEmpty(Model.ModerationNote))
     {
-        <div class="admin-flag">⚠ @Model.ModerationNote</div>
+        <div class="admin-flag">@Icons.Svg("alert", "icon-sm") @Model.ModerationNote</div>
     }
 
     <form method="post" action="/admin/listings/@Model.Id/edit" class="panel form-panel mt-16">
@@ -26,7 +26,7 @@
                 <select asp-for="CategoryId">
                     @foreach (var root in Model.CategoryTree)
                     {
-                        <optgroup label="@root.Icon @T[root.Name]">
+                        <optgroup label="@T[root.Name]">
                             @foreach (var child in root.Children)
                             {
                                 <option value="@child.Id">@T[child.Name]</option>
@@ -37,8 +37,8 @@
             </label>
         </div>
         <div class="field-row">
-            <label class="check-row"><input asp-for="IsFeatured" /> ★ @T["Featured"]</label>
-            <label class="check-row"><input asp-for="IsUrgent" /> 🔥 @T["Urgent"]</label>
+            <label class="check-row"><input asp-for="IsFeatured" /> @Icons.Svg("star", "icon-sm") @T["Featured"]</label>
+            <label class="check-row"><input asp-for="IsUrgent" /> @Icons.Svg("clock", "icon-sm") @T["Urgent"]</label>
         </div>
 
         <label class="field"><span>@T["Title"]</span><input asp-for="Title" required /></label>
@@ -66,7 +66,7 @@
 
         @if (Model.HasCar)
         {
-            <fieldset class="dyn-fields"><legend>🚗 @T["Vehicle details"]</legend>
+            <fieldset class="dyn-fields"><legend>@Icons.Svg("car", "icon-sm") @T["Vehicle details"]</legend>
                 <div class="field-row">
                     <label class="field"><span>@T["Brand"]</span>
                         <select asp-for="BrandId"><option value="">—</option>
@@ -101,7 +101,7 @@
 
         @if (Model.HasRealEstate)
         {
-            <fieldset class="dyn-fields"><legend>🏠 @T["Property details"]</legend>
+            <fieldset class="dyn-fields"><legend>@Icons.Svg("home", "icon-sm") @T["Property details"]</legend>
                 <div class="field-row">
                     <label class="field"><span>@T["Type"]</span><select asp-for="PropertyType">@foreach (var f in Enum.GetValues<PropertyType>()) { <option value="@f">@f.TranslateEnum()</option> }</select></label>
                     <label class="field"><span>@T["Transaction"]</span><select asp-for="Transaction">@foreach (var f in Enum.GetValues<TransactionType>()) { <option value="@f">@f.TranslateEnum()</option> }</select></label>
@@ -128,7 +128,7 @@
             </fieldset>
         }
 
-        <fieldset class="dyn-fields"><legend>🖼 @T["Photos"]</legend>
+        <fieldset class="dyn-fields"><legend>@Icons.Svg("image", "icon-sm") @T["Photos"]</legend>
             @if (Model.ExistingImages.Count > 0)
             {
                 <div class="admin-img-grid">
@@ -146,6 +146,6 @@
             </label>
         </fieldset>
 
-        <button type="submit" class="btn btn-primary btn-block btn-lg">💾 @T["Save changes"]</button>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">@T["Save changes"]</button>
     </form>
 </div>

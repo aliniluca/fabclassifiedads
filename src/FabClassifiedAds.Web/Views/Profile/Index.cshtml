@@ -10,22 +10,22 @@
 
 <div class="container section-pad">
     <div class="panel seller-hero">
-        <span class="avatar avatar-lg" style="background:@(s.AvatarColor ?? "#6d5dfc")">@(s.DisplayName.Length > 0 ? char.ToUpper(s.DisplayName[0]) : '?')</span>
+        <span class="avatar avatar-lg">@(s.DisplayName.Length > 0 ? char.ToUpper(s.DisplayName[0]) : '?')</span>
         <div class="seller-hero-info">
             <h1>@s.DisplayName
                 @if (s.IsBusiness) { <span class="badge badge-business">@T["Business"]</span> }
             </h1>
             <div class="seller-hero-meta">
-                <span>📋 @Model.TotalActive @T["active ads"]</span>
-                @if (!string.IsNullOrEmpty(s.City)) { <span>📍 @s.City</span> }
+                <span>@Icons.Svg("list", "icon-sm") @Model.TotalActive @T["active ads"]</span>
+                @if (!string.IsNullOrEmpty(s.City)) { <span>@Icons.Svg("pin", "icon-sm") @s.City.Place()</span> }
                 <span>@T["Member since"] @s.CreatedAt.ToString("MMMM yyyy")</span>
                 @if (s.RatingCount > 0)
                 {
-                    <span class="rating">★ @s.RatingAverage.ToString("0.0") <span class="muted small">(@s.RatingCount)</span></span>
+                    <span class="rating">@Icons.Svg("star") @s.RatingAverage.ToString("0.0") <span class="muted small">(@s.RatingCount)</span></span>
                 }
                 @if (Model.Trust is { } tr)
                 {
-                    <span class="trust-chip @tr.CssClass" title="@T[FabClassifiedAds.Web.Services.TrustService.ScoreLabel(tr.Score)]">🛡 @tr.Score</span>
+                    <span class="trust-chip @tr.CssClass" title="@T[FabClassifiedAds.Web.Services.TrustService.ScoreLabel(tr.Score)]">@Icons.Svg("shield") @tr.Score</span>
                 }
             </div>
         </div>
@@ -37,7 +37,7 @@
 
     @if (Model.TotalActive == 0)
     {
-        <div class="empty-state"><span class="empty-icon">📭</span><h3>@T["This seller has no active ads."]</h3></div>
+        <div class="empty-state"><span class="empty-icon">@Icons.Svg("list")</span><h3>@T["This seller has no active ads."]</h3></div>
     }
     else
     {

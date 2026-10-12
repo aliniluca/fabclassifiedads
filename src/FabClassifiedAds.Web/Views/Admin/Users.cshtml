@@ -3,7 +3,7 @@
     ViewData["Title"] = T["Users"];
 }
 <div class="container section-pad">
-    <h1>👤 @T["Users"]</h1>
+    <h1>@Icons.Svg("user") @T["Users"]</h1>
     <partial name="_AdminNav" />
 
     <form method="get" action="/admin/users" class="admin-search mt-16">
@@ -27,7 +27,7 @@
                             <div class="muted small">@u.Email @(string.IsNullOrEmpty(u.City) ? "" : $"· {u.City}")</div>
                         </td>
                         <td>@u.ListingCount</td>
-                        <td>@(u.RatingCount > 0 ? $"★ {u.RatingAverage:0.0} ({u.RatingCount})" : "—")</td>
+                        <td>@(u.RatingCount > 0 ? $"{u.RatingAverage:0.0} ({u.RatingCount})" : "—")</td>
                         <td class="muted small">@u.CreatedAt.ToString("d MMM yyyy")</td>
                         <td>
                             @if (u.IsBusiness) { <span class="badge badge-business">@T["Business"]</span> }

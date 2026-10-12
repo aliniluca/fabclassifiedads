@@ -146,8 +146,8 @@ public class LeadController(
         await db.SaveChangesAsync();
 
         TempData["Flash"] = status == ListingStatus.Active
-            ? "Welcome! Your ad is live. 🎉"
-            : "Welcome! Your ad was submitted and is awaiting review. ⏳";
+            ? "Welcome! Your ad is live."
+            : "Welcome! Your ad was submitted and is awaiting review.";
         return Redirect($"/l/{listing.Id}");
     }
 

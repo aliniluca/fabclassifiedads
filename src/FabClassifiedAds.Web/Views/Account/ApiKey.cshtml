@@ -5,7 +5,7 @@
     var createdAt = ViewBag.CreatedAt as DateTime?;
 }
 <div class="container narrow section-pad">
-    <h1>🔑 @T["API key"]</h1>
+    <h1>@Icons.Svg("key") @T["API key"]</h1>
     <p class="muted">@T["Use this key to post ads programmatically via the API. Ads created with it appear on your account."]</p>
 
     @if (newKey != null)
@@ -14,7 +14,7 @@
             <strong>@T["Your new key — copy it now, it won't be shown again:"]</strong>
             <div class="apikey-row">
                 <code id="apiKeyValue">@newKey</code>
-                <button type="button" class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('apiKeyValue').textContent); this.textContent='✓'">@T["Copy"]</button>
+                <button type="button" class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('apiKeyValue').textContent); this.querySelector('span').hidden=false"><span hidden>@Icons.Svg("check", "icon-sm")</span> @T["Copy"]</button>
             </div>
         </div>
     }

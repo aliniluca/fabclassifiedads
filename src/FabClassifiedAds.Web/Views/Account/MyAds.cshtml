@@ -8,14 +8,14 @@
     <div class="section-head">
         <h1>@T["My ads"]</h1>
         <div class="share-actions">
-            <a href="/account/api" class="btn btn-ghost">🔑 @T["API key"]</a>
+            <a href="/account/api" class="btn btn-ghost">@Icons.Svg("key", "icon-sm") @T["API key"]</a>
             <a href="/post" class="btn btn-primary">@T["+ Post new ad"]</a>
         </div>
     </div>
     @if (Model.Count == 0)
     {
         <div class="empty-state">
-            <span class="empty-icon">📭</span>
+            <span class="empty-icon">@Icons.Svg("list")</span>
             <h3>@T["You haven't posted anything yet"]</h3>
             <p><a href="/post">@T["Post your first ad"]</a> @T["— it takes under a minute."]</p>
         </div>
@@ -30,11 +30,11 @@
                 var expiringSoon = l.Status == ListingStatus.Active && daysLeft is <= 5 and >= 0;
                 <div class="myads-row panel">
                     <a href="/l/@l.Id" class="myads-thumb">
-                        @if (image != null) { <img src="@image.Url" alt="" loading="lazy" /> } else { <span>📷</span> }
+                        @if (image != null) { <img src="@image.Url" alt="" loading="lazy" /> } else { <img src="/media/ph/aicigasesti.svg" alt="" loading="lazy" /> }
                     </a>
                     <div class="myads-main">
                         <a href="/l/@l.Id" class="myads-title">@l.Title</a>
-                        <div class="muted small">@l.Category.Icon @T[l.Category.Name] · @l.Price() · 📍 @l.City</div>
+                        <div class="muted small">@T[l.Category.Name] · @l.Price() · @Icons.Svg("pin", "icon-sm") @l.City.Place()</div>
                         <div class="myads-status">
                             @switch (l.Status)
                             {
@@ -46,10 +46,10 @@
                                     <span class="trust-chip trust-bad">@T["Expired"]</span>
                                     break;
                                 case ListingStatus.PendingReview:
-                                    <span class="trust-chip trust-warn">⏳ @T["In review"]</span>
+                                    <span class="trust-chip trust-warn">@Icons.Svg("clock", "icon-sm") @T["In review"]</span>
                                     break;
                                 case ListingStatus.Rejected:
-                                    <span class="trust-chip trust-bad">🚫 @T["Rejected"]</span>
+                                    <span class="trust-chip trust-bad">@Icons.Svg("x", "icon-sm") @T["Rejected"]</span>
                                     break;
                                 case ListingStatus.Sold:
                                     <span class="trust-chip">@T["Sold"]</span>
@@ -65,7 +65,7 @@
                         {
                             <form method="post" action="/l/@l.Id/republish" class="inline-form">
                                 @Html.AntiForgeryToken()
-                                <button type="submit" class="btn @(l.Status == ListingStatus.Expired || expiringSoon ? "btn-primary" : "btn-ghost") btn-sm">🔄 @T["Republish"]</button>
+                                <button type="submit" class="btn @(l.Status == ListingStatus.Expired || expiringSoon ? "btn-primary" : "btn-ghost") btn-sm">@Icons.Svg("clock", "icon-sm") @T["Republish"]</button>
                             </form>
                         }
                     </div>

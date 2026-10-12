@@ -4,14 +4,14 @@
 }
 <div class="container section-pad">
     <div class="section-head">
-        <h1>📢 @T["Ad banners"]</h1>
+        <h1>@Icons.Svg("image") @T["Ad banners"]</h1>
         <a href="/admin/banners/create" class="btn btn-primary">+ @T["New banner"]</a>
     </div>
     <partial name="_AdminNav" />
 
     @if (Model.Count == 0)
     {
-        <div class="empty-state"><span class="empty-icon">📢</span><h3>@T["No banners yet"]</h3></div>
+        <div class="empty-state"><span class="empty-icon">@Icons.Svg("image")</span><h3>@T["No banners yet"]</h3></div>
     }
     else
     {
@@ -24,21 +24,21 @@
                         <div class="admin-row-title">@b.Title</div>
                         <div class="muted small">
                             @b.Placement.TranslateEnum() ·
-                            @(b.IsLive(DateTime.UtcNow) ? $"🟢 {T["Live"]}" : $"⚪ {T["Off"]}") ·
-                            👁 @b.Impressions.Number() · 🖱 @b.Clicks.Number()
+                            @(b.IsLive(DateTime.UtcNow) ? $"{T["Live"]}" : $"{T["Off"]}") ·
+                            @Icons.Svg("eye", "icon-sm") @b.Impressions.Number() · @Icons.Svg("link", "icon-sm") @b.Clicks.Number()
                             @if (b.StartsAt.HasValue || b.EndsAt.HasValue) { <text> · @(b.StartsAt?.ToString("d MMM") ?? "…") → @(b.EndsAt?.ToString("d MMM") ?? "…")</text> }
                         </div>
-                        <div class="muted small ellipsis">→ @b.LinkUrl</div>
+                        <div class="muted small ellipsis">@Icons.Svg("arrow", "icon-sm") @b.LinkUrl</div>
                     </div>
                     <div class="admin-actions">
-                        <a href="/admin/banners/@b.Id/edit" class="btn btn-ghost btn-sm">✏️ @T["Edit"]</a>
+                        <a href="/admin/banners/@b.Id/edit" class="btn btn-ghost btn-sm">@Icons.Svg("edit", "icon-sm") @T["Edit"]</a>
                         <form method="post" action="/admin/banners/@b.Id/toggle" class="inline-form">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-ghost btn-sm">@(b.IsActive ? T["Deactivate"] : T["Activate"])</button>
                         </form>
                         <form method="post" action="/admin/banners/@b.Id/delete" class="inline-form" onsubmit="return confirm('@T["Are you sure?"]')">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-ghost btn-sm btn-danger">🗑</button>
+                            <button type="submit" class="btn btn-ghost btn-sm btn-danger" aria-label="@T["Delete"]" title="@T["Delete"]">@Icons.Svg("trash", "icon-sm")</button>
                         </form>
                     </div>
                 </div>

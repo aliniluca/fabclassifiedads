@@ -307,7 +307,7 @@ public class AdminController(
         try
         {
             await email.SendAsync(to, "AiciGăsești — test email",
-                "<h2>✅ Email works</h2><p>Your SMTP configuration is sending correctly.</p>");
+                "<h2>Email works</h2><p>Your SMTP configuration is sending correctly.</p>");
             TempData["Flash"] = $"Test email sent to {to}.";
         }
         catch (Exception ex)

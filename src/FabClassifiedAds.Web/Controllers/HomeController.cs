@@ -19,13 +19,16 @@ public class HomeController(AppDbContext db) : Controller
             FeaturedListings = await ActiveListings()
                 .Where(l => l.IsFeatured)
                 .OrderByDescending(l => l.BumpedAt).Take(8).ToListAsync(),
+            // featured ads already have their own row, so "latest" skips them
             LatestListings = await ActiveListings()
+                .Where(l => !l.IsFeatured)
                 .OrderByDescending(l => l.CreatedAt).Take(12).ToListAsync(),
             TotalActiveListings = await db.Listings.CountAsync(l => l.Status == ListingStatus.Active),
-            TotalUsers = await db.Users.CountAsync(),
-            TotalCategories = await db.Categories.CountAsync(),
             PopularBrands = await db.CarBrands.AsNoTracking()
                 .Where(b => b.IsPopular).OrderBy(b => b.Name).ToListAsync(),
+            RiskExample = await db.Listings.AsNoTracking()
+                .Where(l => l.Status == ListingStatus.Active && l.TrustScore < 40)
+                .OrderBy(l => l.TrustScore).FirstOrDefaultAsync(),
         };
         return View(vm);
     }

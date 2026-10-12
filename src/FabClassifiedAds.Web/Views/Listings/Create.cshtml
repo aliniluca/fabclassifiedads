@@ -12,7 +12,7 @@
 
     <div class="import-box panel" id="importBox">
         <div class="import-box-head">
-            <span class="import-box-icon">📥</span>
+            <span class="import-box-icon">@Icons.Svg("download")</span>
             <div>
                 <strong>@T["Already have this ad on another site?"]</strong>
                 <div class="muted small">@T["Paste the link to your own ad and we'll fill in the form for you."]</div>
@@ -37,7 +37,7 @@
                 <option value="">@T["Choose a category…"]</option>
                 @foreach (var root in Model.CategoryTree)
                 {
-                    <optgroup label="@root.Icon @T[root.Name]">
+                    <optgroup label="@T[root.Name]">
                         @foreach (var child in root.Children)
                         {
                             <option value="@child.Id">@T[child.Name]</option>
@@ -87,16 +87,16 @@
             <span>@T["Photos"] <span class="muted">@T["PhotoLimits"]</span></span>
             <label class="photo-drop" id="photoDrop">
                 <input type="file" name="Photos" id="photoInput" multiple accept="image/jpeg,image/png,image/webp,image/gif" hidden />
-                <span class="photo-drop-hint">📸 @T["Click to choose photos"]<br/><small class="muted">@T["The first photo becomes the cover"]</small></span>
+                <span class="photo-drop-hint">@Icons.Svg("camera") @T["Click to choose photos"]<br/><small class="muted">@T["The first photo becomes the cover"]</small></span>
             </label>
             <div class="photo-previews" id="photoPreviews"></div>
         </div>
 
         <div class="field">
-            <span>🎬 @T["Video"] <span class="muted">@T["VideoLimits"]</span></span>
+            <span>@Icons.Svg("video", "icon-sm") @T["Video"] <span class="muted">@T["VideoLimits"]</span></span>
             <label class="photo-drop">
                 <input type="file" name="Video" id="videoInput" accept="video/mp4,video/webm,video/quicktime" hidden />
-                <span class="photo-drop-hint" id="videoHint">🎥 @T["Add a vertical video — video ads appear first in the Feed"]</span>
+                <span class="photo-drop-hint" id="videoHint">@Icons.Svg("video") @T["Add a vertical video — video ads appear first in the Feed"]</span>
             </label>
         </div>
 
@@ -112,7 +112,7 @@
         </div>
 
         <fieldset id="carFields" class="dyn-fields" hidden>
-            <legend>🚗 @T["Vehicle details"]</legend>
+            <legend>@Icons.Svg("car", "icon-sm") @T["Vehicle details"]</legend>
             <div class="field-row">
                 <label class="field">
                     <span>@T["Brand"]</span>
@@ -182,7 +182,7 @@
         </fieldset>
 
         <fieldset id="reFields" class="dyn-fields" hidden>
-            <legend>🏠 @T["Property details"]</legend>
+            <legend>@Icons.Svg("home", "icon-sm") @T["Property details"]</legend>
             <div class="field-row">
                 <label class="field"><span>@T["Type"] *</span>
                     <select asp-for="PropertyType"><option value="">@T["Type…"]</option>
@@ -225,6 +225,6 @@
             </details>
         </fieldset>
 
-        <button type="submit" class="btn btn-primary btn-block btn-lg">🚀 @T["Publish ad"]</button>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">@T["Publish ad"]</button>
     </form>
 </div>

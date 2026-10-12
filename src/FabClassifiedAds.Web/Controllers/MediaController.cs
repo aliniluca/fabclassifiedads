@@ -26,24 +26,18 @@ public class MediaController(AppDbContext db, IWebHostEnvironment env) : Control
     [ResponseCache(Duration = 86400)]
     public IActionResult Placeholder(string seed)
     {
-        var hash = Math.Abs(seed.GetHashCode(StringComparison.Ordinal));
-        var (from, to) = Palettes[hash % Palettes.Length];
-        var angle = hash % 360;
-        var initial = char.ToUpperInvariant(seed.FirstOrDefault(char.IsLetter) is var c && c != '\0' ? c : 'F');
-
-        var svg = $"""
+        // default "no photo" plate for every ad without pictures: flat field, hairline frame,
+        // the AiciGăsești stamp mark and wordmark in muted ink
+        const string svg = """
             <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
-              <defs>
-                <linearGradient id="g" gradientTransform="rotate({angle} 0.5 0.5)">
-                  <stop offset="0%" stop-color="{from}"/>
-                  <stop offset="100%" stop-color="{to}"/>
-                </linearGradient>
-              </defs>
-              <rect width="800" height="600" fill="url(#g)"/>
-              <circle cx="{120 + hash % 560}" cy="{100 + hash % 400}" r="180" fill="#ffffff" opacity="0.10"/>
-              <circle cx="{600 - hash % 400}" cy="{450 - hash % 300}" r="120" fill="#000000" opacity="0.07"/>
-              <text x="400" y="330" font-family="Arial, sans-serif" font-size="160" font-weight="bold"
-                    fill="#ffffff" opacity="0.35" text-anchor="middle">{initial}</text>
+              <rect width="800" height="600" fill="#e9edf1"/>
+              <g transform="translate(352 196) scale(3)" fill="none" stroke="#7d8a99" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="16" cy="16" r="14" stroke-width="2.2"/>
+                <circle cx="16" cy="16" r="10.5" stroke-width="1"/>
+                <path d="m11 16.4 3.4 3.4 6.6-7.2" stroke-width="2.4"/>
+              </g>
+              <text x="400" y="358" text-anchor="middle" fill="#7d8a99" font-size="46" letter-spacing="-0.5"
+                    font-family="'Public Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"><tspan font-weight="700">Aici</tspan><tspan font-weight="400">Găsești</tspan></text>
             </svg>
             """;
         return Content(svg, "image/svg+xml");
@@ -100,14 +94,14 @@ public class MediaController(AppDbContext db, IWebHostEnvironment env) : Control
                 <clipPath id="photo"><rect x="60" y="320" width="960" height="960" rx="48"/></clipPath>
               </defs>
               <rect width="1080" height="1920" fill="url(#bg)"/>
-              <text x="80" y="170" font-family="Arial, sans-serif" font-size="76" font-weight="bold" fill="#ffffff">⚡ Aici<tspan fill="{to}">Găsești</tspan></text>
+              <text x="80" y="170" font-family="Arial, sans-serif" font-size="76" font-weight="bold" fill="#ffffff">Aici<tspan fill="{to}">Găsești</tspan></text>
               <text x="80" y="245" font-family="Arial, sans-serif" font-size="40" fill="#9aa0bd">{WebUtility.HtmlEncode(listing.Category.Icon + " " + listing.Category.Name)}</text>
               <rect x="60" y="320" width="960" height="960" rx="48" fill="url(#accent)" opacity="0.85"/>
               {photoElement}
               {titleSvg}
               <text x="80" y="{1480 + titleLines.Count * 78}" font-family="Arial, sans-serif" font-size="44" fill="#cfd3e8">{WebUtility.HtmlEncode(listing.ListingSummary())}</text>
               <text x="80" y="{1590 + titleLines.Count * 78}" font-family="Arial, sans-serif" font-size="96" font-weight="bold" fill="url(#accent)">{WebUtility.HtmlEncode(listing.Price())}</text>
-              <text x="80" y="1850" font-family="Arial, sans-serif" font-size="40" fill="#9aa0bd">📍 {WebUtility.HtmlEncode(listing.City)}   ·   aicigasesti.ro/l/{listing.Id}</text>
+              <text x="80" y="1850" font-family="Arial, sans-serif" font-size="40" fill="#9aa0bd">{WebUtility.HtmlEncode(listing.City)}   ·   aicigasesti.ro/l/{listing.Id}</text>
             </svg>
             """;
         return Content(svg, "image/svg+xml");

@@ -3,7 +3,7 @@
     var holdAll = (bool)(ViewBag.HoldAll ?? false);
 }
 <div class="container narrow section-pad">
-    <h1>⚙️ @T["Site settings"]</h1>
+    <h1>@Icons.Svg("settings") @T["Site settings"]</h1>
     <partial name="_AdminNav" />
 
     <form method="post" action="/admin/settings" class="panel form-panel mt-16">
@@ -22,7 +22,7 @@
         </label>
         <p class="muted small">@T["These add to the built-in lists. Matching is diacritics- and leetspeak-insensitive."]</p>
 
-        <button type="submit" class="btn btn-primary btn-block mt-16">💾 @T["Save settings"]</button>
+        <button type="submit" class="btn btn-primary btn-block mt-16">@T["Save settings"]</button>
     </form>
 
     <div class="panel form-panel mt-16">
@@ -30,7 +30,7 @@
         <p class="muted small">@T["Configured via SMTP_* environment variables at deploy. Send yourself a test to verify."]</p>
         <form method="post" action="/admin/settings/test-email">
             @Html.AntiForgeryToken()
-            <button type="submit" class="btn btn-ghost btn-sm">✉️ @T["Send test email"]</button>
+            <button type="submit" class="btn btn-ghost btn-sm">@Icons.Svg("message", "icon-sm") @T["Send test email"]</button>
         </form>
     </div>
 </div>

@@ -216,9 +216,9 @@ public class TrustService(AppDbContext db)
         else report.Add("Email not confirmed", TrustLevel.Warning, 10);
 
         if (user.RatingCount >= 5 && user.RatingAverage < 3.5)
-            report.Add("Low ratings", TrustLevel.Danger, 20, $"★ {user.RatingAverage:0.0}");
+            report.Add("Low ratings", TrustLevel.Danger, 20, $"{user.RatingAverage:0.0}/5");
         else if (user.RatingCount > 0)
-            report.Add("Good ratings", TrustLevel.Good, 0, $"★ {user.RatingAverage:0.0} ({user.RatingCount})");
+            report.Add("Good ratings", TrustLevel.Good, 0, $"{user.RatingAverage:0.0}/5, {user.RatingCount}");
         else
             report.Add("No ratings yet", TrustLevel.Info, 5);
 

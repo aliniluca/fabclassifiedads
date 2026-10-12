@@ -1,0 +1,632 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-12T00:00:00Z",
+  "title": "Design System: AiciGăsești",
+  "extensions": {
+    "colorMeta": {
+      "document-green": {
+        "role": "primary",
+        "displayName": "Document Green",
+        "tonalRamp": [
+          "#074533",
+          "#0c7859",
+          "#12ab7e",
+          "#17dea4",
+          "#46ecbc",
+          "#7ef2d0",
+          "#b5f7e4",
+          "#e8fdf7"
+        ],
+        "cssVar": "--primary"
+      },
+      "document-green-deep": {
+        "role": "primary",
+        "displayName": "Document Green Deep",
+        "tonalRamp": [
+          "#064633",
+          "#0b7958",
+          "#10ad7d",
+          "#15e0a2",
+          "#44eeba",
+          "#7cf3cf",
+          "#b4f8e4",
+          "#e8fdf6"
+        ],
+        "cssVar": "--primary-strong"
+      },
+      "check-cell-green": {
+        "role": "primary",
+        "displayName": "Check Cell Green",
+        "tonalRamp": [
+          "#1c3026",
+          "#315442",
+          "#46775e",
+          "#5a9b7a",
+          "#7eb499",
+          "#a5cab8",
+          "#cbe1d6",
+          "#eff6f2"
+        ],
+        "cssVar": "--primary-soft"
+      },
+      "check-line-green": {
+        "role": "primary",
+        "displayName": "Check Line Green",
+        "tonalRamp": [
+          "#1c3027",
+          "#315444",
+          "#457761",
+          "#5a9b7e",
+          "#7eb49c",
+          "#a5cbba",
+          "#cbe1d7",
+          "#eff6f3"
+        ],
+        "cssVar": "--primary-line"
+      },
+      "navy-ink": {
+        "role": "secondary",
+        "displayName": "Navy Ink",
+        "tonalRamp": [
+          "#13233a",
+          "#213c64",
+          "#2f568e",
+          "#3c6fb8",
+          "#6590cd",
+          "#93b1dc",
+          "#c2d2eb",
+          "#ecf1f9"
+        ],
+        "cssVar": "--ink"
+      },
+      "navy-ink-raised": {
+        "role": "secondary",
+        "displayName": "Navy Ink Raised",
+        "tonalRamp": [
+          "#142338",
+          "#243c61",
+          "#33568a",
+          "#426fb3",
+          "#6a90c8",
+          "#96b1d9",
+          "#c3d3e9",
+          "#ecf1f8"
+        ],
+        "cssVar": "--ink-2"
+      },
+      "header-mint": {
+        "role": "secondary",
+        "displayName": "Header Mint",
+        "tonalRamp": [
+          "#143828",
+          "#236246",
+          "#328b64",
+          "#41b481",
+          "#69c99f",
+          "#96d9bc",
+          "#c3e9d9",
+          "#ecf8f3"
+        ]
+      },
+      "risk-red": {
+        "role": "tertiary",
+        "displayName": "Risk Red",
+        "tonalRamp": [
+          "#400d0d",
+          "#6e1616",
+          "#9d2020",
+          "#cc2929",
+          "#dd5555",
+          "#e78888",
+          "#f1bbbb",
+          "#fbeaea"
+        ],
+        "cssVar": "--danger"
+      },
+      "risk-red-soft": {
+        "role": "tertiary",
+        "displayName": "Risk Red Soft",
+        "tonalRamp": [
+          "#460a07",
+          "#79120c",
+          "#ac1a11",
+          "#df2116",
+          "#ec4f46",
+          "#f2847d",
+          "#f8b9b5",
+          "#fde9e8"
+        ],
+        "cssVar": "--danger-soft"
+      },
+      "risk-red-line": {
+        "role": "tertiary",
+        "displayName": "Risk Red Line",
+        "tonalRamp": [
+          "#400f0c",
+          "#6f1b15",
+          "#9f261e",
+          "#ce3127",
+          "#de5c54",
+          "#e88d87",
+          "#f2beba",
+          "#fbebea"
+        ],
+        "cssVar": "--danger-line"
+      },
+      "caution-amber": {
+        "role": "tertiary",
+        "displayName": "Caution Amber",
+        "tonalRamp": [
+          "#4c2d00",
+          "#854e00",
+          "#bd6f00",
+          "#f59000",
+          "#ffab33",
+          "#ffc470",
+          "#ffddad",
+          "#fff4e5"
+        ],
+        "cssVar": "--warn"
+      },
+      "caution-amber-soft": {
+        "role": "tertiary",
+        "displayName": "Caution Amber Soft",
+        "tonalRamp": [
+          "#483005",
+          "#7c5308",
+          "#b1760c",
+          "#e6990f",
+          "#f2b240",
+          "#f6c979",
+          "#fae0b2",
+          "#fdf5e7"
+        ],
+        "cssVar": "--warn-soft"
+      },
+      "caution-amber-line": {
+        "role": "tertiary",
+        "displayName": "Caution Amber Line",
+        "tonalRamp": [
+          "#402e0d",
+          "#6f4f16",
+          "#9e711f",
+          "#cd9228",
+          "#dead54",
+          "#e8c588",
+          "#f2debb",
+          "#fbf5ea"
+        ],
+        "cssVar": "--warn-line"
+      },
+      "cool-page": {
+        "role": "neutral",
+        "displayName": "Cool Page",
+        "tonalRamp": [
+          "#1f262e",
+          "#354250",
+          "#4b5e71",
+          "#627a93",
+          "#8599ad",
+          "#a9b8c6",
+          "#ced6de",
+          "#f0f2f5"
+        ],
+        "cssVar": "--page"
+      },
+      "sheet-white": {
+        "role": "neutral",
+        "displayName": "Sheet White",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5e5e5e",
+          "#7a7a7a",
+          "#999999",
+          "#b8b8b8",
+          "#d6d6d6",
+          "#f2f2f2"
+        ],
+        "cssVar": "--surface"
+      },
+      "sheet-tint": {
+        "role": "neutral",
+        "displayName": "Sheet Tint",
+        "tonalRamp": [
+          "#1b2631",
+          "#2f4255",
+          "#435e79",
+          "#577a9d",
+          "#7c99b6",
+          "#a3b8cc",
+          "#cbd6e2",
+          "#eff2f6"
+        ],
+        "cssVar": "--surface-2"
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "tonalRamp": [
+          "#1f262d",
+          "#36414f",
+          "#4d5d70",
+          "#637991",
+          "#8698ac",
+          "#aab7c5",
+          "#cfd6de",
+          "#f0f2f5"
+        ],
+        "cssVar": "--border"
+      },
+      "hairline-strong": {
+        "role": "neutral",
+        "displayName": "Hairline Strong",
+        "tonalRamp": [
+          "#20262d",
+          "#37414e",
+          "#4e5d6f",
+          "#657990",
+          "#8798ab",
+          "#abb7c4",
+          "#cfd6dd",
+          "#f0f2f4"
+        ],
+        "cssVar": "--border-strong"
+      },
+      "slate-muted": {
+        "role": "neutral",
+        "displayName": "Slate Muted",
+        "tonalRamp": [
+          "#20252c",
+          "#38414d",
+          "#505c6d",
+          "#68778d",
+          "#8996a9",
+          "#adb6c3",
+          "#d0d5dc",
+          "#f0f2f4"
+        ],
+        "cssVar": "--text-muted"
+      },
+      "on-ink-muted": {
+        "role": "neutral",
+        "displayName": "On-Ink Muted",
+        "tonalRamp": [
+          "#1c2530",
+          "#314154",
+          "#465c77",
+          "#5a779a",
+          "#7e96b4",
+          "#a5b6ca",
+          "#ccd5e1",
+          "#eff2f6"
+        ],
+        "cssVar": "--on-ink-muted"
+      },
+      "photo-plate": {
+        "role": "neutral",
+        "displayName": "Photo Plate",
+        "tonalRamp": [
+          "#1e262f",
+          "#334251",
+          "#495e74",
+          "#5f7a96",
+          "#8299b0",
+          "#a7b8c8",
+          "#cdd6df",
+          "#eff2f5"
+        ]
+      },
+      "focus-blue": {
+        "role": "neutral",
+        "displayName": "Focus Blue",
+        "tonalRamp": [
+          "#061f46",
+          "#0b367a",
+          "#0f4dad",
+          "#1464e1",
+          "#4487ee",
+          "#7cabf3",
+          "#b4cff8",
+          "#e8f0fd"
+        ],
+        "cssVar": "--focus"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Homepage and /start intro H1 only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page H1: results, listing title (max 30ch), account pages."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Section heads."
+      },
+      "subtitle": {
+        "displayName": "Subtitle",
+        "purpose": "H3 inside panels."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text; 72ch cap on descriptions and legal, 52ch on intro copy."
+      },
+      "label": {
+        "displayName": "Sheet Label",
+        "purpose": "Uppercase heading of a sheet or ruled group; never a tagline above another heading."
+      },
+      "price": {
+        "displayName": "Price",
+        "purpose": "Detail price (800, 1.85rem); cards use 750 at 1.14rem. Always tabular."
+      }
+    },
+    "shadows": [
+      {
+        "name": "sheet-lift",
+        "value": "0 1px 2px rgba(19,35,58,.06), 0 4px 14px rgba(19,35,58,.07)",
+        "purpose": "Inspection sheet at rest; listing card on hover only."
+      },
+      {
+        "name": "floating-layer",
+        "value": "0 2px 4px rgba(19,35,58,.06), 0 12px 32px rgba(19,35,58,.12)",
+        "purpose": "Mobile nav drop panel, cookie consent bar."
+      },
+      {
+        "name": "pressed",
+        "value": "inset 0 2px 4px rgba(0,0,0,.18)",
+        "purpose": "Primary button :active."
+      },
+      {
+        "name": "focus-ring-field",
+        "value": "0 0 0 3px rgba(11,107,79,.18)",
+        "purpose": "Field and composite search bar focus, with green border."
+      },
+      {
+        "name": "focus-ring-header",
+        "value": "0 0 0 3px rgba(127,209,173,.35)",
+        "purpose": "Header search focus on navy."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "All state transitions."
+      },
+      {
+        "name": "duration-state",
+        "value": "150ms",
+        "purpose": "Color and border changes on buttons, chips, tiles; card shadow uses 200ms."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "transition: none; animation: none",
+        "purpose": "Under prefers-reduced-motion everything is still."
+      },
+      {
+        "name": "feed-kenburns",
+        "value": "14s ease-in-out infinite alternate, scale 1 to 1.1",
+        "purpose": "Feed only: slow drift on still photos."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "560px"
+      },
+      {
+        "name": "small",
+        "value": "640px"
+      },
+      {
+        "name": "messages",
+        "value": "860px"
+      },
+      {
+        "name": "header-collapse",
+        "value": "900px"
+      },
+      {
+        "name": "search-stack",
+        "value": "920px"
+      },
+      {
+        "name": "detail-stack",
+        "value": "960px"
+      },
+      {
+        "name": "nav-labels",
+        "value": "1100px"
+      }
+    ],
+    "layout": {
+      "container": "1240px",
+      "containerNarrow": "860px",
+      "gutter": "20px",
+      "headerHeight": "64px",
+      "sectionPad": "40px"
+    },
+    "exceptions": [
+      {
+        "name": "Video feed (/feed)",
+        "body": "Sanctioned dark, immersive surface: black ground, full-height scroll-snap items, a bottom linear-gradient shade (transparent 55% to rgba(0,0,0,.82)) for caption legibility, 10px-rounded media from 720px, round 52px translucent-navy rail buttons (rgba(19,35,58,.72), 22% white border) that turn document green on hover, Ken Burns drift on stills."
+      },
+      {
+        "name": "Chat bubbles",
+        "body": "12px radius with a 3px tail corner; own messages navy with white text, theirs Sheet Tint with hairline."
+      }
+    ],
+    "icons": {
+      "source": "Helpers/Icons.cs",
+      "grid": "24px",
+      "stroke": "1.5px",
+      "color": "currentColor",
+      "geometry": "Lucide paths (ISC)",
+      "sizes": {
+        "default": "20px",
+        "small": "16px",
+        "large": "28px",
+        "category": "30px at stroke 1.4"
+      }
+    },
+    "fonts": {
+      "family": "Public Sans",
+      "files": [
+        "wwwroot/fonts/public-sans-latin.woff2",
+        "wwwroot/fonts/public-sans-latin-ext.woff2"
+      ],
+      "axis": "wght 100-900",
+      "display": "swap"
+    },
+    "placeholder": {
+      "source": "Controllers/MediaController.cs Placeholder",
+      "body": "Flat #e9edf1 plate, double-ring check mark and AiciGăsești wordmark in #7d8a99; used for every ad without photos."
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Document-green primary action (search, publish, contact).",
+      "html": "<button class=\"ds-btn-primary\"><svg class='ds-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 5v14M5 12h14'/></svg>Adaugă anunț</button>",
+      "css": ".ds-btn-primary{font-family:'Public Sans',system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 20px;border-radius:6px;border:1px solid transparent;font-weight:650;font-size:.95rem;cursor:pointer;transition:background-color .15s cubic-bezier(.16,1,.3,1),border-color .15s cubic-bezier(.16,1,.3,1);background:var(--primary,#0b6b4f);color:#fff;} .ds-btn-primary:hover{background:var(--primary-strong,#08573f);} .ds-btn-primary:active{box-shadow:inset 0 2px 4px rgba(0,0,0,.18);} .ds-btn-primary:focus-visible{outline:2px solid var(--focus,#1f6feb);outline-offset:2px;} .ds-icon{width:20px;height:20px;}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action on white: hairline-strong frame, navy text.",
+      "html": "<button class=\"ds-btn-ghost\">Vezi toate anunțurile vânzătorului</button>",
+      "css": ".ds-btn-ghost{font-family:'Public Sans',system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 20px;border-radius:6px;border:1px solid transparent;font-weight:650;font-size:.95rem;cursor:pointer;transition:background-color .15s cubic-bezier(.16,1,.3,1),border-color .15s cubic-bezier(.16,1,.3,1);background:#fff;border-color:var(--border-strong,#aeb9c6);color:var(--ink,#13233a);} .ds-btn-ghost:hover{border-color:var(--ink,#13233a);background:var(--surface-2,#f6f8fa);} .ds-btn-ghost:focus-visible{outline:2px solid var(--focus,#1f6feb);outline-offset:2px;}"
+    },
+    {
+      "name": "Danger Button",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Destructive action in the red risk triplet.",
+      "html": "<button class=\"ds-btn-danger\">Șterge anunțul</button>",
+      "css": ".ds-btn-danger{font-family:'Public Sans',system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 20px;border-radius:6px;border:1px solid transparent;font-weight:650;font-size:.95rem;cursor:pointer;transition:background-color .15s cubic-bezier(.16,1,.3,1),border-color .15s cubic-bezier(.16,1,.3,1);background:#fff;color:var(--danger,#c62828);border-color:var(--danger-line,#f0b4b0);} .ds-btn-danger:hover{border-color:var(--danger,#c62828);background:var(--danger-soft,#fdeceb);} .ds-btn-danger:focus-visible{outline:2px solid var(--focus,#1f6feb);outline-offset:2px;}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Form field: white, hairline-strong border, green focus ring.",
+      "html": "<input class=\"ds-input\" placeholder=\"Ce cauți?\" />",
+      "css": ".ds-input{font-family:'Public Sans',system-ui,sans-serif;width:280px;min-height:42px;padding:9px 12px;border-radius:6px;border:1px solid var(--border-strong,#aeb9c6);background:#fff;color:var(--ink,#13233a);font-size:.95rem;} .ds-input::placeholder{color:#66727f;} .ds-input:focus{outline:none;border-color:var(--primary,#0b6b4f);box-shadow:0 0 0 3px rgba(11,107,79,.18);}"
+    },
+    {
+      "name": "Header Bar",
+      "kind": "nav",
+      "refersTo": "site-header",
+      "description": "Full-width navy bar: wordmark, search, nav links, green post action.",
+      "html": "<header class=\"ds-header\"><a class=\"ds-logo\" href=\"#\"><svg class='ds-mark' viewBox='0 0 32 32' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='16' cy='16' r='14' stroke-width='2.2'/><circle cx='16' cy='16' r='10.5' stroke-width='1'/><path d='m11 16.4 3.4 3.4 6.6-7.2' stroke-width='2.4'/></svg><span>Aici</span><span class=\"ds-light\">Găsești</span></a><form class=\"ds-hsearch\"><input placeholder=\"Caută mașini, apartamente…\"/><button type=\"button\" aria-label=\"Caută\"><svg class='ds-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='7'/><path d='m20 20-3.5-3.5'/></svg></button></form><a class=\"ds-navlink\" href=\"#\">Conectare</a><a class=\"ds-post\" href=\"#\"><svg class='ds-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 5v14M5 12h14'/></svg>Adaugă anunț</a></header>",
+      "css": ".ds-header{font-family:'Public Sans',system-ui,sans-serif;display:flex;align-items:center;gap:16px;min-height:64px;padding:10px 20px;background:var(--ink,#13233a);color:#fff;} .ds-logo{display:inline-flex;align-items:center;font-size:1.28rem;font-weight:750;letter-spacing:-.02em;color:#fff;text-decoration:none;} .ds-light{font-weight:400;} .ds-mark{width:26px;height:26px;color:#7fd1ad;margin-right:9px;} .ds-hsearch{flex:1;max-width:420px;position:relative;display:flex;} .ds-hsearch input{width:100%;height:42px;padding:0 46px 0 14px;border-radius:6px;border:1px solid transparent;background:#fff;color:#13233a;font:inherit;font-size:.95rem;} .ds-hsearch input:focus{outline:none;border-color:#7fd1ad;box-shadow:0 0 0 3px rgba(127,209,173,.35);} .ds-hsearch button{position:absolute;right:3px;top:3px;bottom:3px;width:40px;border:0;border-radius:4px;background:#0b6b4f;color:#fff;display:grid;place-items:center;cursor:pointer;} .ds-hsearch button:hover{background:#08573f;} .ds-navlink{margin-left:auto;padding:8px 10px;border-radius:6px;color:#b9c6d6;font-weight:550;font-size:.92rem;text-decoration:none;} .ds-navlink:hover{color:#fff;background:#1e3352;} .ds-navlink:focus-visible,.ds-post:focus-visible{outline:2px solid var(--focus,#1f6feb);outline-offset:2px;} .ds-post{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 20px;border-radius:6px;background:#0b6b4f;color:#fff;font-weight:650;font-size:.95rem;text-decoration:none;} .ds-post:hover{background:#08573f;} .ds-icon{width:20px;height:20px;}"
+    },
+    {
+      "name": "Chip and Trust Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Brand / subcategory chip (navy border on hover) beside a tabular trust chip in its risk triplet.",
+      "html": "<a class=\"ds-chip\" href=\"#\">Volkswagen</a> <span class=\"ds-trust ds-trust-warn\"><svg class='ds-icon-s' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10'/><path d='m9 12 2 2 4-4'/></svg>60/100</span>",
+      "css": ".ds-chip{font-family:'Public Sans',system-ui,sans-serif;padding:7px 13px;min-height:38px;display:inline-flex;align-items:center;background:#fff;border:1px solid var(--border,#d6dce3);border-radius:6px;font-size:.88rem;font-weight:550;color:var(--ink,#13233a);text-decoration:none;} .ds-chip:hover{border-color:var(--ink,#13233a);} .ds-chip:focus-visible{outline:2px solid var(--focus,#1f6feb);outline-offset:2px;} .ds-trust{font-family:'Public Sans',system-ui,sans-serif;display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;font-size:.76rem;font-weight:700;font-variant-numeric:tabular-nums;border:1px solid;vertical-align:middle;} .ds-trust-warn{background:var(--warn-soft,#fdf3e1);color:var(--warn,#8f5400);border-color:var(--warn-line,#e9c98f);} .ds-icon-s{width:13px;height:13px;}"
+    },
+    {
+      "name": "Listing Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat white card with 4:3 photo well, tabular price and the ruled check strip at its foot.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-media\"><span class=\"ds-badge\">Promovat</span></div><div class=\"ds-body\"><div class=\"ds-meta\">Autoturisme</div><a class=\"ds-title\" href=\"#\">BMW 320d xDrive M Sport — Full LED, HUD</a><div class=\"ds-sum\">2021 · 78 000 km · Diesel · Automată</div><div class=\"ds-price\">28 900 €</div><div class=\"ds-foot\"><span>Timișoara</span><span>acum 6 zile</span></div><div class=\"ds-strip\"><svg class='ds-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg><span class=\"ds-strip-l\">Verificat</span><span>95/100</span></div></div></article>",
+      "css": ".ds-card{font-family:'Public Sans',system-ui,sans-serif;width:260px;background:#fff;border:1px solid var(--border,#d6dce3);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s cubic-bezier(.16,1,.3,1),box-shadow .2s cubic-bezier(.16,1,.3,1);} .ds-card:hover{border-color:var(--border-strong,#aeb9c6);box-shadow:0 1px 2px rgba(19,35,58,.06),0 4px 14px rgba(19,35,58,.07);} .ds-media{position:relative;aspect-ratio:4/3;background:#e4e9ee;} .ds-badge{position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:4px;font-size:.7rem;font-weight:700;letter-spacing:.03em;background:#13233a;color:#fff;} .ds-body{padding:12px 14px 0;display:flex;flex-direction:column;gap:4px;} .ds-meta{font-size:.76rem;color:#556274;} .ds-title{font-weight:600;font-size:.96rem;line-height:1.3;color:#13233a;text-decoration:none;} .ds-title:hover{text-decoration:underline;text-underline-offset:3px;} .ds-title:focus-visible{outline:2px solid var(--focus,#1f6feb);outline-offset:2px;} .ds-sum{color:#556274;font-size:.82rem;font-variant-numeric:tabular-nums;} .ds-price{font-size:1.14rem;font-weight:750;color:#13233a;letter-spacing:-.01em;font-variant-numeric:tabular-nums;padding-top:6px;} .ds-foot{display:flex;justify-content:space-between;color:#556274;font-size:.78rem;padding:6px 0 10px;} .ds-strip{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;margin:0 -14px;padding:7px 14px;border-top:1px solid #d6dce3;font-size:.74rem;font-weight:700;color:#08573f;background:#e7f1ec;font-variant-numeric:tabular-nums;} .ds-strip .ds-icon{width:15px;height:15px;stroke-width:2;} .ds-strip-l{text-transform:uppercase;letter-spacing:.06em;}"
+    },
+    {
+      "name": "Inspection Sheet",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "Signature: navy-framed lifted sheet with tinted head strip, ruled tick rows and a navy-ruled foot.",
+      "html": "<aside class=\"ds-sheet\"><div class=\"ds-sheet-head\"><h2 class=\"ds-sheet-title\">Verificare AiciGăsești</h2><span class=\"ds-sheet-ref\">la fiecare anunț</span></div><ul class=\"ds-rows\"><li><span class=\"ds-tick\"><svg class='ds-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg></span><div><strong>Preț comparat cu piața</strong><em>Îl comparăm cu media anunțurilor similare.</em></div></li><li><span class=\"ds-tick\"><svg class='ds-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg></span><div><strong>Chat protejat</strong><em>Te avertizăm dacă cineva cere bani în avans.</em></div></li></ul><div class=\"ds-sheet-foot\">Fiecare anunț primește un scor de la 0 la 100.</div></aside>",
+      "css": ".ds-sheet{font-family:'Public Sans',system-ui,sans-serif;width:420px;background:#fff;border:1px solid var(--ink,#13233a);border-radius:6px;box-shadow:0 1px 2px rgba(19,35,58,.06),0 4px 14px rgba(19,35,58,.07);color:#13233a;} .ds-sheet-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 18px;border-bottom:1px solid #13233a;background:#f6f8fa;border-radius:6px 6px 0 0;} .ds-sheet-title{font-size:.78rem;font-weight:750;letter-spacing:.08em;text-transform:uppercase;margin:0;} .ds-sheet-ref{font-size:.78rem;color:#556274;} .ds-rows{list-style:none;margin:0;padding:0;} .ds-rows li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding:12px 18px;border-bottom:1px solid #d6dce3;} .ds-rows li:last-child{border-bottom:0;} .ds-rows strong{display:block;font-size:.95rem;} .ds-rows em{display:block;font-style:normal;font-size:.86rem;color:#556274;} .ds-tick{width:26px;height:26px;border-radius:4px;display:grid;place-items:center;background:#e7f1ec;color:#0b6b4f;border:1px solid #a9cdbd;} .ds-tick .ds-icon{width:16px;height:16px;stroke-width:2.25;} .ds-sheet-foot{padding:12px 18px;border-top:1px solid #13233a;font-size:.86rem;}"
+    },
+    {
+      "name": "Verification Stamp",
+      "kind": "custom",
+      "refersTo": "stamp",
+      "description": "Signature: rotated double-ring rubber stamp; green VERIFICAT, amber caution, red RISC.",
+      "html": "<div class=\"ds-stamps\"><div class=\"ds-stamp\"><div><div class=\"ds-sw\">VERIFICAT</div><div class=\"ds-ss\">95</div><div class=\"ds-sub\">AICIGĂSEȘTI</div></div></div><div class=\"ds-stamp ds-stamp-bad\"><div><div class=\"ds-sw\">RISC</div><div class=\"ds-ss\">5</div><div class=\"ds-sub\">AICIGĂSEȘTI</div></div></div></div>",
+      "css": ".ds-stamps{display:flex;gap:28px;padding:12px;} .ds-stamp{--stamp:#0b6b4f;font-family:'Public Sans',system-ui,sans-serif;width:104px;height:104px;border-radius:50%;border:3px solid var(--stamp);color:var(--stamp);display:grid;place-items:center;text-align:center;transform:rotate(-9deg);position:relative;background:rgba(255,255,255,.85);} .ds-stamp::before{content:'';position:absolute;inset:5px;border:1px solid var(--stamp);border-radius:50%;} .ds-stamp-bad{--stamp:#c62828;} .ds-sw{font-size:.6rem;font-weight:800;letter-spacing:.08em;line-height:1.1;} .ds-ss{font-size:1.5rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;} .ds-sub{font-size:.5rem;font-weight:700;letter-spacing:.06em;}"
+    },
+    {
+      "name": "Risk Check Line",
+      "kind": "custom",
+      "refersTo": "check-strip",
+      "description": "The red risk triplet on a check strip and a price-vs-market warning box.",
+      "html": "<div class=\"ds-rstrip\"><svg class='ds-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3'/><path d='M12 9v4M12 17h.01'/></svg><span class=\"ds-rl\">Risc ridicat</span><span>5/100</span></div><div class=\"ds-rprice\">Preț cu 67% sub media pieței — posibil risc</div>",
+      "css": ".ds-rstrip{font-family:'Public Sans',system-ui,sans-serif;width:260px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;padding:7px 14px;border-top:1px solid #d6dce3;font-size:.74rem;font-weight:700;background:#fdeceb;color:#c62828;font-variant-numeric:tabular-nums;} .ds-rstrip .ds-icon{width:15px;height:15px;stroke-width:2;} .ds-rl{text-transform:uppercase;letter-spacing:.06em;} .ds-rprice{font-family:'Public Sans',system-ui,sans-serif;margin-top:12px;width:320px;padding:10px 12px;border-radius:6px;font-size:.86rem;font-weight:600;background:#fdeceb;color:#c62828;border:1px solid #f0b4b0;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Fișa de inspecție",
+    "overview": "Every ad on AiciGăsești has been inspected, and the site reads like the paperwork that proves it: an official inspection sheet in the spirit of the Romanian RAR/ITP forms. White sheets lie on a cool grey-blue page. Navy ink carries the header bar, the headings and the body text. Document green means two things only: the primary action, and \"verified\". Red and amber appear only when something is actually wrong.\n\nThe density is that of a working marketplace, not a brochure. Grids are tight, information is ruled into cells with 1px hairlines, and figures (prices, km, years, scores) sit in tabular numerals so columns line up the way they would on a printed form. The one recurring artifact is the verification itself: a ruled check strip at the foot of every listing card, and a full inspection sheet with a round double-ring stamp on the homepage and the listing detail.\n\nThe system rejects the dark neon-gradient template and the bare OLX look where trust is invisible. There are no gradients, no glows, no emoji. The one sanctioned exception is the vertical video feed (`/feed`), which stays dark and immersive (see Do's and Don'ts).",
+    "keyCharacteristics": [
+      "White sheets on a cool page (#f3f5f7), ruled with 1px hairlines.",
+      "Navy ink for structure and text; document green for action and \"verified\" only.",
+      "Risk colors (red, amber) reserved for real warnings, always as soft fill + line + text triplets.",
+      "Public Sans, self-hosted, one family, tabular figures for every number.",
+      "6px corners everywhere; 4px for small inner pieces; full circle only for the stamp, avatars and round icon buttons.",
+      "Drawn 1.5px line icons on a 24px grid, `currentColor`, never emoji or glyphs."
+    ],
+    "rules": [
+      {
+        "name": "The Green Means Checked Rule",
+        "body": "Document green marks either the primary action or a passed check. It never decorates.",
+        "section": "colors"
+      },
+      {
+        "name": "The Risk Ink Rule",
+        "body": "Red and amber appear only when the inspection found something. Each warning uses its triplet (soft fill, line, ink); never a bare red fill with white text.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Gradient Rule",
+        "body": "Flat fills only. Emphasis comes from weight and ink, never gradients or glow.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Every price, km, year, cm³, hp, count and score uses `font-variant-numeric: tabular-nums`.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Family Rule",
+        "body": "Public Sans carries every role. Hierarchy is weight and size, never a second face.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Card Rule",
+        "body": "Listing cards, panels and chips are flat at rest with a hairline border; shadow appears on cards only on hover. Only the inspection sheet is lifted at rest.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do put the inspection result where the decision is made: a check strip on every card, the inspection sheet before the seller's pitch on detail.",
+      "Do frame grouped facts as ruled cells sharing 1px hairlines, like a printed form.",
+      "Do use tabular figures for every price, km, year and score.",
+      "Do use the Icons helper (24px grid, 1.5px stroke, `currentColor`) for every icon; 20px default, 16px small, 28 to 30px for category tiles.",
+      "Do use the risk triplet (soft fill, line, ink) for every warning state.",
+      "Do keep the vertical video feed (`/feed`) dark and immersive: black ground, full-height snap items, a bottom shade over the video for caption legibility, 10px-rounded media on desktop, round translucent-navy rail buttons that turn green on hover. This is the one sanctioned departure from the white-sheet world."
+    ],
+    "donts": [
+      "Don't use gradients, glows or neon anywhere outside the feed's caption shade.",
+      "Don't use green for decoration, or red and amber for anything that is not a real warning.",
+      "Don't use emoji or text glyphs as icons.",
+      "Don't add a second typeface.",
+      "Don't put an uppercase tagline above a heading; uppercase labels only head the sheet or ruled group they belong to.",
+      "Don't lift cards or panels with shadow at rest; only the inspection sheet is lifted.",
+      "Don't invent scale or social proof (user counts, testimonials, ratings) in any sheet, band or badge."
+    ]
+  }
+}

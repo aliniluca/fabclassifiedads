@@ -4,64 +4,68 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#13233a" />
     <title>@(ViewData["Title"] != null ? $"{ViewData["Title"]} — AiciGăsești" : "AiciGăsești")</title>
     @if (ViewData["MetaDescription"] is string metaDesc)
     {
         <meta name="description" content="@metaDesc" />
     }
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" href="~/fonts/public-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @await RenderSectionAsync("head", required: false)
 </head>
 <body>
+@{
+    var currentPath = Context.Request.Path + Context.Request.QueryString;
+    var wordmark = new Microsoft.AspNetCore.Html.HtmlString(
+        "<svg class=\"logo-mark\" viewBox=\"0 0 32 32\" fill=\"none\" stroke=\"currentColor\" aria-hidden=\"true\">" +
+        "<circle cx=\"16\" cy=\"16\" r=\"14\" stroke-width=\"2.2\"/><circle cx=\"16\" cy=\"16\" r=\"10.5\" stroke-width=\"1\"/>" +
+        "<path d=\"m11 16.4 3.4 3.4 6.6-7.2\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>");
+}
 <header class="site-header">
     <div class="container header-inner">
-        <a class="logo" href="/"><span class="logo-mark">⚡</span>Aici<span class="logo-accent">Găsești</span></a>
+        <a class="logo" href="/" aria-label="AiciGăsești — @T["Home"]">@wordmark<span>Aici<span class="logo-accent">Găsești</span></span></a>
 
-        <form class="header-search" action="/search" method="get">
-            <input type="search" name="Q" placeholder="@T["Search 25,000+ ads — cars, apartments, phones…"]"
+        <form class="header-search" action="/search" method="get" role="search">
+            <input type="search" name="Q" placeholder="@T["Search cars, apartments, phones…"]"
                    value="@(Context.Request.Query["Q"])" aria-label="@T["Search"]" />
-            <button type="submit" class="btn-search" aria-label="@T["Search"]">🔍</button>
+            <button type="submit" class="btn-search" aria-label="@T["Search"]">@Icons.Svg("search")</button>
         </form>
 
-        <button type="button" class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
+        <button type="button" class="nav-toggle" id="navToggle" aria-label="@T["Menu"]" aria-expanded="false" aria-controls="headerNav">@Icons.Svg("menu")</button>
 
-        <nav class="header-nav" id="headerNav">
-            @{
-                var currentPath = Context.Request.Path + Context.Request.QueryString;
-            }
+        <nav class="header-nav" id="headerNav" aria-label="@T["Main menu"]">
             <span class="lang-switch">
-                <a href="/set-language?culture=ro&returnUrl=@Uri.EscapeDataString(currentPath)" class="@(Translator.IsRo ? "active" : "")">RO</a><span class="lang-sep">|</span><a href="/set-language?culture=en&returnUrl=@Uri.EscapeDataString(currentPath)" class="@(Translator.IsRo ? "" : "active")">EN</a>
+                <a href="/set-language?culture=ro&returnUrl=@Uri.EscapeDataString(currentPath)" class="@(Translator.IsRo ? "active" : "")" lang="ro">RO</a><span class="lang-sep" aria-hidden="true">|</span><a href="/set-language?culture=en&returnUrl=@Uri.EscapeDataString(currentPath)" class="@(Translator.IsRo ? "" : "active")" lang="en">EN</a>
             </span>
-            <a href="/feed" class="nav-link nav-feed" title="Feed">🎬<span class="nav-label">Feed</span></a>
+            <a href="/feed" class="nav-link nav-feed" title="@T["Video feed"]">@Icons.Svg("play")<span class="nav-label">@T["Video feed"]</span></a>
             @if (User.Identity?.IsAuthenticated == true)
             {
-                <a href="/saved-searches" class="nav-link" title="@T["Alerts"]">🔔<span class="nav-label">@T["Alerts"]</span></a>
-                <a href="/favorites" class="nav-link" title="@T["Favorites"]">♥<span class="nav-label">@T["Favorites"]</span></a>
-                <a href="/messages" class="nav-link" title="@T["Messages"]">💬<span class="nav-label">@T["Messages"]</span></a>
-                <a href="/my-ads" class="nav-link" title="@T["My ads"]">📋<span class="nav-label">@T["My ads"]</span></a>
+                <a href="/saved-searches" class="nav-link" title="@T["Alerts"]">@Icons.Svg("bell")<span class="nav-label">@T["Alerts"]</span></a>
+                <a href="/favorites" class="nav-link" title="@T["Favorites"]">@Icons.Svg("heart")<span class="nav-label">@T["Favorites"]</span></a>
+                <a href="/messages" class="nav-link" title="@T["Messages"]">@Icons.Svg("message")<span class="nav-label">@T["Messages"]</span></a>
+                <a href="/my-ads" class="nav-link" title="@T["My ads"]">@Icons.Svg("list")<span class="nav-label">@T["My ads"]</span></a>
                 @if (User.IsInRole("Admin"))
                 {
-                    <a href="/admin" class="nav-link nav-admin" title="Admin">🛡️<span class="nav-label">Admin</span></a>
+                    <a href="/admin" class="nav-link nav-admin" title="Admin">@Icons.Svg("settings")<span class="nav-label">Admin</span></a>
                 }
                 <form action="/logout" method="post" class="inline-form">
                     @Html.AntiForgeryToken()
-                    <button type="submit" class="nav-link nav-button">@T["Sign out"]</button>
+                    <button type="submit" class="nav-link nav-button" title="@T["Sign out"]">@Icons.Svg("logout")<span class="nav-label">@T["Sign out"]</span></button>
                 </form>
             }
             else
             {
-                <a href="/login" class="nav-link">@T["Sign in"]</a>
+                <a href="/login" class="nav-link">@Icons.Svg("user")<span>@T["Sign in"]</span></a>
             }
-            <a href="/post" class="btn btn-primary btn-post">+ @T["Post ad"]</a>
+            <a href="/start" class="btn btn-primary btn-post">@Icons.Svg("plus")@T["Post ad"]</a>
         </nav>
     </div>
 </header>
 
 @if (TempData["Flash"] is string flash)
 {
-    <div class="container"><div class="flash">@T[flash]</div></div>
+    <div class="container"><div class="flash" role="status">@T[flash]</div></div>
 }
 
 <main>
@@ -71,8 +75,8 @@
 <footer class="site-footer">
     <div class="container footer-grid">
         <div>
-            <a class="logo" href="/"><span class="logo-mark">⚡</span>Aici<span class="logo-accent">Găsești</span></a>
-            <p class="footer-tagline">@T["The most complete classifieds platform. Buy, sell and discover anything — from cars to castles."]</p>
+            <a class="logo" href="/">@wordmark<span>Aici<span class="logo-accent">Găsești</span></span></a>
+            <p class="footer-tagline">@T["FooterTagline"]</p>
         </div>
         <div>
             <h4>@T["Marketplace"]</h4>
@@ -83,7 +87,7 @@
         </div>
         <div>
             <h4>@T["Account"]</h4>
-            <a href="/post">@T["Post an ad"]</a>
+            <a href="/start">@T["Post an ad"]</a>
             <a href="/favorites">@T["Favorites"]</a>
             <a href="/messages">@T["Messages"]</a>
             <a href="/my-ads">@T["My ads"]</a>
@@ -101,7 +105,7 @@
 
 @if (Context.Request.Cookies["cookie_consent"] == null)
 {
-    <div class="cookie-consent" id="cookieConsent">
+    <div class="cookie-consent" id="cookieConsent" role="region" aria-label="Cookies">
         <p>@T["We use only essential cookies to run the site."] <a href="/cookies">@T["Learn more"]</a></p>
         <button type="button" class="btn btn-primary btn-sm" id="cookieAccept">@T["Got it"]</button>
     </div>

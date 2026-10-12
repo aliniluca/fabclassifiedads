@@ -46,7 +46,7 @@ public class SavedSearchesController(AppDbContext db) : Controller
                 FiltersJson = JsonSerializer.Serialize(filters),
             });
             await db.SaveChangesAsync();
-            TempData["Flash"] = "Search saved — we'll email you when new matching ads appear. 🔔";
+            TempData["Flash"] = "Search saved — we'll email you when new matching ads appear.";
         }
         else
         {

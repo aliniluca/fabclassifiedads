@@ -5,7 +5,7 @@
     var c = ViewBag.Counts;
 }
 <div class="container section-pad">
-    <h1>🛡️ @T["Admin — moderation"]</h1>
+    <h1>@Icons.Svg("shield") @T["Admin — moderation"]</h1>
     <partial name="_AdminNav" />
 
     <div class="admin-stats">
@@ -17,14 +17,14 @@
     </div>
 
     <div class="admin-tabs">
-        <a href="/admin?tab=pending" class="admin-tab @(tab == "pending" ? "active" : "")">⏳ @T["Pending"] (@c.Pending)</a>
-        <a href="/admin?tab=active" class="admin-tab @(tab == "active" ? "active" : "")">✅ @T["Active"]</a>
-        <a href="/admin?tab=rejected" class="admin-tab @(tab == "rejected" ? "active" : "")">🚫 @T["Rejected"]</a>
+        <a href="/admin?tab=pending" class="admin-tab @(tab == "pending" ? "active" : "")">@Icons.Svg("clock", "icon-sm") @T["Pending"] (@c.Pending)</a>
+        <a href="/admin?tab=active" class="admin-tab @(tab == "active" ? "active" : "")">@Icons.Svg("check", "icon-sm") @T["Active"]</a>
+        <a href="/admin?tab=rejected" class="admin-tab @(tab == "rejected" ? "active" : "")">@Icons.Svg("x", "icon-sm") @T["Rejected"]</a>
     </div>
 
     @if (Model.Count == 0)
     {
-        <div class="empty-state"><span class="empty-icon">✨</span><h3>@T["Nothing here"]</h3></div>
+        <div class="empty-state"><span class="empty-icon">@Icons.Svg("check")</span><h3>@T["Nothing here"]</h3></div>
     }
     else
     {
@@ -34,14 +34,14 @@
                 var img = l.Images.FirstOrDefault();
                 <div class="admin-row panel">
                     <a href="/l/@l.Id" target="_blank" class="admin-thumb">
-                        @if (img != null) { <img src="@img.Url" alt="" loading="lazy" /> } else { <span>📷</span> }
+                        @if (img != null) { <img src="@img.Url" alt="" loading="lazy" /> } else { <img src="/media/ph/aicigasesti.svg" alt="" loading="lazy" /> }
                     </a>
                     <div class="admin-row-main">
                         <a href="/l/@l.Id" target="_blank" class="admin-row-title">@l.Title</a>
-                        <div class="muted small">@l.Category.Icon @T[l.Category.Name] · @l.Price() · 📍 @l.City · @l.User.DisplayName · @l.CreatedAt.TimeAgo()</div>
+                        <div class="muted small">@T[l.Category.Name] · @l.Price() · @Icons.Svg("pin", "icon-sm") @l.City.Place() · @l.User.DisplayName · @l.CreatedAt.TimeAgo()</div>
                         @if (!string.IsNullOrEmpty(l.ModerationNote))
                         {
-                            <div class="admin-flag">⚠ @l.ModerationNote</div>
+                            <div class="admin-flag">@Icons.Svg("alert", "icon-sm") @l.ModerationNote</div>
                         }
                         <div class="admin-desc muted small">@(l.Description.Length > 220 ? l.Description[..220] + "…" : l.Description)</div>
                     </div>
@@ -50,21 +50,21 @@
                         {
                             <form method="post" action="/admin/listings/@l.Id/approve" class="inline-form">
                                 @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-primary btn-sm">✓ @T["Approve"]</button>
+                                <button type="submit" class="btn btn-primary btn-sm">@Icons.Svg("check", "icon-sm") @T["Approve"]</button>
                             </form>
                         }
                         @if (l.Status != ListingStatus.Rejected)
                         {
                             <form method="post" action="/admin/listings/@l.Id/reject" class="inline-form">
                                 @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-ghost btn-sm btn-danger">✕ @T["Reject"]</button>
+                                <button type="submit" class="btn btn-ghost btn-sm btn-danger">@Icons.Svg("x", "icon-sm") @T["Reject"]</button>
                             </form>
                         }
-                        <a href="/admin/listings/@l.Id/edit" class="btn btn-ghost btn-sm">✏️ @T["Edit"]</a>
+                        <a href="/admin/listings/@l.Id/edit" class="btn btn-ghost btn-sm">@Icons.Svg("edit", "icon-sm") @T["Edit"]</a>
                         <form method="post" action="/admin/listings/@l.Id/delete" class="inline-form"
                               onsubmit="return confirm('@T["Delete this listing permanently?"]')">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-ghost btn-sm btn-danger">🗑 @T["Delete"]</button>
+                            <button type="submit" class="btn btn-ghost btn-sm btn-danger">@Icons.Svg("trash", "icon-sm") @T["Delete"]</button>
                         </form>
                     </div>
                 </div>

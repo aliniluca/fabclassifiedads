@@ -4,7 +4,7 @@
 }
 <div class="container narrow section-pad">
     <partial name="_AdminNav" />
-    <h1>📢 @(Model.Id == 0 ? T["New banner"] : T["Edit banner"])</h1>
+    <h1>@Icons.Svg("image") @(Model.Id == 0 ? T["New banner"] : T["Edit banner"])</h1>
 
     <form method="post" action="/admin/banners/save" class="panel form-panel mt-16">
         @Html.AntiForgeryToken()
@@ -33,6 +33,6 @@
         </div>
         <label class="check-row"><input asp-for="IsActive" /> @T["Active"]</label>
 
-        <button type="submit" class="btn btn-primary btn-block btn-lg mt-16">💾 @T["Save banner"]</button>
+        <button type="submit" class="btn btn-primary btn-block btn-lg mt-16">@T["Save banner"]</button>
     </form>
 </div>

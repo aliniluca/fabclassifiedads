@@ -17,27 +17,8 @@
     </nav>
 
     <div class="search-head">
-        <h1>@(Model.CurrentCategory != null ? $"{Model.CurrentCategory.Icon} {T[Model.CurrentCategory.Name]}" : (string.IsNullOrEmpty(f.Q) ? T["All ads"] : T.Format("ResultsFor", f.Q)))</h1>
+        <h1>@(Model.CurrentCategory != null ? T[Model.CurrentCategory.Name] : (string.IsNullOrEmpty(f.Q) ? T["All ads"] : T.Format("ResultsFor", f.Q)))</h1>
         <span class="result-count">@Model.Result.TotalCount.Number() @T["ads"]</span>
-        <span class="search-head-actions">
-            @{
-                var mapQuery = Context.Request.QueryString.Value ?? "";
-                if (Model.CurrentCategory != null && !mapQuery.Contains("Category="))
-                {
-                    mapQuery = string.IsNullOrEmpty(mapQuery)
-                        ? $"?Category={Model.CurrentCategory.Slug}"
-                        : $"{mapQuery}&Category={Model.CurrentCategory.Slug}";
-                }
-            }
-            <a href="/map@(mapQuery)" class="btn btn-ghost btn-sm">🗺 @T["Map view"]</a>
-            @if (User.Identity?.IsAuthenticated == true)
-            {
-                <form method="post" action="/saved-searches/save@(mapQuery)" class="inline-form">
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn-ghost btn-sm">🔔 @T["Save search"]</button>
-                </form>
-            }
-        </span>
     </div>
 
     @if (Model.ChildCategories.Count > 0)
@@ -45,7 +26,7 @@
         <div class="subcat-strip">
             @foreach (var child in Model.ChildCategories)
             {
-                <a href="/c/@child.Slug" class="subcat-chip">@child.Icon @T[child.Name]</a>
+                <a href="/c/@child.Slug" class="subcat-chip">@T[child.Name]</a>
             }
         </div>
     }
@@ -80,7 +61,7 @@
                 @if (Model.ShowCarFilters)
                 {
                     <div class="filter-group">
-                        <h3>🚗 @T["Brand & model"]</h3>
+                        <h3>@Icons.Svg("car", "icon-sm") @T["Brand & model"]</h3>
                         <select name="BrandId" id="brandSelect" data-models-url="/api/car-models/">
                             <option value="">@T["Any brand"]</option>
                             <optgroup label="@T["Popular brands"]">
@@ -208,7 +189,7 @@
                 @if (Model.ShowRealEstateFilters)
                 {
                     <div class="filter-group">
-                        <h3>🏠 @T["Property"]</h3>
+                        <h3>@Icons.Svg("home", "icon-sm") @T["Property"]</h3>
                         <select name="PropertyType">
                             <option value="">@T["Any property type"]</option>
                             @foreach (var pt in Enum.GetValues<PropertyType>())
@@ -316,6 +297,26 @@
         </aside>
 
         <div class="search-results">
+            <div class="results-toolbar">
+            <span class="search-head-actions">
+                @{
+                    var mapQuery = Context.Request.QueryString.Value ?? "";
+                    if (Model.CurrentCategory != null && !mapQuery.Contains("Category="))
+                    {
+                        mapQuery = string.IsNullOrEmpty(mapQuery)
+                            ? $"?Category={Model.CurrentCategory.Slug}"
+                            : $"{mapQuery}&Category={Model.CurrentCategory.Slug}";
+                    }
+                }
+                <a href="/map@(mapQuery)" class="btn btn-ghost btn-sm">@Icons.Svg("map", "icon-sm") @T["Map view"]</a>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <form method="post" action="/saved-searches/save@(mapQuery)" class="inline-form">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-ghost btn-sm">@Icons.Svg("bell", "icon-sm") @T["Save search"]</button>
+                    </form>
+                }
+            </span>
             <div class="sort-bar">
                 <form method="get" action="@(Model.CurrentCategory != null ? $"/c/{Model.CurrentCategory.Slug}" : "/search")" id="sortForm">
                     @foreach (var (key, values) in Context.Request.Query.Where(kv => kv.Key != "Sort" && kv.Key != "Page" && kv.Key != "category"))
@@ -341,11 +342,12 @@
                     </label>
                 </form>
             </div>
+            </div>
 
             @if (Model.Result.Items.Count == 0)
             {
                 <div class="empty-state">
-                    <span class="empty-icon">🔭</span>
+                    <span class="empty-icon">@Icons.Svg("search")</span>
                     <h3>@T["No ads match your filters"]</h3>
                     <p>@T["Try widening the price range or removing some filters."]</p>
                 </div>

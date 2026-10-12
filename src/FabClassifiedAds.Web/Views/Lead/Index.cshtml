@@ -4,13 +4,12 @@
     ViewData["MetaDescription"] = T["Paste your OLX or Autovit link and publish it on AiciGăsești in seconds — free."];
 }
 <div class="lead-hero">
-    <div class="hero-bg"></div>
     <div class="container lead-inner">
-        <h1 class="hero-title">@T["Already on OLX or Autovit?"]<br/><span class="gradient-text">@T["Move your ad here in 30 seconds"]</span></h1>
+        <h1 class="hero-title">@T["Already on OLX or Autovit?"]<br/>@T["Move your ad here in 30 seconds"]</h1>
         <p class="hero-subtitle">@T["Paste the link — we fill everything in. Create a free account and it's live."]</p>
 
         <div class="lead-paste panel">
-            <span class="hero-search-icon">🔗</span>
+            <span class="hero-search-icon">@Icons.Svg("link")</span>
             <input type="url" id="leadUrl" placeholder="https://olx.ro/… @T["or"] autovit.ro/…" inputmode="url" autocomplete="off" />
             <button type="button" class="btn btn-primary" id="leadImportBtn">@T["Bring my ad"]</button>
         </div>
@@ -41,7 +40,7 @@
                 <option value="">@T["Choose a category…"]</option>
                 @foreach (var root in Model.CategoryTree)
                 {
-                    <optgroup label="@root.Icon @T[root.Name]">
+                    <optgroup label="@T[root.Name]">
                         @foreach (var child in root.Children)
                         {
                             <option value="@child.Id">@T[child.Name]</option>
@@ -69,7 +68,7 @@
         <input type="hidden" asp-for="SourceUrl" />
         <div id="leadImages"></div>
 
-        <button type="submit" class="btn btn-primary btn-block btn-lg">🚀 @T["Create account & publish"]</button>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">@T["Create account & publish"]</button>
         <p class="muted small center-text mt-8">@T["Already have an account?"] <a href="/login">@T["Sign in"]</a></p>
     </form>
 </div>

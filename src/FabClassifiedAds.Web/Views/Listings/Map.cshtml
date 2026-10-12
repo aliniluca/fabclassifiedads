@@ -7,9 +7,9 @@
 
 <div class="container map-page">
     <div class="search-head">
-        <h1>🗺 @(Model.CurrentCategory != null ? T[Model.CurrentCategory.Name] : T["All ads"]) @T["on the map"]</h1>
+        <h1>@Icons.Svg("map") @(Model.CurrentCategory != null ? T[Model.CurrentCategory.Name] : T["All ads"]) @T["on the map"]</h1>
         <span class="search-head-actions">
-            <a href="@listUrl" class="btn btn-ghost btn-sm">☰ @T["List view"]</a>
+            <a href="@listUrl" class="btn btn-ghost btn-sm">@Icons.Svg("list", "icon-sm") @T["List view"]</a>
         </span>
     </div>
     <p class="muted">@T["Showing every filtered ad that has a location. Click a marker for details."]</p>
