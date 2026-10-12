@@ -9,11 +9,15 @@
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.*" />
     <PackageReference Include="MailKit" Version="4.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.*" />
-    <!-- Note: EF Core pulls SQLitePCLRaw e_sqlite3 2.1.11 transitively, which NuGet flags
-         (NU1903). Do NOT override with the 3.x bundle — it mismatches EF's SQLitePCLRaw.core
-         and throws BadImageFormatException at runtime. This resolves cleanly at .NET 11 GA. -->
+    <!-- Pinned to 10.0.9 on purpose: EF 10.0.12+ pulls SQLitePCLRaw 2.1.12, whose native
+         linux-x64 libe_sqlite3.so needs GLIBC 2.33+. The production server (Ubuntu 20.04,
+         GLIBC 2.31) then crashes at startup with DllNotFoundException 'e_sqlite3'.
+         10.0.9 brings SQLitePCLRaw 2.1.11 (needs GLIBC 2.28). Unpin only after the server
+         moves to Ubuntu 22.04+ (GLIBC 2.35). -->
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.9" />
+    <!-- Note: SQLitePCLRaw e_sqlite3 2.1.11 is flagged by NuGet (NU1903). Do NOT override with
+         the 3.x bundle — it mismatches EF's SQLitePCLRaw.core and throws BadImageFormatException. -->
   </ItemGroup>
 
 </Project>
