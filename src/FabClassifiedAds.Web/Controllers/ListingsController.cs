@@ -61,7 +61,8 @@ public class ListingsController(
         return View(vm);
     }
 
-    [HttpGet("/l/{id:int}/{slug?}")]
+    [HttpGet("/anunt/{category}/{slug}-{id:int}")]
+    [HttpGet("/l/{id:int}/{slug?}")]   // legacy short links — 301 to the canonical URL
     public async Task<IActionResult> Details(int id)
     {
         var listing = await db.Listings
@@ -75,6 +76,11 @@ public class ListingsController(
             .FirstOrDefaultAsync(l => l.Id == id);
 
         if (listing is null) return NotFound();
+
+        // one URL per ad: old /l/{id} links and outdated slugs (title edited) redirect permanently
+        var canonical = listing.SeoUrl();
+        if (!string.Equals(Request.Path.Value, canonical, StringComparison.Ordinal))
+            return RedirectPermanent(canonical + Request.QueryString);
 
         // non-public listings (pending/draft/rejected/suspended) are visible only to
         // their owner and to admins — everyone else gets a 404

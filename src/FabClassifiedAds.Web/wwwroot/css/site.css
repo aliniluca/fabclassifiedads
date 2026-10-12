@@ -772,3 +772,8 @@ input[type=checkbox], input[type=radio] { accent-color: var(--primary); }
     .check-strip { gap: 5px; font-size: .68rem; }
     .check-strip-label { letter-spacing: .02em; white-space: nowrap; }
 }
+
+/* ===== My account ===== */
+.account-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 4px; }
+.account-page .h3 { font-size: 1.1rem; margin-bottom: 14px; }
+.field-hint { margin: -10px 0 14px; }

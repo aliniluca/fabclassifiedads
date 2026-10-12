@@ -6,9 +6,10 @@
     var car = l.CarDetails;
     var re = l.RealEstateDetails;
     var canonical = $"{Context.Request.Scheme}://{Context.Request.Host}{l.SeoUrl()}";
-    var ogImage = l.Images.FirstOrDefault()?.Url is { } img
+    // social previews can't show SVG: ads with only the default plate use the JPEG share card
+    var ogImage = l.Images.FirstOrDefault()?.Url is { } img && !img.EndsWith(".svg", StringComparison.OrdinalIgnoreCase)
         ? (img.StartsWith("http") ? img : $"{Context.Request.Scheme}://{Context.Request.Host}{img}")
-        : $"{Context.Request.Scheme}://{Context.Request.Host}/l/{l.Id}/share-card.svg";
+        : $"{Context.Request.Scheme}://{Context.Request.Host}/l/{l.Id}/share-card.jpg";
 }
 
 @section head {
@@ -258,7 +259,7 @@
                 <div class="seller-location">@Icons.Svg("pin", "icon-sm")@l.City.Place()@(string.IsNullOrEmpty(l.Region) || l.Region == l.City ? "" : $", {l.Region.Place()}")</div>
                 @if (!string.IsNullOrWhiteSpace(l.ContactPhone))
                 {
-                    <a href="tel:@l.ContactPhone" class="btn btn-ghost btn-block mt-8">@Icons.Svg("phone")@l.ContactPhone</a>
+                    <a href="tel:@l.ContactPhone" class="btn btn-ghost btn-block mt-8">@Icons.Svg("phone")@PhoneNumbers.Format(l.ContactPhone)</a>
                 }
                 <a href="@sellerUrl" class="btn btn-ghost btn-sm btn-block mt-8">@Icons.Svg("list", "icon-sm")@T["See all seller's ads"]</a>
 
@@ -291,7 +292,7 @@
                 <h3>@T["Share"]</h3>
                 <div class="share-actions">
                     <button type="button" class="btn btn-ghost btn-sm" id="shareBtn" data-title="@l.Title">@Icons.Svg("share", "icon-sm")@T["Share link"]</button>
-                    <a href="/l/@l.Id/share-card.svg" target="_blank" class="btn btn-ghost btn-sm">@Icons.Svg("image", "icon-sm")@T["Share card"]</a>
+                    <a href="/l/@l.Id/share-card.jpg" target="_blank" class="btn btn-ghost btn-sm" data-share-card data-title="@l.Title" data-filename="aicigasesti-@(l.Id).jpg">@Icons.Svg("image", "icon-sm")@T["Share card"]</a>
                 </div>
                 <p class="muted small">@T["Post the 9:16 card straight to TikTok or Instagram stories."]</p>
             </div>

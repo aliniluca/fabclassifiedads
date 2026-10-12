@@ -45,6 +45,7 @@
                 <a href="/favorites" class="nav-link" title="@T["Favorites"]">@Icons.Svg("heart")<span class="nav-label">@T["Favorites"]</span></a>
                 <a href="/messages" class="nav-link" title="@T["Messages"]">@Icons.Svg("message")<span class="nav-label">@T["Messages"]</span></a>
                 <a href="/my-ads" class="nav-link" title="@T["My ads"]">@Icons.Svg("list")<span class="nav-label">@T["My ads"]</span></a>
+                <a href="/account" class="nav-link" title="@T["My account"]">@Icons.Svg("user")<span class="nav-label">@T["My account"]</span></a>
                 @if (User.IsInRole("Admin"))
                 {
                     <a href="/admin" class="nav-link nav-admin" title="Admin">@Icons.Svg("settings")<span class="nav-label">Admin</span></a>
@@ -91,6 +92,7 @@
             <a href="/favorites">@T["Favorites"]</a>
             <a href="/messages">@T["Messages"]</a>
             <a href="/my-ads">@T["My ads"]</a>
+            <a href="/account">@T["My account"]</a>
         </div>
         <div>
             <h4>@T["Legal"]</h4>

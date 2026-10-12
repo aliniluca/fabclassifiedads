@@ -144,18 +144,35 @@ public static partial class Display
         return text.Length > 157 ? text[..157].TrimEnd() + "…" : text;
     }
 
-    /// <summary>URL slug for the SEO path /l/{id}/{slug}.</summary>
-    public static string SeoSlug(this Listing l)
+    /// <summary>ASCII URL slug: lowercase, Romanian diacritics transliterated ("Mașină nouă" -> "masina-noua"),
+    /// cut on a word boundary at <paramref name="max"/> characters.</summary>
+    public static string UrlSlug(string? text, int max = 80)
     {
-        string basis = l.CarDetails is { } c && c.Brand is not null
-            ? $"{c.Brand.Name} {c.Model?.Name} {c.Year} {l.City}"
-            : $"{l.Title} {l.City}";
-        var slug = Data.CategorySeeder.Slugify(basis);
-        return slug.Length > 70 ? slug[..70].TrimEnd('-') : slug;
+        var chars = (text ?? "").Normalize(System.Text.NormalizationForm.FormD)
+            .Where(ch => CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)
+            .Select(ch => char.IsAsciiLetterOrDigit(ch) ? char.ToLowerInvariant(ch) : '-');
+        var slug = NonSlugRun().Replace(new string(chars.ToArray()), "-").Trim('-');
+        if (slug.Length > max)
+        {
+            var cut = slug.LastIndexOf('-', max);
+            slug = slug[..(cut > max / 2 ? cut : max)].TrimEnd('-');
+        }
+        return slug;
     }
 
-    /// <summary>Canonical listing URL with the SEO slug.</summary>
-    public static string SeoUrl(this Listing l) => $"/l/{l.Id}/{l.SeoSlug()}";
+    /// <summary>Canonical listing path: /anunt/{romanian-category}/{title}-{id}.</summary>
+    public static string ListingPath(int id, string? title, string? categoryName)
+    {
+        var category = UrlSlug(Translator.RoText(categoryName ?? "Anunturi"), 40);
+        var titleSlug = UrlSlug(title);
+        return $"/anunt/{(category.Length > 0 ? category : "anunturi")}/{(titleSlug.Length > 0 ? titleSlug : "anunt")}-{id}";
+    }
+
+    /// <summary>Canonical listing URL (needs Category loaded for the category segment).</summary>
+    public static string SeoUrl(this Listing l) => ListingPath(l.Id, l.Title, l.Category?.Name);
+
+    [GeneratedRegex("-{2,}")]
+    private static partial Regex NonSlugRun();
 
     [GeneratedRegex(@"\s+")]
     private static partial Regex MultiWhitespace();

@@ -206,3 +206,32 @@ document.addEventListener('submit', async (e) => {
         form.submit();
     }
 });
+
+// Share card: on phones hand the JPEG straight to the share sheet (Instagram, TikTok, WhatsApp);
+// where file sharing isn't supported, download it instead.
+document.addEventListener('click', async (e) => {
+    const link = e.target.closest('[data-share-card]');
+    if (!link) return;
+    e.preventDefault();
+    try {
+        const res = await fetch(link.href);
+        if (!res.ok) throw new Error('card ' + res.status);
+        const blob = await res.blob();
+        const file = new File([blob], link.dataset.filename || 'aicigasesti.jpg', { type: 'image/jpeg' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: link.dataset.title || '' });
+            return;
+        }
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = file.name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (err) {
+        if (err && err.name === 'AbortError') return;   // user closed the share sheet
+        window.open(link.href, '_blank');
+    }
+});

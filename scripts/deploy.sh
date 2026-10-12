@@ -96,9 +96,10 @@ Environment=DOTNET_CLI_TELEMETRY_OPTOUT=1
 EOF
 # Pass through runtime env if provided at deploy time, and PRESERVE existing values
 # across deploys when a var isn't re-supplied. Covers the API key, admin allow-list
-# and SMTP settings. (IMPORT_API_KEY locks /api/*; ADMIN_EMAILS = bootstrap admins.)
+# and SMTP / Mailgun settings. (IMPORT_API_KEY locks /api/*; ADMIN_EMAILS = bootstrap admins.)
 current_env() { [ -f "$UNIT" ] && grep "^Environment=$1=" "$UNIT" | tail -1 | sed "s/^Environment=$1=//"; }
-for var in IMPORT_API_KEY ADMIN_EMAILS SMTP_HOST SMTP_PORT SMTP_USER SMTP_PASSWORD SMTP_FROM SMTP_FROM_NAME; do
+for var in IMPORT_API_KEY ADMIN_EMAILS SMTP_HOST SMTP_PORT SMTP_USER SMTP_PASSWORD SMTP_FROM SMTP_FROM_NAME \
+           MAILGUN_API_KEY MAILGUN_DOMAIN MAILGUN_REGION MAILGUN_FROM MAILGUN_FROM_NAME; do
     val="$(eval echo "\${$var:-}")"
     [ -z "$val" ] && val="$(current_env "$var")"
     [ -n "$val" ] && echo "Environment=$var=$val" >> "$NEW_UNIT"

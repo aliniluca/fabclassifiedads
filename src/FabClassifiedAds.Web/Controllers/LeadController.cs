@@ -1,3 +1,4 @@
+using FabClassifiedAds.Web.Helpers;
 using FabClassifiedAds.Web.Data;
 using FabClassifiedAds.Web.Models;
 using FabClassifiedAds.Web.Models.Entities;
@@ -89,7 +90,7 @@ public class LeadController(
         var user = new ApplicationUser
         {
             UserName = vm.Email, Email = vm.Email, DisplayName = vm.DisplayName.Trim(),
-            PhoneNumber = vm.Phone.Trim(),
+            PhoneNumber = PhoneNumbers.TryNormalize(vm.Phone, out var phone) ? phone : null,
             AvatarColor = AvatarColors[Math.Abs(vm.Email.GetHashCode()) % AvatarColors.Length],
         };
         var created = await userManager.CreateAsync(user, vm.Password);
@@ -114,7 +115,7 @@ public class LeadController(
             CategoryId = category!.Id,
             City = vm.City.Trim(),
             Region = vm.Region?.Trim() ?? "",
-            ContactPhone = vm.Phone.Trim(),
+            ContactPhone = user.PhoneNumber,
             UserId = user.Id,
             Status = status,
             ModerationNote = verdict.Note,

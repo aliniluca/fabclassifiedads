@@ -57,7 +57,7 @@
                     }
                     <a href="/l/@l.Id" class="rail-btn" title="@T["Messages"]" aria-label="@T["Messages"]">@Icons.Svg("message")</a>
                     <button type="button" class="rail-btn feed-share" data-url="/l/@l.Id" data-title="@l.Title" title="@T["Share"]" aria-label="@T["Share"]"><span class="share-idle">@Icons.Svg("share")</span><span class="share-done" hidden>@Icons.Svg("check")</span></button>
-                    <a href="/l/@l.Id/share-card.svg" target="_blank" class="rail-btn" title="@T["Share card"]" aria-label="@T["Share card"]">@Icons.Svg("image")</a>
+                    <a href="/l/@l.Id/share-card.jpg" target="_blank" class="rail-btn" data-share-card data-title="@l.Title" data-filename="aicigasesti-@(l.Id).jpg" title="@T["Share card"]" aria-label="@T["Share card"]">@Icons.Svg("image")</a>
                     @if (!string.IsNullOrEmpty(l.VideoUrl))
                     {
                         <button type="button" class="rail-btn feed-mute" title="Audio" aria-label="Audio"><span class="mute-on">@Icons.Svg("volume-off")</span><span class="mute-off" hidden>@Icons.Svg("volume")</span></button>

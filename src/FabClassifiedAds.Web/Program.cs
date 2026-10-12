@@ -51,6 +51,7 @@ builder.Services.AddScoped<SearchService>();
 builder.Services.AddScoped<PhotoStorage>();
 builder.Services.AddScoped<TrustService>();
 builder.Services.AddSingleton<SafeHttpFetcher>();
+builder.Services.AddSingleton<ShareCardRenderer>();
 builder.Services.AddScoped<ListingUrlImporter>();
 builder.Services.AddScoped<CategoryDetector>();
 builder.Services.AddScoped<ApiKeyService>();
@@ -60,10 +61,23 @@ builder.Services.AddScoped<Microsoft.AspNetCore.Authentication.IClaimsTransforma
 
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy(AdminAccess.PolicyName, policy => policy.RequireRole(AdminAccess.Role));
-// Real SMTP sender when configured (Smtp:* config / SMTP_* env), else the dev outbox
+// Email: Mailgun API when configured (Mailgun:* / MAILGUN_* env), else SMTP (Smtp:* / SMTP_*),
+// else the dev outbox (App_Data/outbox)
+var mailgun = MailgunOptions.FromConfig(builder.Configuration);
 var smtp = SmtpOptions.FromConfig(builder.Configuration);
+builder.Services.AddSingleton(mailgun);
 builder.Services.AddSingleton(smtp);
-if (smtp.IsConfigured)
+if (mailgun.IsConfigured)
+{
+    builder.Services.AddHttpClient<IEmailSender, MailgunEmailSender>(client =>
+    {
+        client.BaseAddress = mailgun.BaseAddress;
+        client.Timeout = TimeSpan.FromSeconds(20);
+        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
+            "Basic", Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes($"api:{mailgun.ApiKey}")));
+    });
+}
+else if (smtp.IsConfigured)
     builder.Services.AddSingleton<IEmailSender, SmtpEmailSender>();
 else
     builder.Services.AddSingleton<IEmailSender, OutboxEmailSender>();

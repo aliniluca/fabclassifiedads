@@ -1,0 +1,61 @@
+@model AccountSettingsViewModel
+@{
+    ViewData["Title"] = T["My account"];
+}
+<div class="container narrow section-pad account-page">
+    <h1>@T["My account"]</h1>
+    <p class="muted">@Model.CurrentEmail · @T["On AiciGăsești since"] @Model.MemberSince.ToString("MMM yyyy")</p>
+
+    <nav class="account-links" aria-label="@T["My account"]">
+        <a href="/my-ads" class="btn btn-ghost btn-sm">@Icons.Svg("list", "icon-sm")@T["My ads"]</a>
+        <a href="/favorites" class="btn btn-ghost btn-sm">@Icons.Svg("heart", "icon-sm")@T["Favorites"]</a>
+        <a href="/messages" class="btn btn-ghost btn-sm">@Icons.Svg("message", "icon-sm")@T["Messages"]</a>
+        <a href="/saved-searches" class="btn btn-ghost btn-sm">@Icons.Svg("bell", "icon-sm")@T["Alerts"]</a>
+        <a href="/account/api" class="btn btn-ghost btn-sm">@Icons.Svg("key", "icon-sm")@T["API key"]</a>
+    </nav>
+
+    <div asp-validation-summary="All" class="validation-summary"></div>
+
+    <section class="panel mt-16" aria-labelledby="profileTitle">
+        <h2 id="profileTitle" class="h3">@T["Account details"]</h2>
+        <form method="post" action="/account/profile">
+            @Html.AntiForgeryToken()
+            <label class="field"><span>@T["Display name"]</span><input asp-for="Profile.DisplayName" required autocomplete="name" /></label>
+            <label class="field"><span>@T["Phone number"]</span><input asp-for="Profile.Phone" type="tel" required autocomplete="tel" inputmode="tel" placeholder="07xx xxx xxx" /></label>
+            <p class="muted small field-hint">@T["The number also updates on your ads that show a phone."]</p>
+            <label class="field"><span>@T["City"]</span><input asp-for="Profile.City" autocomplete="address-level2" placeholder="@T["optional"]" /></label>
+            <label class="check-row"><input asp-for="Profile.IsBusiness" /> @T["I'm a business / dealer"]</label>
+            <button type="submit" class="btn btn-primary mt-16">@T["Save details"]</button>
+        </form>
+    </section>
+
+    <section class="panel mt-16" aria-labelledby="emailTitle">
+        <h2 id="emailTitle" class="h3">@T["Email address"]</h2>
+        <p class="muted small">@T["You sign in with this address. Changing it needs your current password."]</p>
+        <form method="post" action="/account/email">
+            @Html.AntiForgeryToken()
+            <label class="field"><span>@T["New email"]</span><input asp-for="EmailChange.NewEmail" type="email" required autocomplete="email" /></label>
+            <label class="field"><span>@T["Current password"]</span><input asp-for="EmailChange.CurrentPassword" type="password" required autocomplete="current-password" value="" /></label>
+            <button type="submit" class="btn btn-ghost">@T["Change email"]</button>
+        </form>
+    </section>
+
+    <section class="panel mt-16" aria-labelledby="passwordTitle">
+        <h2 id="passwordTitle" class="h3">@T["Password"]</h2>
+        <form method="post" action="/account/password">
+            @Html.AntiForgeryToken()
+            <label class="field"><span>@T["Current password"]</span><input asp-for="PasswordChange.CurrentPassword" type="password" required autocomplete="current-password" value="" /></label>
+            <div class="field-row">
+                <label class="field"><span>@T["New password"]</span><input asp-for="PasswordChange.NewPassword" type="password" required minlength="6" autocomplete="new-password" value="" /></label>
+                <label class="field"><span>@T["Confirm password"]</span><input asp-for="PasswordChange.ConfirmPassword" type="password" required autocomplete="new-password" value="" /></label>
+            </div>
+            <button type="submit" class="btn btn-ghost">@T["Change password"]</button>
+        </form>
+    </section>
+
+    <section class="panel mt-16" aria-labelledby="privacyTitle">
+        <h2 id="privacyTitle" class="h3">@T["My data & privacy"]</h2>
+        <p class="muted small">@T["Under the GDPR you can download all your data or delete your account at any time."]</p>
+        <a href="/account/data" class="btn btn-ghost btn-sm">@Icons.Svg("shield", "icon-sm")@T["Download data or delete account"]</a>
+    </section>
+</div>

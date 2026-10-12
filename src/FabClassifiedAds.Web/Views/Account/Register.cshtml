@@ -10,7 +10,8 @@
             @Html.AntiForgeryToken()
             <div asp-validation-summary="All" class="validation-summary"></div>
             <label class="field"><span>@T["Display name"]</span><input asp-for="DisplayName" required /></label>
-            <label class="field"><span>@T["Email"]</span><input asp-for="Email" type="email" required /></label>
+            <label class="field"><span>@T["Email"]</span><input asp-for="Email" type="email" required autocomplete="email" /></label>
+            <label class="field"><span>@T["Phone number"]</span><input asp-for="Phone" type="tel" required autocomplete="tel" inputmode="tel" placeholder="07xx xxx xxx" /></label>
             <label class="field"><span>@T["City"]</span><input asp-for="City" placeholder="@T["optional"]" /></label>
             <label class="field"><span>@T["Password"]</span><input asp-for="Password" type="password" required /></label>
             <label class="field"><span>@T["Confirm password"]</span><input asp-for="ConfirmPassword" type="password" required /></label>

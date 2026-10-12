@@ -16,8 +16,14 @@
          moves to Ubuntu 22.04+ (GLIBC 2.35). -->
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.9" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.7" />
     <!-- Note: SQLitePCLRaw e_sqlite3 2.1.11 is flagged by NuGet (NU1903). Do NOT override with
          the 3.x bundle — it mismatches EF's SQLitePCLRaw.core and throws BadImageFormatException. -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- fonts for server-side image rendering (share cards) -->
+    <None Include="Assets\fonts\*.ttf" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

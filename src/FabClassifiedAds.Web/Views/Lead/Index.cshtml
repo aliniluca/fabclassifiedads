@@ -54,7 +54,7 @@
 
         <div class="field-row">
             <label class="field"><span>@T["Your name"]</span><input asp-for="DisplayName" required autocomplete="name" /></label>
-            <label class="field"><span>@T["Phone (shown on the ad)"]</span><input asp-for="Phone" type="tel" required autocomplete="tel" placeholder="07xx xxx xxx" /></label>
+            <label class="field"><span>@T["Phone (shown on the ad)"]</span><input asp-for="Phone" type="tel" required autocomplete="tel" inputmode="tel" placeholder="07xx xxx xxx" /></label>
         </div>
         <div class="field-row">
             <label class="field"><span>@T["Email"]</span><input asp-for="Email" type="email" required autocomplete="email" /></label>

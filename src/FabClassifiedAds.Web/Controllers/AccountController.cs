@@ -1,7 +1,9 @@
+using FabClassifiedAds.Web.Helpers;
 using System.Security.Claims;
 using FabClassifiedAds.Web.Data;
 using FabClassifiedAds.Web.Models;
 using FabClassifiedAds.Web.Models.Entities;
+using FabClassifiedAds.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +14,8 @@ namespace FabClassifiedAds.Web.Controllers;
 public class AccountController(
     UserManager<ApplicationUser> userManager,
     SignInManager<ApplicationUser> signInManager,
-    AppDbContext db) : Controller
+    AppDbContext db,
+    Translator t) : Controller
 {
     private static readonly string[] AvatarColors = ["#6d5dfc", "#fc5d8d", "#28c76f", "#ff9f43", "#00cfe8", "#ea5455"];
 
@@ -31,6 +34,7 @@ public class AccountController(
         {
             UserName = vm.Email, Email = vm.Email,
             DisplayName = vm.DisplayName, City = vm.City, IsBusiness = vm.IsBusiness,
+            PhoneNumber = PhoneNumbers.TryNormalize(vm.Phone, out var phone) ? phone : null,
             AvatarColor = AvatarColors[Math.Abs(vm.Email.GetHashCode()) % AvatarColors.Length],
         };
         var result = await userManager.CreateAsync(user, vm.Password);
@@ -118,6 +122,111 @@ public class AccountController(
         TempData["Flash"] = "API key revoked.";
         return RedirectToAction(nameof(ApiKey));
     }
+
+    // ---------- "Contul meu": profile, email, password ----------
+
+    [Authorize]
+    [HttpGet("/account")]
+    public async Task<IActionResult> Settings()
+    {
+        var user = await userManager.GetUserAsync(User);
+        if (user is null) return Challenge();
+        return View(BuildSettings(user));
+    }
+
+    [Authorize]
+    [HttpPost("/account/profile")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateProfile([Bind(Prefix = "Profile")] ProfileForm form)
+    {
+        var user = await userManager.GetUserAsync(User);
+        if (user is null) return Challenge();
+        if (!ModelState.IsValid) return View("Settings", BuildSettings(user, profile: form));
+
+        var oldPhone = user.PhoneNumber;
+        user.DisplayName = form.DisplayName.Trim();
+        user.City = string.IsNullOrWhiteSpace(form.City) ? null : form.City.Trim();
+        user.IsBusiness = form.IsBusiness;
+        if (PhoneNumbers.TryNormalize(form.Phone, out var phone) && phone != oldPhone)
+        {
+            user.PhoneNumber = phone;
+            user.PhoneNumberConfirmed = false;
+            // ads that showed the old number now show the new one
+            await db.Listings.Where(l => l.UserId == user.Id && l.ContactPhone != null)
+                .ExecuteUpdateAsync(s => s.SetProperty(l => l.ContactPhone, phone));
+        }
+        await userManager.UpdateAsync(user);
+        await signInManager.RefreshSignInAsync(user);
+        TempData["Flash"] = "Your details were saved.";
+        return RedirectToAction(nameof(Settings));
+    }
+
+    [Authorize]
+    [HttpPost("/account/email")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangeEmail([Bind(Prefix = "EmailChange")] EmailForm form)
+    {
+        var user = await userManager.GetUserAsync(User);
+        if (user is null) return Challenge();
+        var newEmail = form.NewEmail?.Trim() ?? "";
+
+        if (ModelState.IsValid && !await userManager.CheckPasswordAsync(user, form.CurrentPassword))
+            ModelState.AddModelError("EmailChange.CurrentPassword", t["The current password is not correct."]);
+        if (ModelState.IsValid && await userManager.FindByEmailAsync(newEmail) is { } other && other.Id != user.Id)
+            ModelState.AddModelError("EmailChange.NewEmail", t["This email is already used by another account."]);
+        if (!ModelState.IsValid) return View("Settings", BuildSettings(user, email: form));
+
+        // the email is also the login name
+        user.Email = newEmail;
+        user.UserName = newEmail;
+        user.EmailConfirmed = false;
+        var result = await userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            foreach (var e in result.Errors) ModelState.AddModelError("", e.Description);
+            return View("Settings", BuildSettings(user, email: form));
+        }
+        await userManager.UpdateSecurityStampAsync(user);   // signs out other sessions
+        await signInManager.RefreshSignInAsync(user);
+        TempData["Flash"] = "Your email was changed. Use the new address to sign in.";
+        return RedirectToAction(nameof(Settings));
+    }
+
+    [Authorize]
+    [HttpPost("/account/password")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangePassword([Bind(Prefix = "PasswordChange")] PasswordForm form)
+    {
+        var user = await userManager.GetUserAsync(User);
+        if (user is null) return Challenge();
+        if (!ModelState.IsValid) return View("Settings", BuildSettings(user));
+
+        var result = await userManager.ChangePasswordAsync(user, form.CurrentPassword, form.NewPassword);
+        if (!result.Succeeded)
+        {
+            foreach (var e in result.Errors)
+                ModelState.AddModelError("", e.Code == "PasswordMismatch" ? t["The current password is not correct."] : e.Description);
+            return View("Settings", BuildSettings(user));
+        }
+        await signInManager.RefreshSignInAsync(user);   // keeps this session; the new security stamp ends the others
+        TempData["Flash"] = "Your password was changed.";
+        return RedirectToAction(nameof(Settings));
+    }
+
+    private static AccountSettingsViewModel BuildSettings(ApplicationUser user, ProfileForm? profile = null, EmailForm? email = null) => new()
+    {
+        CurrentEmail = user.Email ?? "",
+        MemberSince = user.CreatedAt,
+        HasApiKey = user.ApiKeyHash != null,
+        Profile = profile ?? new ProfileForm
+        {
+            DisplayName = user.DisplayName,
+            Phone = PhoneNumbers.Format(user.PhoneNumber),
+            City = user.City,
+            IsBusiness = user.IsBusiness,
+        },
+        EmailChange = email ?? new EmailForm(),
+    };
 
     [Authorize]
     [HttpGet("/account/data")]

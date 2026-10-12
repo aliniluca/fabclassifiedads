@@ -1,6 +1,7 @@
 using FabClassifiedAds.Web.Models.Entities;
 using FabClassifiedAds.Web.Services;
 using System.ComponentModel.DataAnnotations;
+using FabClassifiedAds.Web.Helpers;
 
 namespace FabClassifiedAds.Web.Models;
 
@@ -38,7 +39,7 @@ public class QuickStartViewModel
     [Required, StringLength(60, MinimumLength = 2)] public string DisplayName { get; set; } = "";
     [Required, EmailAddress] public string Email { get; set; } = "";
     [Required, DataType(DataType.Password), StringLength(100, MinimumLength = 6)] public string Password { get; set; } = "";
-    [Required, Phone] public string Phone { get; set; } = "";
+    [ValidPhone] public string? Phone { get; set; }   // nullable so only ValidPhone (localised) reports a missing number
     public bool AcceptTerms { get; set; }
 
     // the ad (carried from the preview step as hidden fields)
@@ -153,6 +154,8 @@ public class RegisterViewModel
     public string DisplayName { get; set; } = "";
     [Required, EmailAddress]
     public string Email { get; set; } = "";
+    [ValidPhone]
+    public string? Phone { get; set; }
     [Required, DataType(DataType.Password), StringLength(100, MinimumLength = 6)]
     public string Password { get; set; } = "";
     [DataType(DataType.Password), Compare(nameof(Password))]
@@ -160,6 +163,46 @@ public class RegisterViewModel
     public string? City { get; set; }
     public bool IsBusiness { get; set; }
     public bool AcceptTerms { get; set; }
+}
+
+/// <summary>"Contul meu" page: profile details, email change and password change forms.</summary>
+public class AccountSettingsViewModel
+{
+    public ProfileForm Profile { get; set; } = new();
+    public EmailForm EmailChange { get; set; } = new();
+    public PasswordForm PasswordChange { get; set; } = new();
+    public string CurrentEmail { get; set; } = "";
+    public DateTime MemberSince { get; set; }
+    public bool HasApiKey { get; set; }
+}
+
+public class ProfileForm
+{
+    [Required, StringLength(60, MinimumLength = 2)]
+    public string DisplayName { get; set; } = "";
+    [ValidPhone]
+    public string? Phone { get; set; }
+    [StringLength(80)]
+    public string? City { get; set; }
+    public bool IsBusiness { get; set; }
+}
+
+public class EmailForm
+{
+    [Required, EmailAddress]
+    public string NewEmail { get; set; } = "";
+    [Required, DataType(DataType.Password)]
+    public string CurrentPassword { get; set; } = "";
+}
+
+public class PasswordForm
+{
+    [Required, DataType(DataType.Password)]
+    public string CurrentPassword { get; set; } = "";
+    [Required, DataType(DataType.Password), StringLength(100, MinimumLength = 6)]
+    public string NewPassword { get; set; } = "";
+    [DataType(DataType.Password), Compare(nameof(NewPassword))]
+    public string ConfirmPassword { get; set; } = "";
 }
 
 public class LoginViewModel

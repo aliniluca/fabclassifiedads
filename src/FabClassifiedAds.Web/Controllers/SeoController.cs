@@ -36,8 +36,7 @@ public class SeoController(AppDbContext db) : Controller
             .Where(l => l.Status == ListingStatus.Active)
             .OrderByDescending(l => l.BumpedAt)
             .Take(5000)
-            .Include(l => l.CarDetails!).ThenInclude(c => c.Brand)
-            .Select(l => new { l.Id, l.City, l.Title, l.BumpedAt, Brand = l.CarDetails!.Brand!.Name, Model = l.CarDetails.Model!.Name, Year = (int?)l.CarDetails.Year })
+            .Select(l => new { l.Id, l.Title, l.BumpedAt, CategoryName = l.Category.Name })
             .ToListAsync();
 
         var sb = new StringBuilder();
@@ -58,12 +57,7 @@ public class SeoController(AppDbContext db) : Controller
             Url(host + "/");
             foreach (var slug in categories) Url($"{host}/c/{slug}");
             foreach (var l in listings)
-            {
-                var basis = l.Brand != null ? $"{l.Brand} {l.Model} {l.Year} {l.City}" : $"{l.Title} {l.City}";
-                var seoSlug = CategorySeeder.Slugify(basis);
-                if (seoSlug.Length > 70) seoSlug = seoSlug[..70].TrimEnd('-');
-                Url($"{host}/l/{l.Id}/{seoSlug}", l.BumpedAt);
-            }
+                Url(host + Display.ListingPath(l.Id, l.Title, l.CategoryName), l.BumpedAt);
 
             w.WriteEndElement();
             await w.WriteEndDocumentAsync();

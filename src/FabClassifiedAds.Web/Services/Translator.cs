@@ -17,6 +17,9 @@ public class Translator
 
     public string Format(string key, params object[] args) => string.Format(this[key], args);
 
+    /// <summary>Romanian text for a key regardless of the request culture (used for URL slugs).</summary>
+    public static string RoText(string key) => Ro.TryGetValue(key, out var ro) ? ro : key;
+
     /// <summary>English texts for sentence keys that contain placeholders.</summary>
     private static readonly Dictionary<string, string> En = new()
     {
@@ -184,6 +187,26 @@ public class Translator
         ["CHECKED"] = "VERIFICAT",
         ["RISK"] = "RISC",
         ["Caution"] = "Atenție",
+        ["Phone number"] = "Număr de telefon",
+        ["My account"] = "Contul meu",
+        ["Account details"] = "Datele contului",
+        ["The number also updates on your ads that show a phone."] = "Numărul se actualizează și în anunțurile tale care afișează telefonul.",
+        ["Save details"] = "Salvează datele",
+        ["Email address"] = "Adresa de email",
+        ["You sign in with this address. Changing it needs your current password."] = "Cu această adresă te conectezi. Pentru a o schimba îți cerem parola actuală.",
+        ["New email"] = "Email nou",
+        ["Current password"] = "Parola actuală",
+        ["Change email"] = "Schimbă emailul",
+        ["Password"] = "Parolă",
+        ["New password"] = "Parola nouă",
+        ["Change password"] = "Schimbă parola",
+        ["Download data or delete account"] = "Descarcă datele sau șterge contul",
+        ["API key"] = "Cheie API",
+        ["Your details were saved."] = "Datele au fost salvate.",
+        ["Your email was changed. Use the new address to sign in."] = "Emailul a fost schimbat. De acum te conectezi cu noua adresă.",
+        ["Your password was changed."] = "Parola a fost schimbată.",
+        ["The current password is not correct."] = "Parola actuală nu este corectă.",
+        ["This email is already used by another account."] = "Acest email este deja folosit de alt cont.",
         ["No photo"] = "Fără fotografie",
 
         // subcategory names (CategorySeeder) — brand-only names stay as they are

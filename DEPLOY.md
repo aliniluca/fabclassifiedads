@@ -328,6 +328,31 @@ sudo IMPORT_API_KEY="..." ADMIN_EMAILS="email@tau.ro" \
 Portul alege automat modul TLS: `465` = SSL, `587`/`25` = STARTTLS. Verifică rapid din
 **Admin → Setări → „Trimite email de test"** — îți trimite un email de probă pe adresa ta.
 
+## Email prin Mailgun (recomandat pentru emailuri tranzacționale)
+
+Când Mailgun e configurat, are prioritate față de SMTP (ordinea: Mailgun → SMTP → outbox).
+Setările stau în secțiunea `Mailgun` din `appsettings.json`, **dar cheia API nu se pune
+niciodată acolo** — repo-ul e public pe GitHub. Fiecare valoare poate fi suprascrisă cu o
+variabilă de mediu `MAILGUN_*`, pe care `deploy.sh` o salvează în serviciul systemd și o
+păstrează la deploy-urile următoare:
+
+```bash
+sudo MAILGUN_API_KEY="cheia-privata-din-mailgun" \
+     MAILGUN_DOMAIN="mg.aicigasesti.ro" \
+     MAILGUN_REGION="EU" \
+     MAILGUN_FROM="no-reply@aicigasesti.ro" \
+     ./scripts/deploy.sh
+```
+
+1. În Mailgun: **Sending → Domains → Add new domain** (ex. `mg.aicigasesti.ro`, regiunea **EU**).
+2. Adaugă în DNS-ul domeniului înregistrările afișate de Mailgun (SPF `TXT`, DKIM `TXT`,
+   `MX`, `CNAME` pentru tracking) și așteaptă statusul **Verified**.
+3. **API Security → Add new key** → copiază cheia (o vezi o singură dată).
+4. `MAILGUN_REGION` trebuie să fie regiunea în care ai creat domeniul (`EU` → `api.eu.mailgun.net`,
+   `US` → `api.mailgun.net`); altfel Mailgun răspunde `401 Forbidden`.
+5. Rulează deploy-ul de mai sus și trimite un email de test din **Admin → Setări**.
+   Erorile Mailgun apar în log: `journalctl -u aicigasesti -n 50`.
+
 ## Backup automat
 
 `scripts/backup.sh` face backup consistent la baza SQLite (snapshot online) + arhivează
